@@ -18,7 +18,6 @@ namespace Telemachus
         {
             try
             {
-
                 Application.OpenURL("http://" + TelemachusBehaviour.getServerPrimaryIPAddress() + ":"
                     + TelemachusBehaviour.getServerPort() + "/telemachus/information.html");
 
