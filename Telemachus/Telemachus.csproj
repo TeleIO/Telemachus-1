@@ -45,6 +45,9 @@
     <Reference Include="UnityEngine">
       <HintPath>..\references\UnityEngine.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>..\references\UnityEngine.UI.dll</HintPath>
+    </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>..\references\Assembly-CSharp.dll</HintPath>
     </Reference>
