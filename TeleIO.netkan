@@ -11,4 +11,5 @@
     "depends": [
         { "name": "ModuleManager" }
     ],
+    "version"	  : "1.6.17"
 }
