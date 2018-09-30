@@ -91,7 +91,7 @@
 rd /s /q "$(ProjectDir)..\ksp-telemachus-dev\GameData\TeleIO"
 
 xcopy "$(TargetDir)Servers.dll" "$(ProjectDir)..\publish\GameData\TeleIO\Plugins\" /e /y /i /r
-xcopy "$(TargetDir)Telemachus.dll" "$(ProjectDir)..\publish\GameData\TeleIO\Plugins\" /e /y /i /r
+xcopy "$(TargetDir)TeleIO.dll" "$(ProjectDir)..\publish\GameData\TeleIO\Plugins\" /e /y /i /r
 xcopy "$(TargetDir)websocket-sharp.dll" "$(ProjectDir)..\publish\GameData\TeleIO\Plugins\" /e /y /i /r
 
 xcopy "$(ProjectDir)..\Parts\*" "$(ProjectDir)..\publish\GameData\TeleIO\Parts\"  /e /y /i /r
