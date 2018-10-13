@@ -1,0 +1,26 @@
+{
+    "NAME": "Telemcachus",
+    "URL": "https://ksp.sarbian.com/jenkins/job/ModularFlightIntegrator/lastSuccessfulBuild/artifact/ModularFlightIntegrator/ModularFlightIntegrator.version",
+    "DOWNLOAD": "https://github.com/TeleIO/Telemachus-1/releases/latest",
+    "VERSION":{
+        "MAJOR": 1,
+        "MINOR": 6,
+        "PATCH": 19,
+        "BUILD": 0
+    },
+    "KSP_VERSION": {
+        "MAJOR": 1,
+        "MINOR": 4,
+        "PATCH": 5
+    },
+    "KSP_VERSION_MIN": {
+        "MAJOR": 1,
+        "MINOR": 4,
+        "PATCH": 0
+    },
+    "KSP_VERSION_MAX": {
+        "MAJOR": 1,
+        "MINOR": 4,
+        "PATCH": 90
+    }
+}
