@@ -1,6 +1,6 @@
 {
     "NAME": "Telemcachus",
-    "URL": "https://ksp.sarbian.com/jenkins/job/ModularFlightIntegrator/lastSuccessfulBuild/artifact/ModularFlightIntegrator/ModularFlightIntegrator.version",
+    "URL": "https://raw.githubusercontent.com/TeleIO/Telemachus-1/master/Telemachus.version",
     "DOWNLOAD": "https://github.com/TeleIO/Telemachus-1/releases/latest",
     "VERSION":{
         "MAJOR": 1,
