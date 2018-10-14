@@ -111,6 +111,8 @@ xcopy "$(ProjectDir)..\WebPages\WebPagesTest\src\*" "$(ProjectDir)..\ksp-telemac
 xcopy "$(ProjectDir)..\publish\GameData\*"  "$(ProjectDir)..\ksp-telemachus-dev\GameData\" /e /y /i /r
 powershell -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $assets = Invoke-WebRequest -Uri https://api.github.com/repos/TeleIO/houston/releases/latest | ConvertFrom-Json; $assets = $assets.assets; iwr $assets.browser_download_url -OutFile h.zip; Expand-Archive -Path h.zip -DestinationPath houston;"
 dir
+mkdir "$(ProjectDir)..\publish\GameData\Telemachus\Plugins\PluginData\Telemachus\houston"  /e /y /i /r
+xcopy "$(TargetDir)houston\*" "$(ProjectDir)..\publish\GameData\Telemachus\Plugins\PluginData\Telemachus\"
       
     </PostBuildEvent>
   </PropertyGroup>
