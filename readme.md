@@ -1,8 +1,9 @@
 Telamachus Supporting Project | Readme
 =
-[![Build status](https://ci.appveyor.com/api/projects/status/sbcv42lehc5lwade?svg=true)](https://ci.appveyor.com/project/DanGSun/telemachus-1)
+[![Build status](https://flat.badgen.net/appveyor/ci/DanGSun/Telemachus-1)](https://ci.appveyor.com/project/DanGSun/telemachus-1)
+[![](https://flat.badgen.net/github/stars/TeleIO/Telemachus-1)](https://github.com/TeleIO/Telemachus-1/stargazers)
+[![](https://flat.badgen.net/github/assets-dl/TeleIO/Telemachus-1)]()
 
-[![Latest Release](https://badgen.net/github/release/TeleIO/Telenachus-1/stable)](https://github.com/TeleIO/Telemachus-1/latest)
 
 [Building](https://github.com/richardbunt/Telemachus/wiki/Building)
 
