@@ -104,7 +104,7 @@ namespace Telemachus
         static private void writeDefaultConfig()
         {
             config.SetValue("PORT", 8085);
-            config.SetValue("IPADDRESS", "127.0.0.1");
+            config.SetValue("IPADDRESS", "0.0.0.0");
             config.save();
         }
 
