@@ -1,0 +1,8 @@
+@font-face {
+    font-family: 'TimeBurner';
+    src: url('../fonts/TimeBurner.woff2') format('woff2'),
+        url('../fonts/TimeBurner.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+

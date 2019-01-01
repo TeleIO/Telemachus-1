@@ -3,28 +3,28 @@
     slice = [].slice;
 
   standardCharts = {
-    "Высота": {
+    "Altitude": {
       series: ["v.altitude", "v.heightFromTerrain"],
       yaxis: {
-        label: "Высота",
+        label: "Altitude",
         unit: "m",
         min: 0,
         max: null
       }
     },
-    "Апогей и Перигей": {
+    "Apoapsis and Periapsis": {
       series: ["o.ApA", "o.PeA"],
       yaxis: {
-        label: "Высота",
+        label: "Altitude",
         unit: "m",
         min: 0,
         max: null
       }
     },
-    "Атмосферная плотность": {
+    "Atmospheric Density": {
       series: ["v.atmosphericDensity"],
       yaxis: {
-        label: "<!altitude>",
+        label: "Altitude",
         unit: "Pa",
         min: 0,
         max: null
@@ -39,91 +39,91 @@
         max: null
       }
     },
-    "Ускорение": {
+    "G-Force": {
       series: ["s.sensor.acc"],
       yaxis: {
-        label: "Ускорение",
+        label: "Acceleration",
         unit: "Gs",
         min: null,
         max: null
       }
     },
-    "Гравитация": {
+    "Gravity": {
       series: ["s.sensor.grav"],
       yaxis: {
-        label: "Гравитация",
-        unit: "м/c\u00B2",
+        label: "Gravity",
+        unit: "m/s\u00B2",
         min: 0,
         max: null
       }
     },
-    "Давление": {
+    "Pressure": {
       series: ["s.sensor.pres"],
       yaxis: {
-        label: "Давление",
+        label: "Pressure",
         unit: "Pa",
         min: 0,
         max: null
       }
     },
-    "Температура": {
+    "Temperature": {
       series: ["s.sensor.temp"],
       yaxis: {
-        label: "Температура",
+        label: "Temperature",
         unit: "\u00B0C",
         min: null,
         max: null
       }
     },
-    "Орбитальная скорость": {
+    "Orbital Velocity": {
       series: ["v.orbitalVelocity"],
       yaxis: {
-        label: "Скорость",
-        unit: "м/c",
+        label: "Velocity",
+        unit: "m/s",
         min: 0,
         max: null
       }
     },
-    "Скорость относително поверхности": {
+    "Surface Velocity": {
       series: ["v.surfaceSpeed", "v.verticalSpeed"],
       yaxis: {
-        label: "Скорость",
-        unit: "м/c",
+        label: "Velocity",
+        unit: "m/s",
         min: null,
         max: null
       }
     },
-    "Angular Скорость": {
+    "Angular Velocity": {
       series: ["v.angularVelocity"],
       yaxis: {
-        label: "Angular Скорость",
+        label: "Angular Velocity",
         unit: "\u00B0/s",
         min: 0,
         max: null
       }
     },
-    "Жидкое топливо и окислитель": {
+    "Liquid Fuel and Oxidizer": {
       series: ["r.resource[LiquidFuel]", "r.resource[Oxidizer]"],
       yaxis: {
-        label: "Количество",
+        label: "Volume",
         unit: "L",
         min: 0,
         max: null
       }
     },
-    "Электрический заряд": {
+    "Electric Charge": {
       series: ["r.resource[ElectricCharge]"],
       yaxis: {
-        label: "Электрический заряд",
+        label: "Electric Charge",
         unit: "Wh",
         min: 0,
         max: null
       }
     },
-    "Монотопливо": {
+    "Monopropellant": {
       series: ["r.resource[MonoPropellant]"],
       yaxis: {
-        label: "Монотопливо",
+        label: "Volume",
         unit: "L",
         min: 0,
         max: null
@@ -132,7 +132,7 @@
     "Heading": {
       series: ["n.heading"],
       yaxis: {
-        label: "Угол",
+        label: "Angle",
         unit: "\u00B0",
         min: 0,
         max: 360
@@ -141,7 +141,7 @@
     "Pitch": {
       series: ["n.pitch"],
       yaxis: {
-        label: "Угол",
+        label: "Angle",
         unit: "\u00B0",
         min: -90,
         max: 90
@@ -150,26 +150,26 @@
     "Roll": {
       series: ["n.roll"],
       yaxis: {
-        label: "Угол",
+        label: "Angle",
         unit: "\u00B0",
         min: -180,
         max: 180
       }
     },
-    "Расстояние до цели": {
+    "Target Distance": {
       series: ["tar.distance"],
       yaxis: {
-        label: "Расстояние",
-        unit: "м",
+        label: "Distance",
+        unit: "m",
         min: 0,
         max: null
       }
     },
-    "Относительная Скорость": {
+    "Relative Velocity": {
       series: ["tar.o.relativeVelocity"],
       yaxis: {
-        label: "Скорость",
-        unit: "м/c",
+        label: "Velocity",
+        unit: "m/s",
         min: 0,
         max: null
       }
@@ -177,13 +177,13 @@
     "True Anomaly": {
       series: ["o.trueAnomaly"],
       yaxis: {
-        label: "Угол",
+        label: "Angle",
         unit: "\u00B0",
         min: null,
         max: null
       }
     },
-    "Карта": {
+    "Map": {
       series: ["v.long", "v.lat", "v.name", "v.body"],
       type: "map"
     }
@@ -193,7 +193,7 @@
     "Sine and Cosine": {
       series: ["test.sin", "test.cos"],
       yaxis: {
-        label: "Угол",
+        label: "Angle",
         unit: "\u00B0",
         min: -360,
         max: 360
@@ -202,7 +202,7 @@
     "Quadratic": {
       series: ["test.square"],
       yaxis: {
-        label: "Высота",
+        label: "Altitude",
         unit: "m",
         min: 0,
         max: null
@@ -211,8 +211,8 @@
     "Random": {
       series: ["test.rand"],
       yaxis: {
-        label: "Скорость",
-        unit: "м/c",
+        label: "Velocity",
+        unit: "m/s",
         min: null,
         max: null
       }
@@ -220,8 +220,8 @@
     "Square Root": {
       series: ["test.sqrt"],
       yaxis: {
-        label: "Скорость",
-        unit: "м/c",
+        label: "Velocity",
+        unit: "m/s",
         min: 0,
         max: null
       }
@@ -229,8 +229,8 @@
     "Exponential": {
       series: ["test.exp"],
       yaxis: {
-        label: "Скорость",
-        unit: "м/c",
+        label: "Velocity",
+        unit: "m/s",
         min: 1,
         max: null
       }
@@ -238,8 +238,8 @@
     "Logarithmic": {
       series: ["test.log"],
       yaxis: {
-        label: "Скорость",
-        unit: "м/c",
+        label: "Velocity",
+        unit: "m/s",
         min: null,
         max: null
       }
@@ -251,32 +251,32 @@
   charts = {};
 
   standardLayouts = {
-    "Динамика полета": {
-      charts: ["Высота", "Орбитальная скорость", "True Anomaly"],
+    "Flight Dynamics": {
+      charts: ["Altitude", "Orbital Velocity", "True Anomaly"],
       telemetry: ["o.sma", "o.eccentricity", "o.inclination", "o.lan", "o.argumentOfPeriapsis", "o.timeOfPeriapsisPassage", "o.trueAnomaly", "v.altitude", "v.orbitalVelocity"]
     },
-    "Вхождение в атомосферу": {
-      charts: ["Карта", "Высота", "Скорость относително поверхности"],
+    "Retrofire": {
+      charts: ["Map", "Altitude", "Surface Velocity"],
       telemetry: ["v.altitude", "v.heightFromTerrain", "v.surfaceSpeed", "v.verticalSpeed", "v.lat", "v.long"]
     },
-    "Системы разгона": {
-      charts: ["Жидкое топливо и окислитель", "Dynamic Pressure", "Атмосферная плотность"],
+    "Booster Systems": {
+      charts: ["Liquid Fuel and Oxidizer", "Dynamic Pressure", "Atmospheric Density"],
       telemetry: ["r.resource[LiquidFuel]", "r.resourceMax[LiquidFuel]", "r.resource[Oxidizer]", "r.resourceMax[Oxidizer]", "v.dynamicPressure", "v.atmosphericDensity"]
     },
-    "Инструментарий": {
-      charts: ["Гравитация", "Давление", "Температура"],
+    "Instrumentation": {
+      charts: ["G-Force", "Pressure", "Temperature"],
       telemetry: ["s.sensor.acc", "s.sensor.pres", "s.sensor.temp", "s.sensor.grav"]
     },
-    "Электричество, Окружение и Связь": {
-      charts: ["Электрический заряд", "Давление", "Температура"],
+    "Electrical, Environmental and Comm.": {
+      charts: ["Electric Charge", "Pressure", "Temperature"],
       telemetry: ["r.resource[ElectricCharge]", "r.resourceMax[ElectricCharge]", "s.sensor.pres", "s.sensor.temp"]
     },
-    "Направление, навигация и контроль": {
+    "Guidance, Navigation and Control": {
       charts: ["Heading", "Pitch", "Roll"],
       telemetry: ["r.resource[MonoPropellant]", "r.resourceMax[MonoPropellant]", "n.heading", "n.pitch", "n.roll"]
     },
-    "Сближение и стыковка": {
-      charts: ["Расстояние до цели", "Относительная скорость"],
+    "Rendezvous and Docking": {
+      charts: ["Target Distance", "Relative Velocity"],
       telemetry: ["tar.name", "tar.o.sma", "tar.o.eccentricity", "tar.o.inclination", "tar.o.lan", "tar.o.argumentOfPeriapsis", "tar.o.timeOfPeriapsisPassage", "tar.o.trueAnomaly", "tar.distance", "tar.o.relativeVelocity"]
     }
   };
@@ -617,7 +617,7 @@
         }
       },
       velocity: function(v) {
-        return siUnit(v, "м/c");
+        return siUnit(v, "m/s");
       },
       deg: function(v) {
         return v.toPrecision(6) + "\u00B0";
@@ -638,7 +638,7 @@
         return siUnit(v / 1000, "Pa");
       },
       grav: function(v) {
-        return siUnit(v, "м/c\u00B2");
+        return siUnit(v, "m/s\u00B2");
       },
       acc: function(v) {
         return v.toPrecision(6) + " G";
@@ -1104,8 +1104,8 @@
       $("#saveLayout").click(function(event) {
         var elem, name;
         event.preventDefault();
-        name = window.prompt("Под каким именем вы хотите сохранить данную раскладку?", $("h1").text().trim()).trim();
-        if ((name == null) || name === "" || (name in layouts && !window.confirm("Это имя уже использовано. Вы уверены в том, что хотите перезаписать ячейку памяти?"))) {
+        name = window.prompt("What name would you like to save this layout under?", $("h1").text().trim()).trim();
+        if ((name == null) || name === "" || (name in layouts && !window.confirm("That name is already in use. Are you sure you want to overwrite the existing layout?"))) {
           return;
         }
         layouts[name] = customLayouts[name] = {
@@ -1138,7 +1138,7 @@
       $("#deleteLayout").click(function(event) {
         var layoutName;
         event.preventDefault();
-        if (window.confirm("Вы уверены в том, что хотите удалить данну раскладку?")) {
+        if (window.confirm("Are you sure you want to delete the current custom layout?")) {
           layoutName = $("h1").text().trim();
           if (!(layoutName in customLayouts)) {
             return;
@@ -1212,12 +1212,12 @@
         "class": "remove"
       })).append($("<img>").attr({
         "class": "handle",
-        src: "draghandle.png",
+        src: "img/draghandle.png",
         alt: "Drag to reorder"
       })).appendTo("#telemetry ul");
       $data = $("<div>").attr({
         "class": "telemetry-data"
-      }).text("Отсутствуют данные").appendTo($li);
+      }).text("No Data").appendTo($li);
       $li.on("telemetry", function(event, data) {
         var value;
         value = data[api];

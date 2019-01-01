@@ -1,113 +1,113 @@
 standardCharts =
-  "Высота":
+  "Altitude":
     series: ["v.altitude", "v.heightFromTerrain"]
-    yaxis: { label: "Высота", unit: "m", min: 0, max: null}
-  "Апогей и Перигей":
+    yaxis: { label: "Altitude", unit: "m", min: 0, max: null}
+  "Apoapsis and Periapsis":
     series: ["o.ApA", "o.PeA"]
-    yaxis: { label: "Высота", unit: "m", min: 0, max: null}
-  "Атмосферная плотность":
+    yaxis: { label: "Altitude", unit: "m", min: 0, max: null}
+  "Atmospheric Density":
     series: ["v.atmosphericDensity"]
-    yaxis: { label: "<!altitude>", unit: "Pa", min: 0, max: null}
+    yaxis: { label: "Altitude", unit: "Pa", min: 0, max: null}
   "Dynamic Pressure":
     series: ["v.dynamicPressure"]
     yaxis: { label: "Dynamic Pressure", unit: "Pa", min: 0, max: null}
-  "Ускорение":
+  "G-Force":
     series: ["s.sensor.acc"]
-    yaxis: { label: "Ускорение", unit: "Gs", min: null, max: null}
-  "Гравитация":
+    yaxis: { label: "Acceleration", unit: "Gs", min: null, max: null}
+  "Gravity":
     series: ["s.sensor.grav"]
-    yaxis: { label: "Гравитация", unit: "м/c\u00B2", min: 0, max: null}
-  "Давление":
+    yaxis: { label: "Gravity", unit: "m/s\u00B2", min: 0, max: null}
+  "Pressure":
     series: ["s.sensor.pres"]
-    yaxis: { label: "Давление", unit: "Pa", min: 0, max: null}
-  "Температура":
+    yaxis: { label: "Pressure", unit: "Pa", min: 0, max: null}
+  "Temperature":
     series: ["s.sensor.temp"]
-    yaxis: { label: "Температура", unit: "\u00B0C", min: null, max: null}
-  "Орбитальная скорость":
+    yaxis: { label: "Temperature", unit: "\u00B0C", min: null, max: null}
+  "Orbital Velocity":
     series: ["v.orbitalVelocity"]
-    yaxis: { label: "Скорость", unit: "м/c", min: 0, max: null}
-  "Скорость относително поверхности":
+    yaxis: { label: "Velocity", unit: "m/s", min: 0, max: null}
+  "Surface Velocity":
     series: ["v.surfaceSpeed", "v.verticalSpeed"]
-    yaxis: { label: "Скорость", unit: "м/c", min: null, max: null}
-  "Angular Скорость":
+    yaxis: { label: "Velocity", unit: "m/s", min: null, max: null}
+  "Angular Velocity":
     series: ["v.angularVelocity"]
-    yaxis: { label: "Angular Скорость", unit: "\u00B0/s", min: 0, max: null}
-  "Жидкое топливо и окислитель":
+    yaxis: { label: "Angular Velocity", unit: "\u00B0/s", min: 0, max: null}
+  "Liquid Fuel and Oxidizer":
     series: ["r.resource[LiquidFuel]", "r.resource[Oxidizer]"]
-    yaxis: { label: "Количество", unit: "L", min: 0, max: null}
-  "Электрический заряд":
+    yaxis: { label: "Volume", unit: "L", min: 0, max: null}
+  "Electric Charge":
     series: ["r.resource[ElectricCharge]"]
-    yaxis: { label: "Электрический заряд", unit: "Wh", min: 0, max: null}
-  "Монотопливо":
+    yaxis: { label: "Electric Charge", unit: "Wh", min: 0, max: null}
+  "Monopropellant":
     series: ["r.resource[MonoPropellant]"]
-    yaxis: { label: "Монотопливо", unit: "L", min: 0, max: null}
+    yaxis: { label: "Volume", unit: "L", min: 0, max: null}
   "Heading":
     series: ["n.heading"]
-    yaxis: { label: "Угол", unit: "\u00B0", min: 0, max: 360}
+    yaxis: { label: "Angle", unit: "\u00B0", min: 0, max: 360}
   "Pitch":
     series: ["n.pitch"]
-    yaxis: { label: "Угол", unit: "\u00B0", min: -90, max: 90}
+    yaxis: { label: "Angle", unit: "\u00B0", min: -90, max: 90}
   "Roll":
     series: ["n.roll"]
-    yaxis: { label: "Угол", unit: "\u00B0", min: -180, max: 180}
-  "Расстояние до цели":
+    yaxis: { label: "Angle", unit: "\u00B0", min: -180, max: 180}
+  "Target Distance":
     series: ["tar.distance"]
-    yaxis: { label: "Расстояние", unit: "м", min: 0, max: null}
-  "Относительная Скорость":
+    yaxis: { label: "Distance", unit: "m", min: 0, max: null}
+  "Relative Velocity":
     series: ["tar.o.relativeVelocity"]
-    yaxis: { label: "Скорость", unit: "м/c", min: 0, max: null}
+    yaxis: { label: "Velocity", unit: "m/s", min: 0, max: null}
   "True Anomaly":
     series: ["o.trueAnomaly"]
-    yaxis: { label: "Угол", unit: "\u00B0", min: null, max: null}
-  "Карта":
+    yaxis: { label: "Angle", unit: "\u00B0", min: null, max: null}
+  "Map":
     series: ["v.long", "v.lat", "v.name", "v.body"]
     type: "map"
 
 testCharts =
   "Sine and Cosine":
     series: ["test.sin", "test.cos"]
-    yaxis: { label: "Угол", unit: "\u00B0", min: -360, max: 360}
+    yaxis: { label: "Angle", unit: "\u00B0", min: -360, max: 360}
   "Quadratic":
     series: ["test.square"]
-    yaxis: { label: "Высота", unit: "m", min: 0, max: null}
+    yaxis: { label: "Altitude", unit: "m", min: 0, max: null}
   "Random":
     series: ["test.rand"]
-    yaxis: { label: "Скорость", unit: "м/c", min: null, max: null}
+    yaxis: { label: "Velocity", unit: "m/s", min: null, max: null}
   "Square Root":
     series: ["test.sqrt"]
-    yaxis: { label: "Скорость", unit: "м/c", min: 0, max: null}
+    yaxis: { label: "Velocity", unit: "m/s", min: 0, max: null}
   "Exponential":
     series: ["test.exp"]
-    yaxis: { label: "Скорость", unit: "м/c", min: 1, max: null}
+    yaxis: { label: "Velocity", unit: "m/s", min: 1, max: null}
   "Logarithmic":
     series: ["test.log"]
-    yaxis: { label: "Скорость", unit: "м/c", min: null, max: null}
+    yaxis: { label: "Velocity", unit: "m/s", min: null, max: null}
 
 customCharts = {}
 
 charts = {}
 
 standardLayouts =
-  "Динамика полета":
-    charts: ["Высота", "Орбитальная скорость", "True Anomaly"],
+  "Flight Dynamics":
+    charts: ["Altitude", "Orbital Velocity", "True Anomaly"],
     telemetry: ["o.sma", "o.eccentricity", "o.inclination", "o.lan", "o.argumentOfPeriapsis", "o.timeOfPeriapsisPassage", "o.trueAnomaly", "v.altitude", "v.orbitalVelocity"]
-  "Вхождение в атомосферу":
-    charts: ["Карта", "Высота", "Скорость относително поверхности"],
+  "Retrofire":
+    charts: ["Map", "Altitude", "Surface Velocity"],
     telemetry: ["v.altitude", "v.heightFromTerrain", "v.surfaceSpeed", "v.verticalSpeed", "v.lat", "v.long"]
-  "Системы разгона":
-    charts: ["Жидкое топливо и окислитель", "Dynamic Pressure", "Атмосферная плотность"]
+  "Booster Systems":
+    charts: ["Liquid Fuel and Oxidizer", "Dynamic Pressure", "Atmospheric Density"]
     telemetry: ["r.resource[LiquidFuel]", "r.resourceMax[LiquidFuel]", "r.resource[Oxidizer]", "r.resourceMax[Oxidizer]", "v.dynamicPressure", "v.atmosphericDensity"]
-  "Инструментарий":
-    charts: ["Гравитация", "Давление", "Температура"]
+  "Instrumentation":
+    charts: ["G-Force", "Pressure", "Temperature"]
     telemetry: ["s.sensor.acc", "s.sensor.pres", "s.sensor.temp", "s.sensor.grav"]
-  "Электричество, Окружение и Связь":
-    charts: ["Электрический заряд", "Давление", "Температура"]
+  "Electrical, Environmental and Comm.":
+    charts: ["Electric Charge", "Pressure", "Temperature"]
     telemetry: ["r.resource[ElectricCharge]", "r.resourceMax[ElectricCharge]", "s.sensor.pres", "s.sensor.temp"]
-  "Направление, навигация и контроль":
+  "Guidance, Navigation and Control":
     charts: ["Heading", "Pitch", "Roll"]
     telemetry: ["r.resource[MonoPropellant]", "r.resourceMax[MonoPropellant]", "n.heading", "n.pitch", "n.roll"]
-  "Сближение и стыковка":
-    charts: ["Расстояние до цели", "Относительная скорость"],
+  "Rendezvous and Docking":
+    charts: ["Target Distance", "Relative Velocity"],
     telemetry: ["tar.name", "tar.o.sma", "tar.o.eccentricity", "tar.o.inclination", "tar.o.lan", "tar.o.argumentOfPeriapsis", "tar.o.timeOfPeriapsisPassage", "tar.o.trueAnomaly", "tar.distance", "tar.o.relativeVelocity"]
 
 testLayouts =
@@ -274,14 +274,14 @@ Telemachus =
     
   formatters:
     unitless: (v) -> if typeof v == "number" then v.toPrecision(6) else v
-    velocity: (v) -> siUnit(v, "м/c")
+    velocity: (v) -> siUnit(v, "m/s")
     deg: (v) -> v.toPrecision(6) + "\u00B0"
     distance: (v) -> siUnit(v, "m")
     time: (v) -> durationString(v)
     string: (v) -> v
     temp: (v) -> v.toPrecision(6) + "\u00B0C"
     pres: (v) -> siUnit(v / 1000, "Pa")
-    grav: (v) -> siUnit(v, "м/c\u00B2")
+    grav: (v) -> siUnit(v, "m/s\u00B2")
     acc: (v) -> v.toPrecision(6) + " G"
     date: (v) -> dateString(v)
 
@@ -717,8 +717,8 @@ $(document).ready ->
   if window.localStorage?
     $("#saveLayout").click (event) ->
       event.preventDefault()
-      name = window.prompt("Под каким именем вы хотите сохранить данную раскладку?", $("h1").text().trim()).trim()
-      return if !name? or name == "" or (name of layouts and !window.confirm("Это имя уже использовано. Вы уверены в том, что хотите перезаписать ячейку памяти?"))
+      name = window.prompt("What name would you like to save this layout under?", $("h1").text().trim()).trim()
+      return if !name? or name == "" or (name of layouts and !window.confirm("That name is already in use. Are you sure you want to overwrite the existing layout?"))
       layouts[name] = customLayouts[name] =
         charts: ($(elem).text().trim() for elem in $(".chart h2"))
         telemetry: ($(elem).data("api") for elem in $("#telemetry li"))
@@ -729,7 +729,7 @@ $(document).ready ->
       
     $("#deleteLayout").click (event) ->
       event.preventDefault()
-      if window.confirm("Вы уверены в том, что хотите удалить данну раскладку?")
+      if window.confirm("Are you sure you want to delete the current custom layout?")
         layoutName = $("h1").text().trim()
         return unless layoutName of customLayouts
         delete customLayouts[layoutName]
@@ -795,9 +795,9 @@ addTelemetry = (api) ->
     $li = $("<li>").data("api", api)
       .append($("<h3>").text(Telemachus.api[api].name))
       .append($("<button>").attr(class: "remove"))
-      .append($("<img>").attr(class: "handle", src: "draghandle.png", alt: "Drag to reorder"))
+      .append($("<img>").attr(class: "handle", src: "img/draghandle.png", alt: "Drag to reorder"))
       .appendTo("#telemetry ul")
-    $data = $("<div>").attr(class: "telemetry-data").text("Отсутствуют данные").appendTo($li)
+    $data = $("<div>").attr(class: "telemetry-data").text("No Data").appendTo($li)
     $li.on "telemetry", (event, data) ->
         value = data[api]
         $data.text(Telemachus.format(value, api))
