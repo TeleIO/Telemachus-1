@@ -20,7 +20,7 @@ namespace Telemachus
             {
 
                 Application.OpenURL("http://" + TelemachusBehaviour.getServerPrimaryIPAddress() + ":"
-                    + TelemachusBehaviour.getServerPort() + "/telemachus/information.html");
+                    + TelemachusBehaviour.getServerPort() + "/telemachus/index.html");
 
             }
             catch
