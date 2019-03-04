@@ -4,6 +4,12 @@ Telamachus Supporting Project | Readme
 [![](https://flat.badgen.net/github/stars/TeleIO/Telemachus-1)](https://github.com/TeleIO/Telemachus-1/stargazers)
 [![](https://flat.badgen.net/github/assets-dl/TeleIO/Telemachus-1)]()
 
+Current status of project:
+* Beta RPM Cameras
+* New Part System
+* Changed UI
+* Integrated Houston + Mkon
+* Automated Building Pipeline
 
 [Building](https://github.com/richardbunt/Telemachus/wiki/Building)
 
