@@ -427,7 +427,9 @@
         }, "json").then((function(_this) {
           return function(data, textStatus, jqXHR) {
             var api, i, k, l, len, len1, n, r, ref, ref1, ref2, resourceApi;
-            ref = JSON.parse(data).api;
+            console.log(data.api);
+            //ref = JSON.parse(data).api;
+            ref = data.api;
             for (k = 0, len = ref.length; k < len; k++) {
               api = ref[k];
               if (api.apistring.match(/^b\./)) {
@@ -492,7 +494,7 @@
         return function(data, textStatus, jqXHR) {
           var error, value;
           try {
-            data = JSON.parse(data);
+	    // console.log(data);
           } catch (error1) {
             error = error1;
             _this.$alertSubscribers.trigger("telemetryAlert", ["Bad Data"]);
