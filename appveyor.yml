@@ -6,6 +6,7 @@ build:
 after_build:
 - ps: >-
     cd publish
+    
     7z a GameData.zip GameData
 artifacts:
 - path: publish/GameData.zip
