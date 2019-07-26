@@ -1,4 +1,4 @@
-Telamachus Supporting Project | Readme
+Telemachus Supporting Project | Readme
 =
 [![Build status](https://flat.badgen.net/appveyor/ci/DanGSun/Telemachus-1)](https://ci.appveyor.com/project/DanGSun/telemachus-1)
 [![](https://flat.badgen.net/github/stars/TeleIO/Telemachus-1)](https://github.com/TeleIO/Telemachus-1/stargazers)
@@ -13,7 +13,7 @@ Current status of project:
 
 [Building](https://github.com/richardbunt/Telemachus/wiki/Building)
 
-[KSP Forum Thread](http://forum.kerbalspaceprogram.com/index.php?/topic/144482-113-2016-07-24-telemachus-telemetry-and-flight-control-in-the-web-browser/)
+[KSP Forum Thread](hhttps://forum.kerbalspaceprogram.com/index.php?/topic/179887-telemachus-reborn-ksp-v15x-17x/)
 
 [Installation](https://github.com/richardbunt/Telemachus/wiki/Installation)
 
