@@ -5,13 +5,8 @@ build:
   verbosity: minimal
 after_build:
 - ps: >-
-    dir
-
     cd publish
-
-    dir
-
-    Compress-Archive -Path GameData -DestinationPath GameData.zip
+    7z a GameData.zip GameData
 artifacts:
 - path: publish/GameData.zip
   name: GameData
