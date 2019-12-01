@@ -219,7 +219,7 @@ namespace Telemachus.CameraSnapshots
                 "BG COLOR: " + camera.backgroundColor,
                 "CULLING MASK: " + camera.cullingMask,
                 "DEPTH: " + camera.depth,
-                "HDR: " + camera.hdr,
+                "HDR: " + camera.allowHDR,
                 "POSITION: " + camera.transform.position,
                 "ROT: " + camera.transform.rotation,
                 "NEAR: " + camera.nearClipPlane,
