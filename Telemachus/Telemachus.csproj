@@ -60,6 +60,12 @@
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>..\references\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.ImageConversionModule">
+      <HintPath>..\references\UnityEngine.ImageConversionModule</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UnityWebRequestWWWModule">
+      <HintPath>..\references\UnityEngine.UnityWebRequestWWWModule.dll</HintPath>
+    </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>..\references\Assembly-CSharp.dll</HintPath>
     </Reference>
