@@ -17,7 +17,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
+    <Optimize>true</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
@@ -39,6 +39,18 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\ksp-telemachus-dev\KSP_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.ImageConversionModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\ksp-telemachus-dev\KSP_Data\Managed\UnityEngine.ImageConversionModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UnityWebRequestModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\ksp-telemachus-dev\KSP_Data\Managed\UnityEngine.UnityWebRequestModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UnityWebRequestWWWModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\ksp-telemachus-dev\KSP_Data\Managed\UnityEngine.UnityWebRequestWWWModule.dll</HintPath>
+    </Reference>
     <Reference Include="websocket-sharp">
       <HintPath>..\websocket-sharp.dll</HintPath>
     </Reference>
@@ -47,6 +59,15 @@
     </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>..\references\UnityEngine.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>..\references\UnityEngine.CoreModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.ImageConversionModule">
+      <HintPath>..\references\UnityEngine.ImageConversionModule</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UnityWebRequestWWWModule">
+      <HintPath>..\references\UnityEngine.UnityWebRequestWWWModule.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>..\references\Assembly-CSharp.dll</HintPath>
@@ -93,38 +114,17 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="AfterBuild.bat" />
+    <Content Include="AfterBuild.sh" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>rd /s /q  "$(ProjectDir)..\publish\GameData"
-rd /s /q "$(ProjectDir)..\ksp-telemachus-dev\GameData\Telemachus"
-
-xcopy "$(TargetDir)Servers.dll" "$(ProjectDir)..\publish\GameData\Telemachus\Plugins\" /e /y /i /r
-xcopy "$(TargetDir)Telemachus.dll" "$(ProjectDir)..\publish\GameData\Telemachus\Plugins\" /e /y /i /r
-xcopy "$(TargetDir)websocket-sharp.dll" "$(ProjectDir)..\publish\GameData\Telemachus\Plugins\" /e /y /i /r
-
-xcopy "$(ProjectDir)..\Parts\*" "$(ProjectDir)..\publish\GameData\Telemachus\Parts\"  /e /y /i /r
-xcopy "$(ProjectDir)..\WebPages\WebPages\src\*" "$(ProjectDir)..\publish\GameData\Telemachus\Plugins\PluginData\Telemachus\" /e /y /i /r
-xcopy "$(ProjectDir)..\licences\*" "$(ProjectDir)..\publish\GameData\Telemachus\" /e /y /i /r
-copy "$(ProjectDir)..\readme.md" "$(ProjectDir)..\publish\GameData\Telemachus\"
-
-xcopy "$(ProjectDir)..\WebPages\WebPagesTest\src\*" "$(ProjectDir)..\ksp-telemachus-dev\GameData\Telemachus\Plugins\PluginData\Telemachus\test" /e /y /i /r
-xcopy "$(ProjectDir)..\publish\GameData\*"  "$(ProjectDir)..\ksp-telemachus-dev\GameData\" /e /y /i /r
-powershell -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $assets = Invoke-WebRequest -Uri https://api.github.com/repos/TeleIO/houston/releases/latest | ConvertFrom-Json; $assets = $assets.assets; iwr $assets.browser_download_url -OutFile h.zip; Expand-Archive -Path h.zip -DestinationPath houston;"
-
-
-mkdir "$(ProjectDir)..\publish\GameData\Telemachus\Plugins\PluginData\Telemachus\houston"
-xcopy "$(TargetDir)houston\*" "$(ProjectDir)..\publish\GameData\Telemachus\Plugins\PluginData\Telemachus\houston"  /e /y /i /r
-powershell -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; iwr https://github.com/TeleIO/mkon/archive/master.zip -OutFile mkon.zip; Expand-Archive -Path mkon.zip -DestinationPath mkon;"      
-mkdir "$(ProjectDir)..\publish\GameData\Telemachus\Plugins\PluginData\Telemachus\mkon"
-xcopy "$(TargetDir)mkon\mkon-master\*" "$(ProjectDir)..\publish\GameData\Telemachus\Plugins\PluginData\Telemachus\mkon"  /e /y /i /r
-dir "$(ProjectDir)..\publish\GameData\Telemachus\Plugins\PluginData\Telemachus\"
-    </PostBuildEvent>
-  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
-  </Target>
+  </Target>-->
   <Target Name="AfterBuild">
+    <Exec Command="./AfterBuild.sh $(ProjectDir) $(TargetDir)" Condition=" '$(OS)' != 'Windows_NT' " />
+    <Exec Command="AfterBuild.bat $(ProjectDir) $(TargetDir)" Condition=" '$(OS)' == 'Windows_NT' " />
   </Target>
-  -->
 </Project>
