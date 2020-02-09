@@ -11,13 +11,6 @@ Current status of project:
 * Integrated Houston + Mkon
 * Automated Building Pipeline
 
-[Building](https://github.com/richardbunt/Telemachus/wiki/Building)
-
-[KSP Forum Thread](hhttps://forum.kerbalspaceprogram.com/index.php?/topic/179887-telemachus-reborn-ksp-v15x-17x/)
-
-[Installation](https://github.com/richardbunt/Telemachus/wiki/Installation)
-
-[User Guide](https://github.com/richardbunt/Telemachus/wiki/User-Guide)
 
 #### Building (&testing) telemachus-reborn
 * this differs from the old original build docu found here:[Building](https://github.com/richardbunt/Telemachus/wiki/Building)
