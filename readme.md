@@ -24,6 +24,7 @@ Current status of project:
 * click Build->Build Solution and wait
 * the actual telemachus build artefacts will be copied to `$YOURGITREPO/Telemachus/bin/Debug` / `$YOURGITREPO/Telemachus/bin/Release`  by visual studio
 * The AfterBuild.(bat/sh) script will copy together all kinds of files(build artefacts+external deps (MKON,houston), telemachus DLLs + parts etc) into `$YOURGITREPO/publish`.
+  * Make sure to provide the project directory (the directory `AfterBuild.sh` lives in and the target directory (e.g. `bin/debug`) as the first and second argument, respectively (e.g. `./AfterBuild.sh . bin/debug` if running from the directory `AfterBuild.sh` lives in).
   * for mkon&houston: mkon & houston releases are simply downloaded from github,extracted and copied into the right place under `$YOURGITREPO/publish/GameData/Telemachus/Plugins/PluginData/Telemachus/...` 
 
 * to test a build copy the complete folder `Telemachus` found under `$YOURGITREPO/publish/GameData/` into your KSP install under `$KSPinstall/GameData/` and start ksp. you maybe want to delete a preexisting `Telemachus` folder in your `$KSPinstall/GameData`.
