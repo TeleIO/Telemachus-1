@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+
+set -o errexit
+set -o nounset
+
 ProjectDir=$1
 TargetDir=$2
 houstonUrl="$(curl --silent "https://api.github.com/repos/TeleIO/houston/releases/latest" | grep '"browser_download_url":'  | cut -d : -f2,3 | cut -d \" -f2)"
