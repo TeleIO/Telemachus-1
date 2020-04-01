@@ -10,8 +10,4 @@ ksp-telemachus-dev
 Telemachus.v12.suo
 WebPages/WebPages.v12.suo
 *.ide-wal
-.vs/Telemachus/xs
-.vs/Telemachus/v15/.suo
-.vs/Telemachus/v15/Server/sqlite3/db.lock
-.vs/Telemachus/v15/Server/sqlite3/storage.ide
-.vs/Telemachus/v15/Server/sqlite3/storage.ide-shm
+.vs/
