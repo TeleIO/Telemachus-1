@@ -3,9 +3,12 @@ Telemachus Supporting Project | Readme
 [![Build status](https://flat.badgen.net/appveyor/ci/DanGSun/Telemachus-1)](https://ci.appveyor.com/project/DanGSun/telemachus-1)
 [![](https://flat.badgen.net/github/stars/TeleIO/Telemachus-1)](https://github.com/TeleIO/Telemachus-1/stargazers)
 [![](https://flat.badgen.net/github/assets-dl/TeleIO/Telemachus-1)]()
+[![Discord Chat](https://img.shields.io/discord/695052938095231016.svg)](https://discord.gg/3f7JNH)
+
+#### Discord
+https://discord.gg/3f7JNH
 
 Current status of project:
-* Beta RPM Cameras
 * New Part System
 * Changed UI
 * Integrated Houston + Mkon
