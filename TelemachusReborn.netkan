@@ -1,0 +1,35 @@
+{
+  "spec_version": 1,
+  "identifier": "TelemachusReborn",
+  "name": "Telemachus Reborn",
+  "abstract": "Telemachus is a universal Web Telemetry Mod for Kerbal Space Program. It allows you to access any aspects of game from browser.",
+  "author": "DanGSun,Sidrus",
+  "$kref": "#/ckan/github/TeleIO/Telemachus-1",
+  "$vref": "#/ckan/ksp-avc",
+  "license": "MIT",
+  "release_status": "stable",
+  "resources": {
+    "homepage": "https://forum.kerbalspaceprogram.com/index.php?/topic/179887-*",
+  },
+  "tags": [
+    "plugin",
+    "information",
+    "telemetry",
+    "remote"
+  ],
+  "provides": [ "Telemachus" ],
+  "conflicts": [
+    { "name": "Telemachus" },
+    { "name": "TelemachusContinued" },
+    { "name": "Telemachus-2" }
+  ],
+  "recommends": [
+    { "name": "RasterPropMonitor" }
+  ],
+  "install": [
+    {
+      "file": "GameData/Telemachus",
+      "install_to": "GameData"
+    }
+  ]
+}
