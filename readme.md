@@ -15,7 +15,7 @@ Current status of project:
 * Automated Building Pipeline
 
 #### External Connection Note
-This mod includes version checking using [MiniAVC](http://forum.kerbalspaceprogram.com/threads/79745). If you opt-in, it will use the internet to check whether there is a new version available. Data is only read from the internet and no personal information is sent. For a more comprehensive version checking experience, please download the [KSP-AVC plugin](http://forum.kerbalspaceprogram.com/threads/79745).
+This mod includes version checking using [MiniAVC](https://forum.kerbalspaceprogram.com/index.php?/topic/173126-180-ksp-avc-add-on-version-checker-plugin-miniavc/). If you opt-in, it will use the internet to check whether there is a new version available. Data is only read from the internet and no personal information is sent. For a more comprehensive version checking experience, please download the [KSP-AVC plugin](https://github.com/linuxgurugamer/KSPAddonVersionChecker/releases).
 
 
 #### Building (&testing) telemachus-reborn
