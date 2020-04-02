@@ -117,6 +117,14 @@
   <ItemGroup>
     <Content Include="AfterBuild.bat" />
     <Content Include="AfterBuild.sh" />
+    <Content Include="deps\MiniAVC.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="deps\TelemachusReborn.version">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

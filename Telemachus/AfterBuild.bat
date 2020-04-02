@@ -4,6 +4,8 @@ rd /s /q "%1..\ksp-telemachus-dev\GameData\Telemachus"
 xcopy "%2Servers.dll" "%1..\publish\GameData\Telemachus\Plugins\" /e /y /i /r
 xcopy "%2Telemachus.dll" "%1..\publish\GameData\Telemachus\Plugins\" /e /y /i /r
 xcopy "%2websocket-sharp.dll" "%1..\publish\GameData\Telemachus\Plugins\" /e /y /i /r
+xcopy "%2\deps\MiniAVC.dll" "%1..\publish\GameData\Telemachus\" /e /y /i /r
+xcopy "%2\deps\telemachusReborn.version" "%1..\publish\GameData\Telemachus\" /e /y /i /r
 
 xcopy "%1..\Parts\*" "%1..\publish\GameData\Telemachus\Parts\"  /e /y /i /r
 xcopy "%1..\WebPages\WebPages\src\*" "%1..\publish\GameData\Telemachus\Plugins\PluginData\Telemachus\" /e /y /i /r
