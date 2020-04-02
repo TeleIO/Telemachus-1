@@ -24,8 +24,8 @@ mkdir -p "$ProjectDir/../publish/GameData/Telemachus/Plugins/PluginData/Telemach
 cp "$TargetDir/Telemachus.dll" "$ProjectDir/../publish/GameData/Telemachus/Plugins/"
 cp "$TargetDir/websocket-sharp.dll" "$ProjectDir/../publish/GameData/Telemachus/Plugins/"
 
-cp "$TargetDir/deps/MiniAVC.dll" "$ProjectDir/../publish/GameData/Telemachus/"
-cp "$TargetDir/deps/TelemachusReborn.version" "$ProjectDir/../publish/GameData/Telemachus/"
+cp "$ProjectDir/../dependencies/MiniAVC.dll" "$ProjectDir/../publish/GameData/Telemachus/"
+cp "$ProjectDir/../TelemachusReborn.version" "$ProjectDir/../publish/GameData/Telemachus/"
 
 cp -ra "$ProjectDir/../Parts/." "$ProjectDir/../publish/GameData/Telemachus/Parts/" 
 cp -ra "$ProjectDir/../WebPages/WebPages/src/." "$ProjectDir/../publish/GameData/Telemachus/Plugins/PluginData/Telemachus/"
