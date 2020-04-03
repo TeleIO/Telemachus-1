@@ -5,7 +5,6 @@ xcopy "%2Servers.dll" "%1..\publish\GameData\Telemachus\Plugins\" /e /y /i /r
 xcopy "%2Telemachus.dll" "%1..\publish\GameData\Telemachus\Plugins\" /e /y /i /r
 xcopy "%2websocket-sharp.dll" "%1..\publish\GameData\Telemachus\Plugins\" /e /y /i /r
 
-xcopy "%1..\dependencies\MiniAVC.dll" "%1..\publish\GameData\Telemachus\" /y /i /r
 xcopy "%1..\TelemachusReborn.version" "%1..\publish\GameData\Telemachus\" /y /i /r
 
 xcopy "%1..\Parts\*" "%1..\publish\GameData\Telemachus\Parts\"  /e /y /i /r
