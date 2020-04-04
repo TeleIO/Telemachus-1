@@ -7,6 +7,7 @@ Telemachus Supporting Project | Readme
 
 #### Discord
 Join our discord community!  Feel free to ask questions, make suggestions, or just hang out with us.
+
 https://discord.gg/3f7JNH
 
 #### Current status of project:
