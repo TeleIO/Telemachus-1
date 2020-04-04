@@ -6,13 +6,11 @@ Telemachus Supporting Project | Readme
 [![Discord Chat](https://img.shields.io/discord/695052938095231016.svg)](https://discord.gg/3f7JNH)
 
 #### Discord
+Join our discord community!  Feel free to ask questions, make suggestions, or just hang out with us.
 https://discord.gg/3f7JNH
 
-Current status of project:
-* New Part System
-* Changed UI
-* Integrated Houston + Mkon
-* Automated Building Pipeline
+#### Current status of project:
+The project has a new maintainer and is actively being developed.  Also, work has started on a v2.0 to modernize the code base and update many of the systems.  If you have feature requests, please open a new issue so we can prioritize the work.
 
 #### Building (&testing) telemachus-reborn
 * this differs from the old original build docu found here:[Building](https://github.com/richardbunt/Telemachus/wiki/Building)
