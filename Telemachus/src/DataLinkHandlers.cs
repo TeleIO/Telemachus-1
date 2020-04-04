@@ -2057,7 +2057,7 @@ namespace Telemachus
 
         public List<T> get(DataSources dataSources)
         {
-            string ID = dataSources.args[0].ToLowerInvariant();
+            string ID = dataSources.args[0];
             List<T> avail = null, ret = null;
 
             lock (cacheLock)
