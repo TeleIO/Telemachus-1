@@ -8,7 +8,7 @@ Telemachus Supporting Project | Readme
 #### Discord
 Join our discord community!  Feel free to ask questions, make suggestions, or just hang out with us.
 
-https://discord.gg/dVJDcV
+https://discord.gg/nkbauw7
 
 #### Current status of project:
 The project has a new maintainer and is actively being developed.  Also, work has started on a v2.0 to modernize the code base and update many of the systems.  If you have feature requests, please open a new issue so we can prioritize the work.
