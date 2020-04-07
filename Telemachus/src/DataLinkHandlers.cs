@@ -2039,7 +2039,7 @@ namespace Telemachus
             set {
                 if (theVessel == value) return;
                 theVessel = value;
-                if (VesselPropertyChanged != null) VesselPropertyChanged(this, EventArgs.Empty);
+                VesselPropertyChanged?.Invoke(this, EventArgs.Empty);
             }
         }
 
@@ -2057,7 +2057,7 @@ namespace Telemachus
 
         public List<T> get(DataSources dataSources)
         {
-            string ID = dataSources.args[0];
+            string ID = dataSources.args[0].ToLowerInvariant();
             List<T> avail = null, ret = null;
 
             lock (cacheLock)
@@ -2249,9 +2249,9 @@ namespace Telemachus
                     {
                         if (!partModules.ContainsKey(module.sensorType.ToString()))
                         {
-                            partModules[module.sensorType.ToString()] = new List<ModuleEnviroSensor>();
+                            partModules[module.sensorType.ToString().ToLowerInvariant()] = new List<ModuleEnviroSensor>();
                         }
-                        partModules[module.sensorType.ToString()].Add(module);
+                        partModules[module.sensorType.ToString().ToLowerInvariant()].Add(module);
                     }
                 }
             }
