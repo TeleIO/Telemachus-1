@@ -1,0 +1,135 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Telemachus | Панель</title>
+  <link rel="stylesheet" href="css/jquery-ui-1.10.3.min.css" type="text/css" charset="UTF-8">
+  <link rel="stylesheet" href="css/leafletksp.css" type="text/css" charset="UTF-8">
+  <link rel="stylesheet" href="css/console.css" type="text/css" media="screen" charset="UTF-8">
+  <script src="js/jquery-1.9.1.min.js" type="text/javascript" charset="UTF-8"></script>
+  <script src="js/jquery-ui-1.10.3.min.js" type="text/javascript" charset="UTF-8"></script>
+  <script src="js/jquery.ui.touch-punch.min.js" type="text/javascript" charset="UTF-8"></script>
+  <script src="js/d3.v3.min.js" type="text/javascript" charset="UTF-8"></script>
+  <script src="js/leafletksp.js" type="text/javascript" charset="UTF-8"></script>
+  <script src="js/ru_console.js" type="text/javascript" charset="UTF-8"></script>
+</head>
+<body>
+  <header>
+    <h1></h1>
+    <nav class="dropdown">
+      <button>
+        <svg viewBox="0,0 180,150">
+          <title>Смена панели</title>
+          <path d="M15,15L165,15M15,75L165,75M15,135L165,135"></path>
+        </svg>
+      </button>
+      <ul>
+      </ul>
+    </nav>
+    <p id="met">T+00:00:00 MET</p>
+    <p id="ut">Year 1, Day 1, 00:00:00 UT</p>
+  </header>
+  <div id="container">
+    <article id="telemetry">
+      <header>
+        <h2>Telemetry</h2>
+      </header>
+      <ul>
+      </ul>
+      <form>
+        <div>
+          <select id="apiCategory">
+            <option value="^v\.">Корабль</option>
+            <option value="^o\.">Орбита</option>
+            <option value="^n\.">Nav Ball</option>
+            <option value="^s\.">Сенсоры</option>
+            <option value="^tar\.">Цель</option>
+            <option value="^dock\.">Стыковка</option>
+            <option value="^r\.">Ресурсы</option>
+            <optgroup label="Небесные тела">
+              <option value="^b\..*\[0\]">Кербол</option>
+              <option value="^b\..*\[1\]">Кербин</option>
+              <option value="^b\..*\[2\]">Муна</option>
+              <option value="^b\..*\[3\]">Минмус</option>
+              <option value="^b\..*\[4\]">Мохо</option>
+              <option value="^b\..*\[5\]">Ева</option>
+              <option value="^b\..*\[6\]">Дюна</option>
+              <option value="^b\..*\[7\]">Айк</option>
+              <option value="^b\..*\[8\]">Джул</option>
+              <option value="^b\..*\[9\]">Лайф</option>
+              <option value="^b\..*\[10\]">Валли</option>
+              <option value="^b\..*\[11\]">Боп</option>
+              <option value="^b\..*\[12\]">Тайло</option>
+              <option value="^b\..*\[13\]">Гилли</option>
+              <option value="^b\..*\[14\]">Пол</option>
+              <option value="^b\..*\[15\]">Дрес</option>
+              <option value="^b\..*\[16\]">Илу</option>
+            </optgroup>
+            <option value="^(?!([vbnos]|dock|tar)\.)">Другое</option>
+          </select>
+          <select id="apiSelect">
+          </select>
+          <input type="submit" value="Add">
+        </div>
+      </form>
+    </article>
+    <div id="charts">
+      <article class="large chart">
+        <header>
+          <h2></h2>
+          <nav class="dropdown">
+            <button>
+              <svg viewBox="0,0 180,150">
+                <title>Сменить график</title>
+                <path d="M15,15L165,15M15,75L165,75M15,135L165,135"></path>
+              </svg>
+            </button>
+            <ul>
+            </ul>
+          </nav>
+        </header>
+        <div class="display"></div>
+        <p class="alert"></p>
+      </article>
+      <article class="small chart">
+        <header>
+          <h2></h2>
+          <nav class="dropdown">
+            <button>
+              <svg viewBox="0,0 180,150">
+                <title>Сменить график</title>
+                <path d="M15,15L165,15M15,75L165,75M15,135L165,135"></path>
+              </svg>
+            </button>
+            <ul>
+            </ul>
+          </nav>
+        </header>
+        <div class="display"></div>
+        <p class="alert"></p>
+      </article>
+      <article class="small chart">
+        <header>
+          <h2></h2>
+          <nav class="dropdown">
+            <button>
+              <svg viewBox="0,0 180,150">
+                <title>Сменить график</title>
+                <path d="M15,15L165,15M15,75L165,75M15,135L165,135"></path>
+              </svg>
+            </button>
+            <ul>
+            </ul>
+          </nav>
+        </header>
+        <div class="display"></div>
+        <p class="alert"></p>
+      </article>
+    </div>
+  </div>
+  <footer>
+    <button id="saveLayout">Сохранить панель</button>
+    <button id="deleteLayout">Удалить панель</button>
+    <!-- <button id="newChart" disabled>New chart</button> -->
+  </footer>
+</body>
+</html>

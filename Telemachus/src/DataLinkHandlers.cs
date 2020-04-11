@@ -9,6 +9,7 @@ using System.Collections;
 using UnityEngine;
 using KSP.UI.Screens;
 using KSP.UI.Util;
+using KSP.Localization;
 
 namespace Telemachus
 {
@@ -885,6 +886,7 @@ namespace Telemachus
         #endregion
     }
 
+
     public class TargetDataLinkHandler : DataLinkHandler
     {
         #region Initialisation
@@ -1375,6 +1377,22 @@ namespace Telemachus
         }
 
         #endregion
+    }
+
+    public class LangDataLinkHandler : DataLinkHandler
+    {
+        public LangDataLinkHandler(FormatterProvider formatters)
+        : base(formatters)
+        {
+            registerAPI(new APIEntry(
+                dataSources =>
+                {
+                    PluginLogger.debug("Start GET");
+                    return KSP.Localization.Localizer.CurrentLanguage;
+                },
+                "o.gameLanguage", "Language  [object gameLanguage]",
+                formatters.ManeuverNodeList, APIEntry.UnitType.UNITLESS));
+        }
     }
 
     public class BodyDataLinkHandler : DataLinkHandler
@@ -2021,7 +2039,7 @@ namespace Telemachus
             set {
                 if (theVessel == value) return;
                 theVessel = value;
-                if (VesselPropertyChanged != null) VesselPropertyChanged(this, EventArgs.Empty);
+                VesselPropertyChanged?.Invoke(this, EventArgs.Empty);
             }
         }
 
@@ -2231,9 +2249,9 @@ namespace Telemachus
                     {
                         if (!partModules.ContainsKey(module.sensorType.ToString()))
                         {
-                            partModules[module.sensorType.ToString()] = new List<ModuleEnviroSensor>();
+                            partModules[module.sensorType.ToString().ToLowerInvariant()] = new List<ModuleEnviroSensor>();
                         }
-                        partModules[module.sensorType.ToString()].Add(module);
+                        partModules[module.sensorType.ToString().ToLowerInvariant()].Add(module);
                     }
                 }
             }

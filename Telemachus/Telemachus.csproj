@@ -10,19 +10,19 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Telemachus</RootNamespace>
     <AssemblyName>Telemachus</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
+    <Optimize>true</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <LangVersion>4</LangVersion>
+    <LangVersion>6</LangVersion>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -32,44 +32,48 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <LangVersion>4</LangVersion>
+    <LangVersion>6</LangVersion>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Assembly-CSharp">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Kerbal Space Program\KSP_x64_Data\Managed\Assembly-CSharp.dll</HintPath>
-    </Reference>
-    <Reference Include="Assembly-CSharp-firstpass">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Kerbal Space Program\KSP_x64_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
-    </Reference>
-    <Reference Include="KSPAssets">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Kerbal Space Program\KSP_x64_Data\Managed\KSPAssets.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="UnityEngine, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Kerbal Space Program\KSP_x64_Data\Managed\UnityEngine.dll</HintPath>
+    <Reference Include="UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\ksp-telemachus-dev\KSP_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.Analytics">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Kerbal Space Program\KSP_x64_Data\Managed\UnityEngine.Analytics.dll</HintPath>
+    <Reference Include="UnityEngine.ImageConversionModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\ksp-telemachus-dev\KSP_Data\Managed\UnityEngine.ImageConversionModule.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.Networking">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Kerbal Space Program\KSP_x64_Data\Managed\UnityEngine.Networking.dll</HintPath>
+    <Reference Include="UnityEngine.UnityWebRequestModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\ksp-telemachus-dev\KSP_Data\Managed\UnityEngine.UnityWebRequestModule.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.Timeline">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Kerbal Space Program\KSP_x64_Data\Managed\UnityEngine.Timeline.dll</HintPath>
+    <Reference Include="UnityEngine.UnityWebRequestWWWModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\ksp-telemachus-dev\KSP_Data\Managed\UnityEngine.UnityWebRequestWWWModule.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.UI, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Kerbal Space Program\KSP_x64_Data\Managed\UnityEngine.UI.dll</HintPath>
+    <Reference Include="UnityEngine">
+      <HintPath>..\references\UnityEngine.dll</HintPath>
     </Reference>
-    <Reference Include="UnityScript.Lang">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Kerbal Space Program\KSP_x64_Data\Managed\UnityScript.Lang.dll</HintPath>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>..\references\UnityEngine.UI.dll</HintPath>
     </Reference>
-    <Reference Include="websocket-sharp">
-      <HintPath>..\websocket-sharp.dll</HintPath>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>..\references\UnityEngine.CoreModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.ImageConversionModule">
+      <HintPath>..\references\UnityEngine.ImageConversionModule</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UnityWebRequestWWWModule">
+      <HintPath>..\references\UnityEngine.UnityWebRequestWWWModule.dll</HintPath>
+    </Reference>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>..\references\Assembly-CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Assembly-CSharp-firstpass">
+      <HintPath>..\references\Assembly-CSharp-firstpass.dll</HintPath>
+    </Reference>
+    <Reference Include="websocket-sharp, Version=1.0.2.59611, Culture=neutral, PublicKeyToken=5660b08a1845a91e, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebSocketSharp.1.0.3-rc11\lib\websocket-sharp.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -78,8 +82,16 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="src\CameraSnapshots\CameraCapture.cs" />
+    <Compile Include="src\CameraSnapshots\IVACameraCapture.cs" />
+    <Compile Include="src\CameraSnapshots\CurrentFlightCameraCapture.cs" />
+    <Compile Include="src\CameraSnapshots\RasterPropMonitorCamera.cs" />
+    <Compile Include="src\CameraSnapshots\RasterPropMonitorCameraCapture.cs" />
+    <Compile Include="src\CameraSnapshots\CameraCaptureManager.cs" />
+    <Compile Include="src\CameraSnapshots\SnapshotRenderer.cs" />
     <Compile Include="src\DataLinkFormatters.cs" />
     <Compile Include="src\DataLinkHandlers.cs" />
+    <Compile Include="src\CameraResponsibility.cs" />
     <Compile Include="src\DataLinkResponsibility.cs" />
     <Compile Include="src\ElseResponsibility.cs" />
     <Compile Include="src\IOPageResponsibility.cs" />
@@ -102,29 +114,20 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="AfterBuild.bat" />
+    <Content Include="AfterBuild.sh" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>rd /s /q  "$(ProjectDir)..\publish\GameData"
-rd /s /q "$(ProjectDir)..\ksp-telemachus-dev\GameData\Telemachus"
-
-xcopy "$(TargetDir)Servers.dll" "$(ProjectDir)..\publish\GameData\Telemachus\Plugins\" /e /y /i /r
-xcopy "$(TargetDir)Telemachus.dll" "$(ProjectDir)..\publish\GameData\Telemachus\Plugins\" /e /y /i /r
-xcopy "$(TargetDir)websocket-sharp.dll" "$(ProjectDir)..\publish\GameData\Telemachus\Plugins\" /e /y /i /r
-
-xcopy "$(ProjectDir)..\Parts\*" "$(ProjectDir)..\publish\GameData\Telemachus\Parts\"  /e /y /i /r
-xcopy "$(ProjectDir)..\WebPages\WebPages\src\*" "$(ProjectDir)..\publish\GameData\Telemachus\Plugins\PluginData\Telemachus\" /e /y /i /r
-xcopy "$(ProjectDir)..\licences\*" "$(ProjectDir)..\publish\GameData\Telemachus\" /e /y /i /r
-copy "$(ProjectDir)..\readme.md" "$(ProjectDir)..\publish\GameData\Telemachus\"
-
-xcopy "$(ProjectDir)..\WebPages\WebPagesTest\src\*" "$(ProjectDir)..\ksp-telemachus-dev\GameData\Telemachus\Plugins\PluginData\Telemachus\test" /e /y /i /r
-xcopy "$(ProjectDir)..\publish\GameData\*"  "$(ProjectDir)..\ksp-telemachus-dev\GameData\" /e /y /i /r
-</PostBuildEvent>
-  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
-  </Target>
+  </Target>-->
   <Target Name="AfterBuild">
+    <Exec Command="./AfterBuild.sh $(ProjectDir) $(TargetDir)" Condition=" '$(OS)' != 'Windows_NT' " />
+    <Exec Command="AfterBuild.bat $(ProjectDir) $(TargetDir)" Condition=" '$(OS)' == 'Windows_NT' " />
   </Target>
-  -->
 </Project>

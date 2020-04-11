@@ -67,6 +67,8 @@ namespace Telemachus
                     webDispatcher = new KSPWebServerDispatcher();
                     webDispatcher.AddResponder(new ElseResponsibility());
                     webDispatcher.AddResponder(new IOPageResponsibility());
+                    var cameraLink = new CameraResponsibility(apiInstance, rateTracker);
+                    webDispatcher.AddResponder(cameraLink);
                     var dataLink = new DataLinkResponsibility(apiInstance, rateTracker);
                     webDispatcher.AddResponder(dataLink);
 
@@ -102,7 +104,7 @@ namespace Telemachus
         static private void writeDefaultConfig()
         {
             config.SetValue("PORT", 8085);
-            config.SetValue("IPADDRESS", "127.0.0.1");
+            config.SetValue("IPADDRESS", "0.0.0.0");
             config.save();
         }
 

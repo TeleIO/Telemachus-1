@@ -1,0 +1,21 @@
+version: 1.7.{build}
+build:
+  project: Telemachus
+  publish_core_console: true
+  verbosity: minimal
+after_build:
+- ps: >-
+    cd publish
+    
+    7z a GameData.zip GameData
+artifacts:
+- path: publish/GameData.zip
+  name: GameData
+deploy:
+- provider: GitHub
+  description: AppVeyor Automated Build
+  auth_token:
+    secure: RjZPWXSDR25JeJunbxnS3ybYWeptboZx4fXAv4smNzoEH703qEjyOd4vE14+xL9t
+  repository: TeleIO/Telemachus-1
+  artifact: GameData
+  draft: true
