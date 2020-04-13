@@ -70,7 +70,7 @@
       series: ["s.sensor.temp"],
       yaxis: {
         label: "Temperature",
-        unit: "\u00B0C",
+        unit: "\u00B0K",
         min: null,
         max: null
       }
