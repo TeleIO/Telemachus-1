@@ -61,7 +61,7 @@
       series: ["s.sensor.pres"],
       yaxis: {
         label: "Pressure",
-        unit: "Pa",
+        unit: "kPa",
         min: 0,
         max: null
       }
@@ -634,16 +634,16 @@
         return v;
       },
       temp: function(v) {
-        return v.toPrecision(6) + "\u00B0C";
+          return v.toFixed(2) + " K"; 
       },
       pres: function(v) {
-        return siUnit(v / 1000, "Pa");
+          return v.toFixed(4) + " kPa";
       },
       grav: function(v) {
-        return siUnit(v, "m/s\u00B2");
+          return v.toFixed(2) + " m/s\u00B2";
       },
       acc: function(v) {
-        return v.toPrecision(6) + " G";
+          return v.toFixed(3) + " G";
       },
       date: function(v) {
         return dateString(v);
