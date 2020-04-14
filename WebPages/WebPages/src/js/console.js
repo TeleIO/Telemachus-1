@@ -613,7 +613,7 @@
     formatters: {
       unitless: function(v) {
         if (typeof v === "number") {
-          return v.toPrecision(6);
+          return v.toFixed(2);
         } else {
           return v;
         }
@@ -622,7 +622,10 @@
         return siUnit(v, "m/s");
       },
       deg: function(v) {
-        return v.toPrecision(6) + "\u00B0";
+        return v.toFixed(2) + "\u00B0";
+      },
+      latlon: function (v) {
+        return v.toFixed(6) + "\u00B0";
       },
       distance: function(v) {
         return siUnit(v, "m");
