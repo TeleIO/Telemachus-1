@@ -1720,10 +1720,10 @@ namespace Telemachus
                 "v.atmosphericDensity", "Atmospheric Density", formatters.Default, APIEntry.UnitType.UNITLESS));
             registerAPI(new PlotableAPIEntry(
                 dataSources => { return dataSources.vessel.longitude > 180 ? dataSources.vessel.longitude - 360.0 : dataSources.vessel.longitude; },
-                "v.long", "Longitude", formatters.Default, APIEntry.UnitType.DEG));
+                "v.long", "Longitude", formatters.Default, APIEntry.UnitType.LATLON));
             registerAPI(new PlotableAPIEntry(
                 dataSources => { return dataSources.vessel.latitude; },
-                "v.lat", "Latitude", formatters.Default, APIEntry.UnitType.DEG));
+                "v.lat", "Latitude", formatters.Default, APIEntry.UnitType.LATLON));
             registerAPI(new PlotableAPIEntry(
                 dataSources => {return (dataSources.vessel.atmDensity * 0.5) * Math.Pow(dataSources.vessel.srf_velocity.magnitude, 2); },
                 "v.dynamicPressure", "Dynamic Pressure", formatters.Default, APIEntry.UnitType.UNITLESS));
@@ -2494,7 +2494,7 @@ namespace Telemachus
     {
         #region Enumeration
 
-        public enum UnitType { UNITLESS, VELOCITY, DEG, DISTANCE, TIME, STRING, TEMP, PRES, GRAV, ACC, DENSITY, DYNAMICPRESSURE, G, DATE };
+        public enum UnitType { UNITLESS, VELOCITY, DEG, DISTANCE, TIME, STRING, TEMP, PRES, GRAV, ACC, DENSITY, DYNAMICPRESSURE, G, DATE, LATLON };
 
         #endregion
 
