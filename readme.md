@@ -3,7 +3,7 @@ Telemachus Reborn
 [![Build status](https://flat.badgen.net/appveyor/ci/DanGSun/Telemachus-1)](https://ci.appveyor.com/project/DanGSun/telemachus-1)
 [![](https://flat.badgen.net/github/stars/TeleIO/Telemachus-1)](https://github.com/TeleIO/Telemachus-1/stargazers)
 [![](https://img.shields.io/github/downloads/TeleIO/Telemachus-1/total.svg)]()
-[![Discord Chat](https://img.shields.io/discord/695052938095231016.svg)](https://discord.gg/3f7JNH)
+[![Discord Chat](https://img.shields.io/discord/695052938095231016.svg)](https://discord.gg/nkbauw7)
 
 # Join the community!
 We always welcome new ideas and suggestions via [issues](https://github.com/TeleIO/Telemachus-1/issues), but sometimes live chat is better.  To support that, we have a [Discord](https://discord.gg/nkbauw7) server setup where most contributors hang out.  Feel free to ask questions, make suggestions, or just hang out with us.  Please remember to follow the [code of conduct](https://github.com/TeleIO/Telemachus-1/wiki/Code-of-Conduct).
