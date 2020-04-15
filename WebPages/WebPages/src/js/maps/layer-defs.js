@@ -3,13 +3,18 @@
 class TelemachusMaps {
     layerDefinitions = [
         {
+            name: 'Kerbin Satellite (Stock)',
+            layer: this.generateStockLayer({ body: 'kerbin', style: 'sat' })
+        },
+        {
+            name: 'Mun Satellite (Stock)',
+            layer: this.generateStockLayer({ body: 'mun', style: 'sat' })
+        },
+        {
             name: 'Kerbin Satellite (JNSQ)',
             layer: this.generateJnsqLayer({ service: 'jnsq', body: 'kerbin', style: 'sat' })
         },
-        {
-            name: 'Kerbin Satellite (Stock)',
-            layer: this.generateStockLayer({ body: 'kerbin', style: 'sat' })
-        }
+        
     ];
 
     generateLayer(url, layerDefinition) {

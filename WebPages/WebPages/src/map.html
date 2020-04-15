@@ -41,6 +41,7 @@
                 rawData = [[0]];
 
                 L.control.layers(baseLayers).addTo(map);
+                tm.layerDefinitions[0].layer.addTo(map);
                 marker.addTo(map);
 
                 jKSPWAPI.initPoll("longs=v.long&lat=v.lat&name=v.name&alt=v.altitude&m=v.surfaceVelocity&body=v.body", function (rawData) { }, function (rawData, d) {
