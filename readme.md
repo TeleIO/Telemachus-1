@@ -1,4 +1,4 @@
-Telemachus Supporting Project | Readme
+Telemachus Reborn
 =
 [![Build status](https://flat.badgen.net/appveyor/ci/DanGSun/Telemachus-1)](https://ci.appveyor.com/project/DanGSun/telemachus-1)
 [![](https://flat.badgen.net/github/stars/TeleIO/Telemachus-1)](https://github.com/TeleIO/Telemachus-1/stargazers)
