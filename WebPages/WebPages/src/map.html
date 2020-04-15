@@ -16,6 +16,7 @@
 
     <script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="js/jKSPWAPICore.js"></script>
+    <script type="text/javascript" src="js/maps/layer-defs.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.6.1/proj4.js"></script>
 
     <script>
@@ -23,13 +24,10 @@
             var previousBody = -1;
             var newBody;
 
-            const baseLayer = new L.tileLayer('https://d3kmnwgldcmvsd.cloudfront.net/tiles/kerbin/sat/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="https://kerbal-maps.finitemonkeys.org/">Kerbal Maps</a>',
-                tms: true
-            });
-
+            const tm = new TelemachusMaps();
+            const baseLayers = tm.layerDefinitionsAsObject();
+            console.log(baseLayers);
             const marker = L.marker([0, 0]);
-
             const map = new L.map('map', {
                 crs: L.CRS.EPSG4326,
                 zoom: 0,
@@ -42,7 +40,7 @@
             jQuery(document).ready(function ($) {
                 rawData = [[0]];
 
-                baseLayer.addTo(map);
+                L.control.layers(baseLayers).addTo(map);
                 marker.addTo(map);
 
                 jKSPWAPI.initPoll("longs=v.long&lat=v.lat&name=v.name&alt=v.altitude&m=v.surfaceVelocity&body=v.body", function (rawData) { }, function (rawData, d) {
