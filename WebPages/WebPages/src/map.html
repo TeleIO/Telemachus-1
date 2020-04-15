@@ -4,52 +4,51 @@
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
     <title>Kerbal Maps</title>
 
-    <link rel="stylesheet" type="text/css" href="css/leafletksp.css" />
     <link rel="stylesheet" href="css/jKSPWAPICore.css" />
+    <link rel="stylesheet" href="css/map.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+          integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+          crossorigin="" />
 
-    <script type="text/javascript" src="js/leafletksp.js"></script>
+    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+            integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+            crossorigin=""></script>
 
     <script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="js/jKSPWAPICore.js"></script>
+    <script type="text/javascript" src="js/maps/layer-defs.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.6.1/proj4.js"></script>
+
     <script>
         function startMap() {
             var previousBody = -1;
             var newBody;
+
+            const tm = new TelemachusMaps();
+            const baseLayers = tm.layerDefinitionsAsObject();
+            console.log(baseLayers);
+            const marker = L.marker([0, 0]);
+            const map = new L.map('map', {
+                crs: L.CRS.EPSG4326,
+                zoom: 0,
+                center: [-0.1027, -74.5754],
+                bodyControl: false,
+                layerControl: true,
+                scaleControl: true
+            });
+
             jQuery(document).ready(function ($) {
-                map = new L.KSP.Map('map', {
-                    layers: [L.KSP.CelestialBody.KERBIN],
-                    zoom: L.KSP.CelestialBody.KERBIN.defaultLayer.options.maxZoom,
-                    center: [-0.1027, -74.5754],
-                    bodyControl: false,
-                    layerControl: true,
-                    scaleControl: true
-                });
-                map.fitWorld();
                 rawData = [[0]];
-                var marker = [L.marker([0, 0]), L.marker([0, 0])];
-                marker[0].addTo(map);
+
+                L.control.layers(baseLayers).addTo(map);
+                tm.layerDefinitions[0].layer.addTo(map);
+                marker.addTo(map);
+
                 jKSPWAPI.initPoll("longs=v.long&lat=v.lat&name=v.name&alt=v.altitude&m=v.surfaceVelocity&body=v.body", function (rawData) { }, function (rawData, d) {
-
-                    if (previousBody != d.body) {
-                        try {
-                            newBody = L.KSP.CelestialBody[d.body.toUpperCase()];
-                            newBody.addTo(map);
-                            previousBody = d.body;
-                        } catch (e) {
-                            if (d.body === undefined) {
-                                previousBody = d.body;
-                            } else {
-                                //alert("Body not supported yet. (" + d.body + ")")
-                                previousBody = -1;
-                            }
-                            
-                        }
-                    }
-
                     if (!isNaN(d.lat) && !isNaN(d.longs)) {
-                        marker[0].setLatLng([d.lat, (d.longs > 180 ? d.longs - 360.0 : d.longs)]);
-                        marker[0].bindPopup(d.name + " </br>Altitude: " + d.alt + "</br>Surface Velocity: " + d.m);
-                        marker[0].update();
+                        marker.setLatLng([d.lat, (d.longs > 180 ? d.longs - 360.0 : d.longs)]);
+                        marker.bindPopup(d.name + " </br>Altitude: " + d.alt + "</br>Surface Velocity: " + d.m);
+                        marker.update();
                     }
                 }, rawData)
             });
@@ -57,6 +56,6 @@
     </script>
 </head>
 <body onload="startMap();" style="padding: 0; margin: 0;">
-    <div id="map" class="map" style="padding: 0; margin: 0; height: 100%;"></div>
+    <div id="map"></div>
 </body>
 </html>
