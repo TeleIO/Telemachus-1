@@ -47,7 +47,7 @@
                 jKSPWAPI.initPoll("longs=v.long&lat=v.lat&name=v.name&alt=v.altitude&m=v.surfaceVelocity&body=v.body", function (rawData) { }, function (rawData, d) {
                     if (!isNaN(d.lat) && !isNaN(d.longs)) {
                         marker.setLatLng([d.lat, (d.longs > 180 ? d.longs - 360.0 : d.longs)]);
-                        marker.bindPopup(d.name + " </br>Altitude: " + d.alt + "</br>Surface Velocity: " + d.m);
+                        marker.bindPopup(d.name + " </br>Altitude: " + (d.alt > 10000 ? (d.alt/1000).toFixed(1) + " km" : d.alt.toFixed() + " m") + "</br>Surface Velocity: " + d.m.toFixed() + " m/s");
                         marker.update();
                     }
                 }, rawData)
