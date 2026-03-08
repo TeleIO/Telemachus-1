@@ -14,6 +14,7 @@
         devShells.default = pkgs.mkShell {
           packages = with pkgs; [
             mono         # MSBuild + Mono runtime (.NET Framework 4.7.2)
+            nuget        # NuGet package manager
             dotnet-sdk_8 # language server / IDE support
             curl
             unzip

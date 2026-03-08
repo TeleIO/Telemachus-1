@@ -18,6 +18,9 @@ jobs:
       - name: Install dependencies
         run: sudo apt-get install -y mono-complete curl unzip
 
+      - name: Restore NuGet packages
+        run: nuget restore Telemachus.sln
+
       - name: Build
         run: |
           MONO_BCL=$(find /usr/lib/mono -maxdepth 1 -name "4.7*" -type d | sort -rV | head -1)

@@ -5,6 +5,7 @@ using System.Text;
 using System.Linq;
 using System.Threading;
 using System.Reflection;
+using Newtonsoft.Json;
 using WebSocketSharp.Net;
 using WebSocketSharp;
 using UnityEngine;
@@ -76,7 +77,7 @@ namespace Telemachus
 
         private static IDictionary<string, object> parseJSONBody(string jsonBody)
         {
-            return (IDictionary<string, object>)SimpleJson.SimpleJson.DeserializeObject(jsonBody);
+            return JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonBody);
         }
 
         public string cameraURL(HttpListenerRequest request, CameraCapture camera)
@@ -110,7 +111,7 @@ namespace Telemachus
                 jsonObject.Add(jsonData);
             }
 
-            byte[] jsonBytes = Encoding.UTF8.GetBytes(SimpleJson.SimpleJson.SerializeObject(jsonObject));
+            byte[] jsonBytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(jsonObject));
 
             response.ContentEncoding = Encoding.UTF8;
             response.ContentType = "application/json";

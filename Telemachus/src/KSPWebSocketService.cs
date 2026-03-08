@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using WebSocketSharp;
 using WebSocketSharp.Server;
 
@@ -55,7 +57,7 @@ namespace Telemachus
             dataRates.RecieveDataFromClient(e.RawData.Length);
 
             // deserialize the message as JSON
-            var json = SimpleJson.SimpleJson.DeserializeObject(e.Data) as SimpleJson.JsonObject;
+            var json = JObject.Parse(e.Data);
 
             lock (dataLock)
             {
@@ -65,13 +67,13 @@ namespace Telemachus
                     // Try converting the item to a list - this is the most common expected.
                     // If we got a string, then add it to the list to allow "one-shot" submission
                     string[] listContents = new string[] { };
-                    if (entry.Value is SimpleJson.JsonArray)
+                    if (entry.Value is JArray arr)
                     {
-                        listContents = (entry.Value as SimpleJson.JsonArray).OfType<string>().Select(x => x.Trim()).ToArray();
+                        listContents = arr.Values<string>().Select(x => x.Trim()).ToArray();
                     }
-                    else if (entry.Value is string)
+                    else if (entry.Value.Type == JTokenType.String)
                     {
-                        listContents = new[] { entry.Value as string };
+                        listContents = new[] { entry.Value.Value<string>() };
                     }
 
                     // Process the possible API entries
@@ -92,7 +94,7 @@ namespace Telemachus
                     }
                     else if (entry.Key == "rate")
                     {
-                        streamRate = Convert.ToInt32(entry.Value);
+                        streamRate = entry.Value.Value<int>();
                         PluginLogger.print(string.Format("Client {0} setting rate {1}", ID, streamRate));
                     }
                     else if (entry.Key == "binary")
@@ -207,7 +209,7 @@ namespace Telemachus
             //    PluginLogger.print(string.Format("Send byte data for {0}, {1}, {2}, {3}", heading, pitch, roll, deltaV));
             //}
 
-            var data = SimpleJson.SimpleJson.SerializeObject(apiResults);
+            var data = JsonConvert.SerializeObject(apiResults);
             // Now, if we have data send a message, otherwise send a null message
             readyToSend = false;
             try

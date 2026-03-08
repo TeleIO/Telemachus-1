@@ -5,6 +5,7 @@ using System.Text;
 using System.Linq;
 using System.Threading;
 using System.Reflection;
+using Newtonsoft.Json;
 using WebSocketSharp.Net;
 using WebSocketSharp;
 
@@ -47,7 +48,7 @@ namespace Telemachus
 
         private static IDictionary<string, object> parseJSONBody(string jsonBody)
         {
-            return (IDictionary<string, object>)SimpleJson.SimpleJson.DeserializeObject(jsonBody);
+            return JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonBody);
         }
 
         public bool process(HttpListenerRequest request, HttpListenerResponse response)
@@ -94,7 +95,7 @@ namespace Telemachus
             if (errors.Count > 0) results["errors"] = errors;
 
             // Now, serialize the dictionary and write to the response
-            var returnData = Encoding.UTF8.GetBytes(SimpleJson.SimpleJson.SerializeObject(results));
+            var returnData = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(results));
             response.ContentEncoding = Encoding.UTF8;
             response.ContentType = "application/json";
             response.WriteContent(returnData);

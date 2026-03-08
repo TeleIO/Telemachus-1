@@ -7,7 +7,9 @@ images
 *.v11.suo
 Leaflet.KSP
 ksp-telemachus-dev
+packages/
 Telemachus.v12.suo
 WebPages/WebPages.v12.suo
 *.ide-wal
 .vs/
+.claude/settings.local.json

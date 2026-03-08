@@ -72,6 +72,9 @@
     <Reference Include="Assembly-CSharp-firstpass">
       <HintPath>..\references\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="websocket-sharp, Version=1.0.2.59611, Culture=neutral, PublicKeyToken=5660b08a1845a91e, processorArchitecture=MSIL">
       <HintPath>..\packages\WebSocketSharp.1.0.3-rc11\lib\websocket-sharp.dll</HintPath>
     </Reference>
@@ -100,7 +103,7 @@
     <Compile Include="src\PluginRegistration.cs" />
     <Compile Include="src\Plugins\RasterPropMonitorPlugin.cs" />
     <Compile Include="src\ServerConfiguration.cs" />
-    <Compile Include="src\SimpleJSON.cs" />
+    <Compile Include="src\InfinityJsonConverter.cs" />
     <Compile Include="src\TelemachusBehaviour.cs" />
     <Compile Include="src\TelemachusPartModules.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
