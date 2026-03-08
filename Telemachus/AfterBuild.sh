@@ -5,7 +5,12 @@ set -o nounset
 
 ProjectDir=$1
 TargetDir=$2
-houstonUrl="$(curl --silent "https://api.github.com/repos/TeleIO/houston/releases/latest" | grep '"browser_download_url":' | cut -d : -f2,3 | cut -d \" -f2)"
+
+authHeader=()
+if [ -n "${GITHUB_TOKEN:-}" ]; then
+  authHeader=(-H "Authorization: token $GITHUB_TOKEN")
+fi
+houstonUrl="$(curl --silent "${authHeader[@]}" "https://api.github.com/repos/TeleIO/houston/releases/latest" | grep '"browser_download_url":' | cut -d : -f2,3 | cut -d \" -f2)"
 mkonUrl="https://github.com/TeleIO/mkon/archive/master.zip"
 
 echo "$ProjectDir"

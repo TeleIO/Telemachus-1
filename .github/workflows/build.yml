@@ -24,6 +24,8 @@ jobs:
         run: mono /tmp/nuget.exe restore Telemachus.sln
 
       - name: Build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           MONO_BCL=$(find /usr/lib/mono -maxdepth 1 -name "4.7*" -type d | sort -rV | head -1)
           echo "Using Mono BCL: $MONO_BCL"
