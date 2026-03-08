@@ -16,7 +16,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Install dependencies
-        run: sudo apt-get install -y mono-complete curl unzip
+        run: sudo apt-get install -y mono-complete nuget curl unzip
 
       - name: Restore NuGet packages
         run: nuget restore Telemachus.sln
