@@ -7,7 +7,6 @@ using System.Reflection;
 using System.Linq;
 using System.Text;
 using System.Timers;
-using Newtonsoft.Json;
 using UnityEngine;
 using WebSocketSharp.Server;
 
@@ -183,11 +182,6 @@ namespace Telemachus
 
         public void Awake()
         {
-            JsonConvert.DefaultSettings = () => new JsonSerializerSettings
-            {
-                Converters = { new InfinityJsonConverter() }
-            };
-
             // Ensure the static instance is set even in partless mode
             // (TelemachusPowerDrain.OnAwake sets it when a part exists)
             instance ??= gameObject;

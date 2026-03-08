@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using WebSocketSharp;
 using WebSocketSharp.Server;
 
@@ -57,7 +55,7 @@ namespace Telemachus
             dataRates.RecieveDataFromClient(e.RawData.Length);
 
             // deserialize the message as JSON
-            var json = JObject.Parse(e.Data);
+            var json = Json.DecodeObject(e.Data);
 
             lock (dataLock)
             {
@@ -67,13 +65,13 @@ namespace Telemachus
                     // Try converting the item to a list - this is the most common expected.
                     // If we got a string, then add it to the list to allow "one-shot" submission
                     string[] listContents = new string[] { };
-                    if (entry.Value is JArray arr)
+                    if (entry.Value is List<object> arr)
                     {
-                        listContents = arr.Values<string>().Select(x => x.Trim()).ToArray();
+                        listContents = arr.Select(x => x.ToString().Trim()).ToArray();
                     }
-                    else if (entry.Value.Type == JTokenType.String)
+                    else if (entry.Value is string s)
                     {
-                        listContents = new[] { entry.Value.Value<string>() };
+                        listContents = new[] { s };
                     }
 
                     // Process the possible API entries
@@ -94,7 +92,7 @@ namespace Telemachus
                     }
                     else if (entry.Key == "rate")
                     {
-                        streamRate = entry.Value.Value<int>();
+                        streamRate = Convert.ToInt32(entry.Value);
                         PluginLogger.print(string.Format("Client {0} setting rate {1}", ID, streamRate));
                     }
                     else if (entry.Key == "binary")
@@ -189,7 +187,7 @@ namespace Telemachus
                 SendAsync(byteData.ToArray(), x => { });
             }
 
-            var data = JsonConvert.SerializeObject(apiResults);
+            var data = Json.Encode(apiResults);
             // Now, if we have data send a message, otherwise send a null message
             readyToSend = false;
             try

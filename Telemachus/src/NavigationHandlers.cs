@@ -24,6 +24,24 @@ namespace Telemachus
 
         [TelemetryAPI("t.universalTime", "Universal Time", Units = APIEntry.UnitType.DATE, AlwaysEvaluable = true)]
         object UniversalTime(DataSources ds) => Planetarium.GetUniversalTime();
+
+        [TelemetryAPI("t.currentRate", "Current Warp Rate")]
+        object CurrentRate(DataSources ds) => TimeWarp.CurrentRate;
+
+        [TelemetryAPI("t.currentRateIndex", "Current Warp Rate Index")]
+        object CurrentRateIndex(DataSources ds) => TimeWarp.CurrentRateIndex;
+
+        [TelemetryAPI("t.warpMode", "Warp Mode (HIGH or LOW)", Units = APIEntry.UnitType.STRING)]
+        object WarpMode(DataSources ds) => TimeWarp.WarpMode.ToString();
+
+        [TelemetryAPI("t.maxPhysicsRate", "Max Physics Warp Rate")]
+        object MaxPhysicsRate(DataSources ds) => TimeWarp.MaxPhysicsRate;
+
+        [TelemetryAPI("t.deltaTime", "Delta Time")]
+        object DeltaTime(DataSources ds) => TimeWarp.deltaTime;
+
+        [TelemetryAPI("t.isPaused", "Game Is Paused")]
+        object IsPaused(DataSources ds) => FlightDriver.Pause;
     }
 
     public class TargetDataLinkHandler : DataLinkHandler
@@ -182,6 +200,33 @@ namespace Telemachus
             Orbit orbitPatch = OrbitPatches.getOrbitPatch(FlightGlobals.fetch.VesselTarget.GetOrbit(), index);
             if (orbitPatch == null) return null;
             return orbitPatch.getRelativePositionAtUT(ut);
+        }
+
+        // --- Target Actions ---
+
+        [TelemetryAPI("tar.setTargetBody", "Set Target to Celestial Body [int body id]", IsAction = true)]
+        object SetTargetBody(DataSources ds)
+        {
+            int bodyId = int.Parse(ds.args[0]);
+            if (bodyId < 0 || bodyId >= FlightGlobals.Bodies.Count) return false;
+            FlightGlobals.fetch.SetVesselTarget(FlightGlobals.Bodies[bodyId]);
+            return true;
+        }
+
+        [TelemetryAPI("tar.setTargetVessel", "Set Target to Vessel by Index [int vessel index]", IsAction = true)]
+        object SetTargetVessel(DataSources ds)
+        {
+            int vesselIdx = int.Parse(ds.args[0]);
+            if (vesselIdx < 0 || vesselIdx >= FlightGlobals.Vessels.Count) return false;
+            FlightGlobals.fetch.SetVesselTarget(FlightGlobals.Vessels[vesselIdx]);
+            return true;
+        }
+
+        [TelemetryAPI("tar.clearTarget", "Clear Current Target", IsAction = true)]
+        object ClearTarget(DataSources ds)
+        {
+            FlightGlobals.fetch.SetVesselTarget(null);
+            return true;
         }
 
         public override bool process(String API, out APIEntry result)

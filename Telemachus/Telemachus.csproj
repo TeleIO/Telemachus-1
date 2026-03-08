@@ -37,7 +37,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="UnityEngine">
       <HintPath>..\references\UnityEngine.dll</HintPath>
@@ -51,17 +50,11 @@
     <Reference Include="UnityEngine.ImageConversionModule">
       <HintPath>..\references\UnityEngine.ImageConversionModule.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.UnityWebRequestWWWModule">
-      <HintPath>..\references\UnityEngine.UnityWebRequestWWWModule.dll</HintPath>
-    </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>..\references\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp-firstpass">
       <HintPath>..\references\Assembly-CSharp-firstpass.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="websocket-sharp, Version=1.0.2.59611, Culture=neutral, PublicKeyToken=5660b08a1845a91e, processorArchitecture=MSIL">
       <HintPath>..\packages\WebSocketSharp.1.0.3-rc11\lib\websocket-sharp.dll</HintPath>
@@ -89,6 +82,8 @@
     <Compile Include="src\VesselDataHandlers.cs" />
     <Compile Include="src\ResourceHandlers.cs" />
     <Compile Include="src\SystemHandlers.cs" />
+    <Compile Include="src\DeltaVHandlers.cs" />
+    <Compile Include="src\AlarmClockHandlers.cs" />
     <Compile Include="src\CameraResponsibility.cs" />
     <Compile Include="src\DataLinkResponsibility.cs" />
     <Compile Include="src\ElseResponsibility.cs" />
@@ -99,7 +94,7 @@
     <Compile Include="src\Plugins\RasterPropMonitorPlugin.cs" />
     <Compile Include="src\ServerConfiguration.cs" />
     <Compile Include="src\IndexRangePolyfill.cs" />
-    <Compile Include="src\InfinityJsonConverter.cs" />
+    <Compile Include="src\Json.cs" />
     <Compile Include="src\KSPAPIBase.cs" />
     <Compile Include="src\TelemachusBehaviour.cs" />
     <Compile Include="src\TelemachusPartModules.cs" />

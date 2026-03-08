@@ -5,7 +5,6 @@ using System.Text;
 using System.Linq;
 using System.Threading;
 using System.Reflection;
-using Newtonsoft.Json;
 using WebSocketSharp.Net;
 using WebSocketSharp;
 using UnityEngine;
@@ -60,7 +59,7 @@ namespace Telemachus
                 hostname = request.UserHostName;
             }
 
-            return request.Url.Scheme + "://" + hostname + PAGE_PREFIX + "/" + UnityEngine.WWW.EscapeURL(camera.cameraManagerName());
+            return request.Url.Scheme + "://" + hostname + PAGE_PREFIX + "/" + Uri.EscapeDataString(camera.cameraManagerName());
         }
 
         public bool processCameraManagerIndex(HttpListenerRequest request, HttpListenerResponse response)
@@ -79,7 +78,7 @@ namespace Telemachus
                 jsonObject.Add(jsonData);
             }
 
-            byte[] jsonBytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(jsonObject));
+            byte[] jsonBytes = Encoding.UTF8.GetBytes(Json.Encode(jsonObject));
 
             response.ContentEncoding = Encoding.UTF8;
             response.ContentType = "application/json";
@@ -132,7 +131,7 @@ namespace Telemachus
             else if (cameraNameEndpointRegex.IsMatch(request.Url.AbsolutePath))
             {
                 Match match = cameraNameEndpointRegex.Match(request.Url.AbsolutePath);
-                string cameraName = UnityEngine.WWW.UnEscapeURL(match.Groups[1].Value);
+                string cameraName = Uri.UnescapeDataString(match.Groups[1].Value);
                 //PluginLogger.debug("GET CAMERA: " + cameraName);
                 return processCameraImageRequest(cameraName, request, response);
             }

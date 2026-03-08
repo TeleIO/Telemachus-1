@@ -192,8 +192,51 @@ namespace Telemachus
             registerAPI(new ActionAPIEntry(BuildActionGroupToggle(KSPActionGroup.Custom10), "f.ag10", "Action Group 10 [optional bool on/off]", formatters.Default));
         }
 
+        // --- Throttle ---
+
         [TelemetryAPI("f.throttle", "Throttle")]
         object Throttle(DataSources ds) => ds.vessel.ctrlState.mainThrottle;
+
+        // --- Control Inputs (current frame) ---
+
+        [TelemetryAPI("f.pitchInput", "Pitch Control Input")]
+        object PitchInput(DataSources ds) => ds.vessel.ctrlState.pitch;
+
+        [TelemetryAPI("f.yawInput", "Yaw Control Input")]
+        object YawInput(DataSources ds) => ds.vessel.ctrlState.yaw;
+
+        [TelemetryAPI("f.rollInput", "Roll Control Input")]
+        object RollInput(DataSources ds) => ds.vessel.ctrlState.roll;
+
+        [TelemetryAPI("f.xInput", "RCS X Translation Input")]
+        object XInput(DataSources ds) => ds.vessel.ctrlState.X;
+
+        [TelemetryAPI("f.yInput", "RCS Y Translation Input")]
+        object YInput(DataSources ds) => ds.vessel.ctrlState.Y;
+
+        [TelemetryAPI("f.zInput", "RCS Z Translation Input")]
+        object ZInput(DataSources ds) => ds.vessel.ctrlState.Z;
+
+        // --- Trim ---
+
+        [TelemetryAPI("f.pitchTrim", "Pitch Trim")]
+        object PitchTrim(DataSources ds) => ds.vessel.ctrlState.pitchTrim;
+
+        [TelemetryAPI("f.yawTrim", "Yaw Trim")]
+        object YawTrim(DataSources ds) => ds.vessel.ctrlState.yawTrim;
+
+        [TelemetryAPI("f.rollTrim", "Roll Trim")]
+        object RollTrim(DataSources ds) => ds.vessel.ctrlState.rollTrim;
+
+        // --- Control State ---
+
+        [TelemetryAPI("f.isNeutral", "Controls Are Neutral")]
+        object IsNeutral(DataSources ds) => ds.vessel.ctrlState.isNeutral;
+
+        [TelemetryAPI("f.killRot", "SAS Kill Rotation Active")]
+        object KillRot(DataSources ds) => ds.vessel.ctrlState.killRot;
+
+        // --- Action Group Values ---
 
         [TelemetryAPI("v.rcsValue", "Query RCS value")]
         object RcsValue(DataSources ds) => ds.vessel.ActionGroups[KSPActionGroup.RCS];
@@ -210,8 +253,81 @@ namespace Telemachus
         [TelemetryAPI("v.gearValue", "Query gear value")]
         object GearValue(DataSources ds) => ds.vessel.ActionGroups[KSPActionGroup.Gear];
 
+        [TelemetryAPI("v.abortValue", "Query abort value")]
+        object AbortValue(DataSources ds) => ds.vessel.ActionGroups[KSPActionGroup.Abort];
+
+        [TelemetryAPI("v.ag1Value", "Query Action Group 1 value")]
+        object Ag1Value(DataSources ds) => ds.vessel.ActionGroups[KSPActionGroup.Custom01];
+
+        [TelemetryAPI("v.ag2Value", "Query Action Group 2 value")]
+        object Ag2Value(DataSources ds) => ds.vessel.ActionGroups[KSPActionGroup.Custom02];
+
+        [TelemetryAPI("v.ag3Value", "Query Action Group 3 value")]
+        object Ag3Value(DataSources ds) => ds.vessel.ActionGroups[KSPActionGroup.Custom03];
+
+        [TelemetryAPI("v.ag4Value", "Query Action Group 4 value")]
+        object Ag4Value(DataSources ds) => ds.vessel.ActionGroups[KSPActionGroup.Custom04];
+
+        [TelemetryAPI("v.ag5Value", "Query Action Group 5 value")]
+        object Ag5Value(DataSources ds) => ds.vessel.ActionGroups[KSPActionGroup.Custom05];
+
+        [TelemetryAPI("v.ag6Value", "Query Action Group 6 value")]
+        object Ag6Value(DataSources ds) => ds.vessel.ActionGroups[KSPActionGroup.Custom06];
+
+        [TelemetryAPI("v.ag7Value", "Query Action Group 7 value")]
+        object Ag7Value(DataSources ds) => ds.vessel.ActionGroups[KSPActionGroup.Custom07];
+
+        [TelemetryAPI("v.ag8Value", "Query Action Group 8 value")]
+        object Ag8Value(DataSources ds) => ds.vessel.ActionGroups[KSPActionGroup.Custom08];
+
+        [TelemetryAPI("v.ag9Value", "Query Action Group 9 value")]
+        object Ag9Value(DataSources ds) => ds.vessel.ActionGroups[KSPActionGroup.Custom09];
+
+        [TelemetryAPI("v.ag10Value", "Query Action Group 10 value")]
+        object Ag10Value(DataSources ds) => ds.vessel.ActionGroups[KSPActionGroup.Custom10];
+
         [TelemetryAPI("v.precisionControlValue", "Query precision controls value")]
         object PrecisionControlValue(DataSources ds) => FlightInputHandler.fetch.precisionMode;
+
+        // --- SAS / Autopilot ---
+
+        [TelemetryAPI("f.sasMode", "Current SAS Mode", Units = APIEntry.UnitType.STRING)]
+        object SasMode(DataSources ds) => ds.vessel.Autopilot.Mode.ToString();
+
+        [TelemetryAPI("f.sasEnabled", "SAS Autopilot Enabled")]
+        object SasEnabled(DataSources ds) => ds.vessel.Autopilot.Enabled;
+
+        [TelemetryAPI("f.setSASMode", "Set SAS Mode [string mode: StabilityAssist, Prograde, Retrograde, Normal, Antinormal, RadialIn, RadialOut, Target, AntiTarget, Maneuver]", IsAction = true)]
+        object SetSASMode(DataSources ds)
+        {
+            var mode = (VesselAutopilot.AutopilotMode)Enum.Parse(
+                typeof(VesselAutopilot.AutopilotMode), ds.args[0], true);
+            ds.vessel.Autopilot.SetMode(mode);
+            return mode.ToString();
+        }
+
+        // --- Trim Actions ---
+
+        [TelemetryAPI("f.setPitchTrim", "Set Pitch Trim [float trim]", IsAction = true)]
+        object SetPitchTrim(DataSources ds)
+        {
+            ds.vessel.ctrlState.pitchTrim = checkFlightStateParameters(float.Parse(ds.args[0]));
+            return 0;
+        }
+
+        [TelemetryAPI("f.setYawTrim", "Set Yaw Trim [float trim]", IsAction = true)]
+        object SetYawTrim(DataSources ds)
+        {
+            ds.vessel.ctrlState.yawTrim = checkFlightStateParameters(float.Parse(ds.args[0]));
+            return 0;
+        }
+
+        [TelemetryAPI("f.setRollTrim", "Set Roll Trim [float trim]", IsAction = true)]
+        object SetRollTrim(DataSources ds)
+        {
+            ds.vessel.ctrlState.rollTrim = checkFlightStateParameters(float.Parse(ds.args[0]));
+            return 0;
+        }
 
         private APIDelegate BuildActionGroupToggle(KSPActionGroup actionGroup)
         {

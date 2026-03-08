@@ -29,7 +29,9 @@ namespace Telemachus
                     new APIDataLinkHandler(this, formatters, serverConfiguration),
                     new NavBallDataLinkHandler(formatters),
                     new MapViewDataLinkHandler(formatters),
-                    new DockingDataLinkHandler(formatters)
+                    new DockingDataLinkHandler(formatters),
+                    new DeltaVDataLinkHandler(formatters),
+                    new AlarmClockDataLinkHandler(formatters)
                     }, formatters
                 ));
         }

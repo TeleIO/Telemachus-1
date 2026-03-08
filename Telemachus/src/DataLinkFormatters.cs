@@ -30,6 +30,10 @@ namespace Telemachus
         public DataSourceResultFormatter Vector3d { get; set; }
         public DataSourceResultFormatter Default { get; set; }
         public DataSourceResultFormatter StringArray { get; set; }
+        public DataSourceResultFormatter DeltaVStageInfo { get; set; }
+        public DataSourceResultFormatter DeltaVStageInfoList { get; set; }
+        public DataSourceResultFormatter Alarm { get; set; }
+        public DataSourceResultFormatter AlarmList { get; set; }
     }
 
     public class JSONFormatterProvider : FormatterProvider
@@ -60,6 +64,10 @@ namespace Telemachus
             Vector3d = new Vector3dJSONFormatter();
             StringArray = new APIEntryStringArrayFormatter();
             Default = new DefaultJSONFormatter();
+            DeltaVStageInfo = new DeltaVStageInfoJSONFormatter();
+            DeltaVStageInfoList = new DeltaVStageInfoListJSONFormatter();
+            Alarm = new AlarmJSONFormatter();
+            AlarmList = new AlarmListJSONFormatter();
         }
 
         public abstract class JSONFormatter : DataSourceResultFormatter
@@ -412,6 +420,81 @@ namespace Telemachus
                 }
 
                 return orbitPatchListData;
+            }
+        }
+
+        public class DeltaVStageInfoJSONFormatter : JSONFormatter
+        {
+            public override object prepareForSerialization(object input)
+            {
+                if (input is not DeltaVStageInfo stage) return null;
+                var d = new Dictionary<string, object>();
+                d["stage"] = stage.stage;
+                d["deltaVVac"] = stage.deltaVinVac;
+                d["deltaVASL"] = stage.deltaVatASL;
+                d["deltaVActual"] = stage.deltaVActual;
+                d["thrustVac"] = stage.thrustVac;
+                d["thrustASL"] = stage.thrustASL;
+                d["thrustActual"] = stage.thrustActual;
+                d["ispVac"] = stage.ispVac;
+                d["ispASL"] = stage.ispASL;
+                d["ispActual"] = stage.ispActual;
+                d["TWRVac"] = stage.TWRVac;
+                d["TWRASL"] = stage.TWRASL;
+                d["TWRActual"] = stage.TWRActual;
+                d["burnTime"] = stage.stageBurnTime;
+                d["stageMass"] = stage.stageMass;
+                d["dryMass"] = stage.dryMass;
+                d["fuelMass"] = stage.fuelMass;
+                d["startMass"] = stage.startMass;
+                d["endMass"] = stage.endMass;
+                return d;
+            }
+        }
+
+        public class DeltaVStageInfoListJSONFormatter : JSONFormatter
+        {
+            private DeltaVStageInfoJSONFormatter stageFormatter = new();
+            public override object prepareForSerialization(object input)
+            {
+                if (input is not List<DeltaVStageInfo> stages)
+                    return new List<Dictionary<string, object>>();
+                var result = new List<Dictionary<string, object>>();
+                foreach (var stage in stages)
+                    result.Add((Dictionary<string, object>)stageFormatter.prepareForSerialization(stage));
+                return result;
+            }
+        }
+
+        public class AlarmJSONFormatter : JSONFormatter
+        {
+            public override object prepareForSerialization(object input)
+            {
+                if (input is not AlarmTypeBase alarm) return null;
+                var d = new Dictionary<string, object>();
+                d["title"] = alarm.title;
+                d["description"] = alarm.description;
+                d["ut"] = alarm.ut;
+                d["timeToAlarm"] = alarm.TimeToAlarm;
+                d["type"] = alarm.GetType().Name;
+                d["vesselName"] = alarm.vesselName;
+                d["vesselId"] = alarm.vesselId;
+                d["eventOffset"] = alarm.eventOffset;
+                return d;
+            }
+        }
+
+        public class AlarmListJSONFormatter : JSONFormatter
+        {
+            private AlarmJSONFormatter alarmFormatter = new();
+            public override object prepareForSerialization(object input)
+            {
+                if (input is not List<AlarmTypeBase> alarms)
+                    return new List<Dictionary<string, object>>();
+                var result = new List<Dictionary<string, object>>();
+                foreach (var alarm in alarms)
+                    result.Add((Dictionary<string, object>)alarmFormatter.prepareForSerialization(alarm));
+                return result;
             }
         }
     }
