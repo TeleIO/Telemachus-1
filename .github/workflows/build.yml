@@ -1,0 +1,38 @@
+name: Build
+
+on:
+  push:
+    branches: ["**"]
+    tags: ["v*"]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: sudo apt-get install -y mono-complete curl unzip
+
+      - name: Build
+        run: msbuild Telemachus.sln /p:Configuration=Release /p:Platform="Any CPU"
+
+      - name: Zip GameData
+        run: cd publish && zip -r GameData.zip GameData
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: GameData
+          path: publish/GameData.zip
+
+      - name: Create draft release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          draft: true
+          files: publish/GameData.zip
