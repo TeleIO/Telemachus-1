@@ -49,7 +49,7 @@
       <HintPath>..\references\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.ImageConversionModule">
-      <HintPath>..\references\UnityEngine.ImageConversionModule</HintPath>
+      <HintPath>..\references\UnityEngine.ImageConversionModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UnityWebRequestWWWModule">
       <HintPath>..\references\UnityEngine.UnityWebRequestWWWModule.dll</HintPath>
