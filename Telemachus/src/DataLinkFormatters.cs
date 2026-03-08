@@ -206,9 +206,31 @@ namespace Telemachus
                         float f = 0;
                         try
                         {
-                            // Try to read the sensor as a float by grabbing the start
+                            // Try to read the sensor display string first
                             var numberOnly = Regex.Match(sensor.readoutInfo, "^[-+]?[0-9]*\\.?[0-9]*([eE][-+]?[0-9]+)?").Value;
                             float.TryParse(numberOnly, out f);
+
+                            // readoutInfo may not update when the PAW is closed (#47);
+                            // fall back to reading directly from FlightGlobals
+                            if (f == 0 && sensor.part != null && sensor.part.vessel != null)
+                            {
+                                Vessel v = sensor.part.vessel;
+                                switch (sensor.sensorType.ToString().ToUpperInvariant())
+                                {
+                                    case "ACC":
+                                        f = (float)v.geeForce;
+                                        break;
+                                    case "GRAV":
+                                        f = (float)FlightGlobals.getGeeForceAtPosition(v.GetWorldPos3D()).magnitude;
+                                        break;
+                                    case "PRES":
+                                        f = (float)v.staticPressurekPa;
+                                        break;
+                                    case "TEMP":
+                                        f = (float)v.externalTemperature;
+                                        break;
+                                }
+                            }
                         }
                         catch
                         {
