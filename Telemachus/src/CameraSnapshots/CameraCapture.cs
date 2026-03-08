@@ -27,17 +27,6 @@ namespace Telemachus.CameraSnapshots
         protected Dictionary<string, Camera> cameraDuplicates = new Dictionary<string, Camera>();
         protected List<string> activeCameras = new List<string>();
         protected static readonly string[] skippedCameras = { "UIMainCamera", "UIVectorCamera", "velocity camera" };
-        private readonly string[] knownCameraNames =
-        {
-            "GalaxyCamera",
-            "Camera ScaledSpace",
-            "Camera VE Underlay", // Environmental Visual Enhancements plugin camera
-            "Camera VE Overlay",  // Environmental Visual Enhancements plugin camera
-            "Camera 01",
-            "Camera 00",
-            "InternalCamera",
-            "FXCamera"
-        };
 
         public Dictionary<string, Camera> gameCameraMapping = new Dictionary<string, Camera>();
 
@@ -135,12 +124,6 @@ namespace Telemachus.CameraSnapshots
                     continue;
                 }
 
-                // Don't duplicate cameras we don't know about
-                if (knownCameraNames.IndexOf(camera.name) == -1)
-                {
-                    continue;
-                }
-
                 //PluginLogger.debug(cameraManagerName() +  " {" + verboseCameraDetails(camera) + "}");
 
                 if (!cameraDuplicates.ContainsKey(camera.name))
@@ -153,7 +136,9 @@ namespace Telemachus.CameraSnapshots
                     cameraDuplicate.aspect = aspect;
 
                     cameraDuplicate.targetTexture = this.overviewTexture;
-                    if (camera.name == "Camera 00" || camera.name == "FXCamera")
+                    // Adjust near clip for scene cameras (not galaxy/scaled space)
+                    if (camera.name != "GalaxyCamera" && camera.name != "Camera ScaledSpace"
+                        && !camera.name.StartsWith("Camera VE"))
                     {
                         cameraDuplicate.nearClipPlane = cameraDuplicate.farClipPlane / 8192.0f;
                     }

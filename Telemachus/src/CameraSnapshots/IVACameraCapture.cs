@@ -33,12 +33,12 @@ namespace Telemachus.CameraSnapshots
 
                 if (CameraManager.Instance.currentCameraMode == CameraManager.CameraMode.IVA)
                 {
-                    foreach (Camera camera in Camera.allCameras)
+                    // Get FoV directly from the InternalCamera component instead of
+                    // searching Camera.allCameras by name (which fails in KSP 1.8+)
+                    Camera internalCam = InternalCamera.Instance.GetComponent<Camera>();
+                    if (internalCam != null)
                     {
-                        if (camera.name == "InternalCamera")
-                        {
-                            fovAngle = camera.fieldOfView;
-                        }
+                        fovAngle = internalCam.fieldOfView;
                     }
                 }
                 else
