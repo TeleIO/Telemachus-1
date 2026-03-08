@@ -531,16 +531,6 @@ namespace Telemachus
             on_attitude = 0;
         }
 
-        private float checkFlightStateParameters(float f)
-        {
-            if (float.IsNaN(f))
-            {
-                f = 0;
-            }
-
-            return Mathf.Clamp(f, -1f, 1f);
-        }
-
         #endregion
 
         #region DataLinkHandler
@@ -1162,7 +1152,6 @@ namespace Telemachus
     {
 
         static float ut = 0, x = 0, y = 0, z = 0;
-        static int maneuver_node_id = 0;
         #region Initialisation
 
         public MapViewDataLinkHandler(FormatterProvider formatters)
@@ -1344,16 +1333,6 @@ namespace Telemachus
             PluginLogger.debug("FINDING THE RIGHT NODE. ID: " + id);
             ManeuverNode[] nodes = datasources.vessel.patchedConicSolver.maneuverNodes.ToArray();
             return (ManeuverNode)nodes.GetValue(id);
-        }
-
-        private float checkFlightStateParameters(float f)
-        {
-            if (float.IsNaN(f))
-            {
-                f = 0;
-            }
-
-            return Mathf.Clamp(f, -1f, 1f);
         }
 
         #endregion
@@ -2480,6 +2459,16 @@ namespace Telemachus
         protected virtual int pausedHandler()
         {
             return 0;
+        }
+
+        protected static float checkFlightStateParameters(float f)
+        {
+            if (float.IsNaN(f))
+            {
+                f = 0;
+            }
+
+            return Mathf.Clamp(f, -1f, 1f);
         }
 
         #endregion

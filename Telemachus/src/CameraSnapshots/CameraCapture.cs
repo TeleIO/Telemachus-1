@@ -224,55 +224,6 @@ namespace Telemachus.CameraSnapshots
         }
 
 
-        /*public void UpdateCameras()
-        {
-            if (CameraManager.Instance != null)
-            {
-                //PluginLogger.debug("CURRENT CAMERA MODE: " + CameraManager.Instance.currentCameraMode);
-            }
-
-            activeCameras = new List<string>();
-            PluginLogger.debug("UPDATING CAMERAS");
-            foreach (Camera camera in Camera.allCameras)
-            {
-                // debugCameraDetails(camera);
-                // Don't duplicate any cameras we're going to skip
-                if (skippedCameras.IndexOf(camera.name) != -1)
-                {
-                    continue;
-                }
-
-                Camera cameraDuplicate;
-
-                if (!cameraDuplicates.ContainsKey(camera.name))
-                {
-                    var cameraDuplicateGameObject = new GameObject(cameraContainerNamePrefix + camera.name);
-                    cameraDuplicate = cameraDuplicateGameObject.AddComponent<Camera>();
-                    cameraDuplicates[camera.name] = cameraDuplicate;
-                }
-                else
-                {
-                    cameraDuplicate = cameraDuplicates[camera.name];
-                }
-
-                cameraDuplicate.CopyFrom(camera);
-                cameraDuplicate.enabled = false;
-                cameraDuplicate.fieldOfView = fovAngle;
-                cameraDuplicate.aspect = aspect;
-
-                if (camera.name == "Camera 00" || camera.name == "FXCamera")
-                {
-                    //PluginLogger.debug("ADJUSTING NEAR CLIPPING PLANE FOR: " + camera.name + " : " + cameraDuplicate.farClipPlane / 8192.0f);
-                    cameraDuplicate.nearClipPlane = cameraDuplicate.farClipPlane / 8192.0f;
-                }
-
-                additionalCameraUpdates(cameraDuplicate);
-
-                //Now that the camera has been duplicated, add it to the list of active cameras
-                activeCameras.Add(camera.name);
-            }
-        }*/
-
         public virtual void additionalCameraUpdates(Camera dupliateCam, Camera gameCamera) { }
 
         public virtual void debugCameraDetails(Camera cam)
@@ -281,31 +232,5 @@ namespace Telemachus.CameraSnapshots
         }
 
         public virtual void BeforeRenderNewScreenshot() { }
-
-        /*public IEnumerator NewScreenshot()
-        {
-            if (mutex)
-            {
-                yield return true;
-            }
-            //PluginLogger.debug("BYPASSED MUTEX");
-            mutex = true;
-            //PluginLogger.debug("WAITING FOR END OF FRAME");
-            yield return new WaitForEndOfFrame();
-
-            BeforeRenderNewScreenshot();
-
-            List<Camera> renderingCameras = new List<Camera>();
-            foreach (string cameraName in activeCameras)
-            {
-                //PluginLogger.debug("[" + cameraManagerName() + "] GETTING CAMERA " + cameraName);
-                renderingCameras.Add(cameraDuplicates[cameraName]);
-            }
-
-            this.imageBytes = SnapshotRenderer.renderSnaphot(renderingCameras, cameraResolution, cameraResolution);
-            this.didRender = true;
-            mutex = false;
-        }*/
-
     }
 }

@@ -189,26 +189,6 @@ namespace Telemachus
                 SendAsync(byteData.ToArray(), x => { });
             }
 
-            //if (allVariables.Contains("binaryNavigation"))
-            //{
-            //    allVariables = allVariables.Where(x => x != "binaryNavigation").ToArray();
-            //    // Build and dispatch the binary information, here and quickly....
-            //    var pitch = Convert.ToSingle(api.ProcessAPIString("n.pitch"));
-            //    var roll = Convert.ToSingle(api.ProcessAPIString("n.roll"));
-            //    var heading = Convert.ToSingle(api.ProcessAPIString("n.heading"));
-            //    var deltaV = Convert.ToSingle(api.ProcessAPIString("v.verticalSpeed"));
-            //    var parts = new List<byte[]>();
-            //    parts.Add(new byte[] { 1 });
-            //    parts.Add(BitConverter.GetBytes(heading));
-            //    parts.Add(BitConverter.GetBytes(pitch));
-            //    parts.Add(BitConverter.GetBytes(roll));
-            //    parts.Add(BitConverter.GetBytes(deltaV));
-            //    if (BitConverter.IsLittleEndian) parts = parts.Select(x => x.Reverse().ToArray()).ToList();
-            //    var byteData = parts.SelectMany(x => x).ToArray();
-            //    SendAsync(byteData, x => { });
-            //    PluginLogger.print(string.Format("Send byte data for {0}, {1}, {2}, {3}", heading, pitch, roll, deltaV));
-            //}
-
             var data = JsonConvert.SerializeObject(apiResults);
             // Now, if we have data send a message, otherwise send a null message
             readyToSend = false;
