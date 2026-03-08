@@ -96,11 +96,7 @@ namespace Telemachus
 
         public bool processCameraManagerIndex(HttpListenerRequest request, HttpListenerResponse response)
         {
-            if (GameObject.Find("CurrentFlightCameraCapture") == null)
-            {
-                //PluginLogger.debug("REBUILDING CAMERA CAPTURE");
-                this.setCameraCapture();
-            }
+            CameraCaptureManager.classedInstance.EnsureFlightCamera();
 
             var jsonObject = new List<Dictionary<string, object>>();
 

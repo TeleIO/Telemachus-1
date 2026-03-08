@@ -67,6 +67,18 @@ namespace Telemachus.CameraSnapshots
             GameEvents.onGameSceneLoadRequested.Add(removeFlightCameraIfNotFlight);
         }
 
+        /// <summary>
+        /// Ensures the flight camera exists. Called lazily on first camera
+        /// request in case onFlightReady fired before the manager was created.
+        /// </summary>
+        public void EnsureFlightCamera()
+        {
+            if (HighLogic.LoadedSceneIsFlight && cameraCaptureTest == null)
+            {
+                addFlightCamera();
+            }
+        }
+
         private void removeFlightCameraIfNotFlight(GameScenes data)
         {
             if (data != GameScenes.FLIGHT && cameraCaptureTest)
