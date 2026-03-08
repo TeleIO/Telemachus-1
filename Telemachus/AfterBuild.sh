@@ -27,7 +27,7 @@ cp "$ProjectDir/../TelemachusReborn.version" "$ProjectDir/../publish/GameData/Te
 cp -ra "$ProjectDir/../Parts/."                         "$ProjectDir/../publish/GameData/Telemachus/Parts/"
 cp -ra "$ProjectDir/../WebPages/WebPages/src/."         "$ProjectDir/../publish/GameData/Telemachus/Plugins/PluginData/Telemachus/"
 cp -ra "$ProjectDir/../Licences/."                      "$ProjectDir/../publish/GameData/Telemachus/"
-cp     "$ProjectDir/../readme.md"                       "$ProjectDir/../publish/GameData/Telemachus/"
+cp     "$ProjectDir/../README.md"                       "$ProjectDir/../publish/GameData/Telemachus/"
 
 # Download Houston
 curl -LO "$houstonUrl"
