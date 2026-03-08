@@ -20,7 +20,7 @@ namespace Telemachus
             APIHandlers.Add(new TargetDataLinkHandler(formatters));
 
             APIHandlers.Add(new CompoundDataLinkHandler(
-                new List<DataLinkHandler>() {
+                new List<DataLinkHandler> {
                     new OrbitDataLinkHandler(formatters),
                     new SensorDataLinkHandler(vesselChangeDetector, formatters),
                     new VesselDataLinkHandler(formatters),
@@ -52,8 +52,7 @@ namespace Telemachus
             try
             {
                 // Get the API entry
-                APIEntry apiEntry = null;
-                process(name, out apiEntry);
+                process(name, out APIEntry apiEntry);
                 if (apiEntry == null) return null;
 
                 // Can we run this variable at the moment?
@@ -116,7 +115,7 @@ namespace Telemachus
             }
         }
 
-        protected List<DataLinkHandler> APIHandlers = new List<DataLinkHandler>();
+        protected List<DataLinkHandler> APIHandlers = new();
 
         public void getAPIList(ref List<APIEntry> APIList)
         {
@@ -129,15 +128,10 @@ namespace Telemachus
         public void getAPIEntry(string APIString, ref List<APIEntry> APIList)
         {
             APIEntry result = null;
-
             foreach (DataLinkHandler APIHandler in APIHandlers)
             {
-                if (APIHandler.process(APIString, out result))
-                {
-                    break;
-                }
+                if (APIHandler.process(APIString, out result)) break;
             }
-
             APIList.Add(result);
         }
 
@@ -166,7 +160,7 @@ namespace Telemachus
                 if (arg.Contains("["))
                 {
                     String[] argsSplit = arg.Split('[');
-                    argsSplit[1] = argsSplit[1].Substring(0, argsSplit[1].Length - 1);
+                    argsSplit[1] = argsSplit[1][..^1];
                     arg = argsSplit[0];
                     String[] paramSplit = argsSplit[1].Split(',');
 

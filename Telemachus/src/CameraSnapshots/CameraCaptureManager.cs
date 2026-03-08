@@ -17,12 +17,8 @@ namespace Telemachus.CameraSnapshots
         {
             get
             {
-                if (CameraCaptureManager.instance == null)
-                {
-                    instance = GameObject.Find("CameraCaptureManager")
-                        ?? new GameObject("CameraCaptureManager", typeof(CameraCaptureManager));
-                }
-
+                instance ??= GameObject.Find("CameraCaptureManager")
+                    ?? new GameObject("CameraCaptureManager", typeof(CameraCaptureManager));
                 return instance;
             }
         }
@@ -37,26 +33,20 @@ namespace Telemachus.CameraSnapshots
         #endregion
 
         private CurrentFlightCameraCapture cameraCaptureTest = null;
-        public Dictionary<string, CameraCapture> cameras = new Dictionary<string, CameraCapture>();
-        public Dictionary<Guid, List<string>> vesselCameraMappings = new Dictionary<Guid, List<string>>();
+        public Dictionary<string, CameraCapture> cameras = new();
+        public Dictionary<Guid, List<string>> vesselCameraMappings = new();
 
 
         public void addToVesselCameraMappings(Vessel vessel, string cameraName)
         {
-            List<string> vesselList;
-            if (!vesselCameraMappings.ContainsKey(vessel.id))
+            if (!vesselCameraMappings.TryGetValue(vessel.id, out List<string> vesselList))
             {
                 vesselList = new List<string>();
                 vesselCameraMappings[vessel.id] = vesselList;
             }
-            else
-            {
-                vesselList = vesselCameraMappings[vessel.id];
-            }
 
             if (!vesselList.Contains(cameraName))
             {
-                //PluginLogger.debug("ADDING: " + cameraName + " TO : " + vessel.id);
                 vesselList.Add(cameraName);
             }
         }

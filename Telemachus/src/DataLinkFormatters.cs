@@ -39,10 +39,7 @@ namespace Telemachus
         {
             get
             {
-                if (instance == null)
-                {
-                    instance = new JSONFormatterProvider();
-                }
+                instance ??= new JSONFormatterProvider();
                 return instance;
             }
         }
@@ -83,7 +80,7 @@ namespace Telemachus
             public override object prepareForSerialization(object input)
             {
                 var vec = (Vector3d)input;
-                if (vec == null) { return null; }
+                // Vector3d is a value type — this null check was dead code
                 return new[] { vec.x, vec.y, vec.z };
             }
         }
@@ -92,7 +89,7 @@ namespace Telemachus
         {
             public override object prepareForSerialization(object input)
             {
-                var apiList = input as List<APIEntry>;
+                if (input is not List<APIEntry> apiList) return null;
                 var apiData = new List<Dictionary<string, object>>();
 
                 foreach (var api in apiList)
@@ -215,21 +212,14 @@ namespace Telemachus
                             if (f == 0 && sensor.part != null && sensor.part.vessel != null)
                             {
                                 Vessel v = sensor.part.vessel;
-                                switch (sensor.sensorType.ToString().ToUpperInvariant())
+                                f = sensor.sensorType.ToString().ToUpperInvariant() switch
                                 {
-                                    case "ACC":
-                                        f = (float)v.geeForce;
-                                        break;
-                                    case "GRAV":
-                                        f = (float)FlightGlobals.getGeeForceAtPosition(v.GetWorldPos3D()).magnitude;
-                                        break;
-                                    case "PRES":
-                                        f = (float)v.staticPressurekPa;
-                                        break;
-                                    case "TEMP":
-                                        f = (float)v.externalTemperature;
-                                        break;
-                                }
+                                    "ACC"  => (float)v.geeForce,
+                                    "GRAV" => (float)FlightGlobals.getGeeForceAtPosition(v.GetWorldPos3D()).magnitude,
+                                    "PRES" => (float)v.staticPressurekPa,
+                                    "TEMP" => (float)v.externalTemperature,
+                                    _ => f,
+                                };
                             }
                         }
                         catch
@@ -264,9 +254,7 @@ namespace Telemachus
         {
             public override object prepareForSerialization(object input)
             {
-                var simuluation = input as MechJebDataLinkHandler.MechJebSimulation;
-
-                if (simuluation == null) { return null; }
+                if (input is not MechJebDataLinkHandler.MechJebSimulation simuluation) return null;
 
                 var simulationData = new Dictionary<string, object>();
 
@@ -302,13 +290,11 @@ namespace Telemachus
         // the formatter that can convert a single maneuver node to JSON
         public class ManeuverNodeJSONFormatter : JSONFormatter
         {
-            private Vector3dJSONFormatter vectorFormatter = new Vector3dJSONFormatter();
-            private OrbitPatchListJSONFormatter orbitPatchesFormatter = new OrbitPatchListJSONFormatter();
+            private Vector3dJSONFormatter vectorFormatter = new();
+            private OrbitPatchListJSONFormatter orbitPatchesFormatter = new();
             public override object prepareForSerialization(object input)
             {
-                var maneuverNode = input as ManeuverNode;
-
-                if (maneuverNode == null) { return null; }
+                if (input is not ManeuverNode maneuverNode) return null;
 
                 var maneuverNodeData = new Dictionary<string, object>();
 
@@ -354,10 +340,10 @@ namespace Telemachus
         //the formatter that can convert a list of maneuver nodes to JSON
         public class ManeuverNodeListJSONFormatter : JSONFormatter
         {
-            private ManeuverNodeJSONFormatter nodeFormatter = new ManeuverNodeJSONFormatter();
+            private ManeuverNodeJSONFormatter nodeFormatter = new();
             public override object prepareForSerialization(object input)
             {
-                var maneuverNodeList = input as List<ManeuverNode>;
+                if (input is not List<ManeuverNode> maneuverNodeList) return new List<Dictionary<string, object>>();
 
                 var maneuverNodeListData = new List<Dictionary<string, object>>();
 
@@ -375,8 +361,7 @@ namespace Telemachus
         {
             public override object prepareForSerialization(object input)
             {
-                Orbit orbit = input as Orbit;
-                if (orbit == null) { return null; }
+                if (input is not Orbit orbit) return null;
 
                 var orbitPatchData = new Dictionary<string, object>();
 
@@ -414,14 +399,12 @@ namespace Telemachus
         //the formatter that can convert a list of maneuver nodes to JSON
         public class OrbitPatchListJSONFormatter : JSONFormatter
         {
-            private OrbitPatchJSONFormatter orbitFormatter = new OrbitPatchJSONFormatter();
+            private OrbitPatchJSONFormatter orbitFormatter = new();
             public override object prepareForSerialization(object input)
             {
-                var orbitPatchList = input as List<Orbit>;
+                if (input is not List<Orbit> orbitPatchList) return new List<Dictionary<string, object>>();
 
                 var orbitPatchListData = new List<Dictionary<string, object>>();
-
-                if (orbitPatchList == null) { return orbitPatchListData; }
 
                 foreach (Orbit orbit in orbitPatchList)
                 {

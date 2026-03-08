@@ -59,7 +59,7 @@ namespace Telemachus.Plugins
 
         public string[] Commands { get { return new[] { "rpm.available", "rpm.*" }; } }
 
-        Dictionary<VesselModule, RPMVesselComputer> rpmComputers = new Dictionary<VesselModule, RPMVesselComputer>(new IdentityEqualityComparer<VesselModule>());
+        Dictionary<VesselModule, RPMVesselComputer> rpmComputers = new(new IdentityEqualityComparer<VesselModule>());
 
         public Func<Vessel, string[], object> GetAPIHandler(string API)
         {
@@ -90,8 +90,7 @@ namespace Telemachus.Plugins
                 {
                     if (vm.GetType().Name == "RPMVesselComputer")
                     {
-                        RPMVesselComputer cmp;
-                        if (rpmComputers.TryGetValue(vm, out cmp))
+                        if (rpmComputers.TryGetValue(vm, out RPMVesselComputer cmp))
                         {
                             return cmp;
                         }

@@ -200,9 +200,6 @@ namespace Telemachus
             catch (Exception ex)
             {
                 PluginLogger.print("Caught " + ex.ToString());
-            }
-            finally
-            {
                 readyToSend = true;
             }
         }

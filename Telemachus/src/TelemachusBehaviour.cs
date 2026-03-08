@@ -18,7 +18,7 @@ namespace Telemachus
         #region Fields
 
         public static GameObject instance;
-        private DelayedAPIRunner delayedAPIRunner = new DelayedAPIRunner();
+        private DelayedAPIRunner delayedAPIRunner = new();
 
         #endregion
 
@@ -29,14 +29,14 @@ namespace Telemachus
         private static KSPAPIBase apiInstance = null;
 
         private static PluginConfiguration config = PluginConfiguration.CreateForType<TelemachusBehaviour>();
-        private static ServerConfiguration serverConfig = new ServerConfiguration();
+        private static ServerConfiguration serverConfig = new();
         private static VesselChangeDetector vesselChangeDetector = null;
 
         // Create a default plugin manager to handle registrations
-        private static PluginManager pluginManager = new PluginManager();
+        private static PluginManager pluginManager = new();
 
         // Keep a list of handlers of the data uplink/downlink rate
-        private static UpLinkDownLinkRate rateTracker = new UpLinkDownLinkRate();
+        private static UpLinkDownLinkRate rateTracker = new();
 
         private static bool isPartless = false;
 
@@ -134,8 +134,7 @@ namespace Telemachus
             string ip = config.GetValue<String>("IPADDRESS");
             if (ip != null)
             {
-                IPAddress ipAddress = null;
-                if (IPAddress.TryParse(ip, out ipAddress))
+                if (IPAddress.TryParse(ip, out IPAddress ipAddress))
                 {
                     serverConfig.ipAddress = ipAddress;
                 }
@@ -164,7 +163,7 @@ namespace Telemachus
             serverConfig.version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             serverConfig.name = "Telemachus";
 
-            isPartless = config.GetValue<int>("PARTLESS") == 0 ? false : true;
+            isPartless = config.GetValue<int>("PARTLESS") != 0;
             PluginLogger.print("Partless:" + isPartless);
         }
 
@@ -191,10 +190,7 @@ namespace Telemachus
 
             // Ensure the static instance is set even in partless mode
             // (TelemachusPowerDrain.OnAwake sets it when a part exists)
-            if (instance == null)
-            {
-                instance = gameObject;
-            }
+            instance ??= gameObject;
 
             LookForModsToInject();
             DontDestroyOnLoad(this);
@@ -327,13 +323,13 @@ namespace Telemachus
     {
         #region Fields
 
-        List<DelayedAPIEntry> actionQueue = new List<DelayedAPIEntry>();
+        List<DelayedAPIEntry> actionQueue = new();
 
         #endregion
 
         #region Lock
 
-        readonly private System.Object queueLock = new System.Object();
+        readonly private object queueLock = new();
 
         #endregion
 

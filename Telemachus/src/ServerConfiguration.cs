@@ -12,18 +12,11 @@ namespace Telemachus
     {
         public string version { get; set; }
         public string name { get; set; }
-        public int port { get; set; }
+        public int port { get; set; } = 8085;
         /// <summary>The IP Address configured in the Telemachus plugin configuration</summary>
-        public IPAddress ipAddress { get; set; }
+        public IPAddress ipAddress { get; set; } = IPAddress.Any;
         /// <summary>A list of IP Addresses that the server should be accessible at</summary>
-        public List<IPAddress> ValidIpAddresses { get; set; }
-
-        public ServerConfiguration()
-        {
-            port = 8085;
-            ipAddress = IPAddress.Any;
-            ValidIpAddresses = new List<IPAddress>();
-        }
+        public List<IPAddress> ValidIpAddresses { get; set; } = new();
     }
 
     internal static class ServerConfigExtensions

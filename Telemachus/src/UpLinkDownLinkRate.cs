@@ -22,7 +22,7 @@ namespace Telemachus
         #region Fields
 
         // Why exactly five and not some other interval?
-        private static TimeSpan TIME_SPAN_5_SECONDS = new TimeSpan(0, 0, 5);
+        private static TimeSpan TIME_SPAN_5_SECONDS = new(0, 0, 5);
         private static DateTime TIME_ARBITRARY = System.DateTime.Now;
 
         /// <summary>
@@ -34,11 +34,11 @@ namespace Telemachus
         /// <summary>
         /// The list that will hold how much data we recieved from the client in bits
         /// </summary>
-        private LinkedList<KeyValuePair<DateTime, int>> upLinkRate = new LinkedList<KeyValuePair<DateTime, int>>();
+        private LinkedList<KeyValuePair<DateTime, int>> upLinkRate = new();
         /// <summary>
         /// The list that will hold how much data we sent to the client in bits
         /// </summary>
-        private LinkedList<KeyValuePair<DateTime, int>> downLinkRate = new LinkedList<KeyValuePair<DateTime, int>>();
+        private LinkedList<KeyValuePair<DateTime, int>> downLinkRate = new();
 
         #endregion
 

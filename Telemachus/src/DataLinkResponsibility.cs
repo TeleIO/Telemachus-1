@@ -33,7 +33,7 @@ namespace Telemachus
         private static Dictionary<string, object> splitArguments(string argstring)
         {
             var ret = new Dictionary<string, object>();
-            if (argstring.StartsWith("?")) argstring = argstring.Substring(1);
+            if (argstring.StartsWith("?")) argstring = argstring[1..];
 
             foreach (var part in argstring.Split('&'))
             {
@@ -63,7 +63,7 @@ namespace Telemachus
             IDictionary<string, object> apiRequests;
             if (request.HttpMethod.ToUpper() == "POST" && request.HasEntityBody)
             {
-                System.IO.StreamReader streamReader = new System.IO.StreamReader(request.InputStream);
+                using var streamReader = new System.IO.StreamReader(request.InputStream);
                 apiRequests = parseJSONBody(streamReader.ReadToEnd());
             }
             else
@@ -109,13 +109,13 @@ namespace Telemachus
         #region Fields
 
         public Vessel vessel;
-        public List<String> args = new List<String>();
+        public List<String> args = new();
         protected string varName;
         #endregion
 
         public DataSources Clone()
         {
-            DataSources d = new DataSources();
+            var d = new DataSources();
             d.vessel = this.vessel;
             d.args = new List<string>(this.args);
             return d;

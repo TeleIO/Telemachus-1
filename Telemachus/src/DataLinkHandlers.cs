@@ -217,7 +217,7 @@ namespace Telemachus
                 }
 
                 // Read whatever data is currently available
-                MechJebSimulation stats = new MechJebSimulation();
+                var stats = new MechJebSimulation();
                 stats.convertMechJebData(stageStatsType, stagingInfo);
                 return stats;
             }
@@ -282,8 +282,8 @@ namespace Telemachus
         #region Data Structures
         public class MechJebSimulation
         {
-            public List<MechJebStageSimulationStats> vacuumStats = new List<MechJebStageSimulationStats>();
-            public List<MechJebStageSimulationStats> atmoStats = new List<MechJebStageSimulationStats>();
+            public List<MechJebStageSimulationStats> vacuumStats = new();
+            public List<MechJebStageSimulationStats> atmoStats = new();
 
             public void convertMechJebData(Type stagingInfoType, object stagingInfo)
             {
@@ -315,7 +315,7 @@ namespace Telemachus
             {
                 foreach (object mechJebStat in mechJebStats)
                 {
-                    MechJebStageSimulationStats stat = new MechJebStageSimulationStats();
+                    var stat = new MechJebStageSimulationStats();
                     Type statType = mechJebStat.GetType();
 
                     // Modern MechJeb uses PascalCase doubles; legacy used camelCase floats
@@ -756,7 +756,7 @@ namespace Telemachus
                 dataSources => { return FlightGlobals.fetch.VesselTarget != null ? FlightGlobals.fetch.VesselTarget.GetOrbit().timeToTransition1 : 0; },
                 "tar.o.timeToTransition1", "Target Time to Transition 1", formatters.Default, APIEntry.UnitType.TIME));
             registerAPI(new PlotableAPIEntry(
-                dataSources => { return FlightGlobals.fetch.VesselTarget != null ? FlightGlobals.fetch.VesselTarget.GetOrbit().timeToTransition1 : 0; },
+                dataSources => { return FlightGlobals.fetch.VesselTarget != null ? FlightGlobals.fetch.VesselTarget.GetOrbit().timeToTransition2 : 0; },
                 "tar.o.timeToTransition2", "Target Time to Transition 2", formatters.Default, APIEntry.UnitType.TIME));
             registerAPI(new PlotableAPIEntry(
                dataSources => { return FlightGlobals.fetch.VesselTarget != null ? FlightGlobals.fetch.VesselTarget.GetOrbit().semiMajorAxis : 0; },
@@ -856,20 +856,8 @@ namespace Telemachus
         public override bool process(String API, out APIEntry result)
         {
             if (!base.process(API, out result))
-            {
-                if (API.StartsWith("tar."))
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                return true;
-            }
+                return API.StartsWith("tar.");
+            return true;
         }
 
         #endregion
@@ -1174,7 +1162,7 @@ namespace Telemachus
                     return KSP.Localization.Localizer.CurrentLanguage;
                 },
                 "o.gameLanguage", "Language  [object gameLanguage]",
-                formatters.ManeuverNodeList, APIEntry.UnitType.UNITLESS));
+                formatters.Default, APIEntry.UnitType.STRING));
         }
     }
 
@@ -1243,7 +1231,7 @@ namespace Telemachus
                 dataSources => { return FlightGlobals.Bodies[int.Parse(dataSources.args[0])].orbit.timeToTransition1; },
                 "b.o.timeToTransition1", "Time to Transition 1 [body id]", formatters.Default, APIEntry.UnitType.TIME));
             registerAPI(new PlotableAPIEntry(
-                dataSources => { return FlightGlobals.Bodies[int.Parse(dataSources.args[0])].orbit.timeToTransition1; },
+                dataSources => { return FlightGlobals.Bodies[int.Parse(dataSources.args[0])].orbit.timeToTransition2; },
                 "b.o.timeToTransition2", "Time to Transition 2 [body id]", formatters.Default, APIEntry.UnitType.TIME));
             registerAPI(new PlotableAPIEntry(
                dataSources => { return FlightGlobals.Bodies[int.Parse(dataSources.args[0])].orbit.semiMajorAxis; },
@@ -1266,7 +1254,7 @@ namespace Telemachus
                     CelestialBody body = FlightGlobals.Bodies[int.Parse(dataSources.args[0])];
 
                     // Find a common reference body between vessel and body
-                    List<CelestialBody> parentBodies = new List<CelestialBody>();
+                    var parentBodies = new List<CelestialBody>();
                     CelestialBody parentBody = dataSources.vessel.mainBody;
                     while (true)
                     {
@@ -1598,7 +1586,7 @@ namespace Telemachus
                 dataSources => { return dataSources.vessel.orbit.timeToTransition1; },
                 "o.timeToTransition1", "Time to Transition 1", formatters.Default, APIEntry.UnitType.TIME));
             registerAPI(new PlotableAPIEntry(
-                dataSources => { return dataSources.vessel.orbit.timeToTransition1; },
+                dataSources => { return dataSources.vessel.orbit.timeToTransition2; },
                 "o.timeToTransition2", "Time to Transition 2", formatters.Default, APIEntry.UnitType.TIME));
             registerAPI(new PlotableAPIEntry(
                dataSources => { return dataSources.vessel.orbit.semiMajorAxis; },
@@ -1835,13 +1823,13 @@ namespace Telemachus
             }
         }
 
-        protected Dictionary<string, List<T>> partModules = new Dictionary<string, List<T>>();
+        protected Dictionary<string, List<T>> partModules = new();
 
         #endregion
 
         #region Lock
 
-        readonly protected System.Object cacheLock = new System.Object();
+        readonly protected object cacheLock = new();
 
         #endregion
 
@@ -1850,23 +1838,14 @@ namespace Telemachus
         public List<T> get(DataSources dataSources)
         {
             string ID = dataSources.args[0].ToLowerInvariant();
-            List<T> avail = null, ret = null;
 
             lock (cacheLock)
             {
-                partModules.TryGetValue(ID, out avail);
+                if (partModules.TryGetValue(ID, out List<T> avail))
+                    return new List<T>(avail);
             }
 
-            if (avail != null)
-            {
-                ret = new List<T>(avail);
-            }
-            else
-            {
-                ret = new List<T>();
-            }
-
-            return ret;
+            return new List<T>();
         }
 
         protected abstract void refresh(Vessel vessel);
@@ -1915,7 +1894,7 @@ namespace Telemachus
             try
             {
                 partModules.Clear();
-                HashSet<Part> activeParts = new HashSet<Part>();
+                var activeParts = new HashSet<Part>();
                 foreach (Part part in vessel.GetActiveParts())
                 {
                     if (part.inverseStage == vessel.currentStage)
@@ -1989,13 +1968,10 @@ namespace Telemachus
                         foreach (PartResource partResource in part.Resources)
                         {
                             String key = partResource.resourceName.ToLowerInvariant();
-                            List<PartResource> list = null;
-                            partModules.TryGetValue(key, out list);
-                            if (list == null)
+                            if (!partModules.TryGetValue(key, out List<PartResource> list))
                             {
                                 list = new List<PartResource>();
                                 partModules[key] = list;
-
                             }
 
                             list.Add(partResource);
@@ -2082,46 +2058,12 @@ namespace Telemachus
 
         public static int partPaused()
         {
-            bool result = FlightDriver.Pause ||
-                !TelemachusPowerDrain.IsAnyActive ||
-                !TelemachusPowerDrain.IsAnyToggled ||
-                !VesselChangeDetector.hasTelemachusPart ||
-                !HighLogic.LoadedSceneIsFlight;
-
-            if (result)
-            {
-                // If we aren't even in the flight scene, say so
-                if (!HighLogic.LoadedSceneIsFlight)
-                {
-                    return 5;
-                }
-
-                if (FlightDriver.Pause)
-                {
-                    return 1;
-                }
-
-                if (!TelemachusPowerDrain.IsAnyActive)
-                {
-                    return 2;
-                }
-
-                if (!TelemachusPowerDrain.IsAnyToggled)
-                {
-                    return 3;
-                }
-
-                if (!VesselChangeDetector.hasTelemachusPart)
-                {
-                    return 4;
-                }
-            }
-            else
-            {
-                return 0;
-            }
-
-            return 5;
+            if (!HighLogic.LoadedSceneIsFlight) return 5;
+            if (FlightDriver.Pause) return 1;
+            if (!TelemachusPowerDrain.IsAnyActive) return 2;
+            if (!TelemachusPowerDrain.IsAnyToggled) return 3;
+            if (!VesselChangeDetector.hasTelemachusPart) return 4;
+            return 0;
         }
 
         #endregion
@@ -2138,7 +2080,7 @@ namespace Telemachus
             registerAPI(new APIEntry(
                 dataSources =>
                 {
-                    List<APIEntry> APIList = new List<APIEntry>();
+                    var APIList = new List<APIEntry>();
                     kspAPI.getAPIList(ref APIList); return APIList;
                 },
                 "a.api", "API Listing", formatters.APIEntry, APIEntry.UnitType.UNITLESS, true));
@@ -2146,7 +2088,7 @@ namespace Telemachus
             registerAPI(new APIEntry(
                 dataSources =>
                 {
-                    List<String> IPList = new List<String>();
+                    var IPList = new List<String>();
 
                     foreach (System.Net.IPAddress a in serverConfiguration.ValidIpAddresses)
                     {
@@ -2160,7 +2102,7 @@ namespace Telemachus
             registerAPI(new APIEntry(
                 dataSources =>
                 {
-                    List<APIEntry> APIList = new List<APIEntry>();
+                    var APIList = new List<APIEntry>();
                     foreach (string apiRequest in dataSources.args)
                     {
                         kspAPI.getAPIEntry(apiRequest, ref APIList);
@@ -2209,8 +2151,7 @@ namespace Telemachus
 
         #region API Fields
 
-        private Dictionary<string, APIEntry> APIEntries =
-           new Dictionary<string, APIEntry>();
+        private Dictionary<string, APIEntry> APIEntries = new();
         APIEntry nullAPI = null;
         protected FormatterProvider formatters = null;
 
@@ -2243,11 +2184,7 @@ namespace Telemachus
 
         public virtual bool process(String API, out APIEntry result)
         {
-            APIEntry entry = null;
-
-            APIEntries.TryGetValue(API, out entry);
-
-            if (entry == null)
+            if (!APIEntries.TryGetValue(API, out APIEntry entry))
             {
                 result = null;
                 return false;
@@ -2366,7 +2303,7 @@ namespace Telemachus
     {
         public static List<Orbit> getPatchesForOrbit(Orbit orbit)
         {
-            List<Orbit> orbitPatches = new List<Orbit>();
+            var orbitPatches = new List<Orbit>();
             //the "next" orbit patch is the root patch, to make the method cleaner
             var nextOrbitPatch = orbit;
 

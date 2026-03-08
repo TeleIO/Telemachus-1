@@ -26,11 +26,7 @@ namespace Telemachus
         {
             get
             {
-                if (_cameraNameEndpointRegex == null)
-                {
-                    _cameraNameEndpointRegex = new Regex(Regex.Escape(PAGE_PREFIX) + "\\/(.+)");
-                }
-
+                _cameraNameEndpointRegex ??= new Regex(Regex.Escape(PAGE_PREFIX) + "\\/(.+)");
                 return _cameraNameEndpointRegex;
             }
         }

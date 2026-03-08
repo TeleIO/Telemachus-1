@@ -24,11 +24,11 @@ namespace Telemachus.CameraSnapshots
             return "NA";
         }
 
-        protected Dictionary<string, Camera> cameraDuplicates = new Dictionary<string, Camera>();
-        protected List<string> activeCameras = new List<string>();
+        protected Dictionary<string, Camera> cameraDuplicates = new();
+        protected List<string> activeCameras = new();
         protected static readonly string[] skippedCameras = { "UIMainCamera", "UIVectorCamera", "velocity camera" };
 
-        public Dictionary<string, Camera> gameCameraMapping = new Dictionary<string, Camera>();
+        public Dictionary<string, Camera> gameCameraMapping = new();
 
 
         protected string cameraContainerNamePrefix

@@ -71,35 +71,27 @@ namespace Telemachus
         private Dictionary<string, HTMLResponseContentType> contentTypes = null;
         private HTMLResponseContentType GetContentType(string extension)
         {
-            if (contentTypes == null)
+            contentTypes ??= new Dictionary<string, HTMLResponseContentType>
             {
-                contentTypes = new Dictionary<string, HTMLResponseContentType>();
-                contentTypes[".html"] = new HTMLResponseContentType { contentType = HTMLContentType.TextContent, mimeType = "text/html" };
-                contentTypes[".css"] = new HTMLResponseContentType { contentType = HTMLContentType.TextContent, mimeType = "text/css" };
-                contentTypes[".js"] = new HTMLResponseContentType { contentType = HTMLContentType.TextContent, mimeType = "application/x-javascript" };
-                contentTypes[".jpg"] = new HTMLResponseContentType { contentType = HTMLContentType.BinaryContent, mimeType = "image/jpeg" };
-                contentTypes[".jpeg"] = new HTMLResponseContentType { contentType = HTMLContentType.BinaryContent, mimeType = "image/jpeg" };
-                contentTypes[".png"] = new HTMLResponseContentType { contentType = HTMLContentType.BinaryContent, mimeType = "image/png" };
-                contentTypes[".gif"] = new HTMLResponseContentType { contentType = HTMLContentType.BinaryContent, mimeType = "image/gif" };
-                contentTypes[".svg"] = new HTMLResponseContentType { contentType = HTMLContentType.BinaryContent, mimeType = "image/svg+xml" };
-                contentTypes[".eot"] = new HTMLResponseContentType { contentType = HTMLContentType.BinaryContent, mimeType = "application/vnd.ms-fontobject" };
-                contentTypes[".ttf"] = new HTMLResponseContentType { contentType = HTMLContentType.BinaryContent, mimeType = "application/font-sfnt" };
-                contentTypes[".woff"] = new HTMLResponseContentType { contentType = HTMLContentType.BinaryContent, mimeType = "application/font-woff" };
-                contentTypes[".otf"] = new HTMLResponseContentType { contentType = HTMLContentType.BinaryContent, mimeType = "application/font-sfnt" };
-                contentTypes[".mp4"] = new HTMLResponseContentType { contentType = HTMLContentType.BinaryContent, mimeType = "video/mp4" };
-                contentTypes[".json"] = new HTMLResponseContentType { contentType = HTMLContentType.TextContent, mimeType = "application/json" };
-                contentTypes[".txt"] = new HTMLResponseContentType { contentType = HTMLContentType.TextContent, mimeType = "text/plain" };
-                contentTypes[""] = new HTMLResponseContentType { contentType = HTMLContentType.BinaryContent, mimeType = null };
+                [".html"]  = new HTMLResponseContentType { contentType = HTMLContentType.TextContent,   mimeType = "text/html" },
+                [".css"]   = new HTMLResponseContentType { contentType = HTMLContentType.TextContent,   mimeType = "text/css" },
+                [".js"]    = new HTMLResponseContentType { contentType = HTMLContentType.TextContent,   mimeType = "application/x-javascript" },
+                [".jpg"]   = new HTMLResponseContentType { contentType = HTMLContentType.BinaryContent, mimeType = "image/jpeg" },
+                [".jpeg"]  = new HTMLResponseContentType { contentType = HTMLContentType.BinaryContent, mimeType = "image/jpeg" },
+                [".png"]   = new HTMLResponseContentType { contentType = HTMLContentType.BinaryContent, mimeType = "image/png" },
+                [".gif"]   = new HTMLResponseContentType { contentType = HTMLContentType.BinaryContent, mimeType = "image/gif" },
+                [".svg"]   = new HTMLResponseContentType { contentType = HTMLContentType.BinaryContent, mimeType = "image/svg+xml" },
+                [".eot"]   = new HTMLResponseContentType { contentType = HTMLContentType.BinaryContent, mimeType = "application/vnd.ms-fontobject" },
+                [".ttf"]   = new HTMLResponseContentType { contentType = HTMLContentType.BinaryContent, mimeType = "application/font-sfnt" },
+                [".woff"]  = new HTMLResponseContentType { contentType = HTMLContentType.BinaryContent, mimeType = "application/font-woff" },
+                [".otf"]   = new HTMLResponseContentType { contentType = HTMLContentType.BinaryContent, mimeType = "application/font-sfnt" },
+                [".mp4"]   = new HTMLResponseContentType { contentType = HTMLContentType.BinaryContent, mimeType = "video/mp4" },
+                [".json"]  = new HTMLResponseContentType { contentType = HTMLContentType.TextContent,   mimeType = "application/json" },
+                [".txt"]   = new HTMLResponseContentType { contentType = HTMLContentType.TextContent,   mimeType = "text/plain" },
+                [""]       = new HTMLResponseContentType { contentType = HTMLContentType.BinaryContent, mimeType = null },
+            };
 
-            }
-            if (contentTypes.ContainsKey(extension))
-            {
-                return contentTypes[extension];
-            }
-            else
-            {
-                return contentTypes[""];
-            }
+            return contentTypes.TryGetValue(extension, out var ct) ? ct : contentTypes[""];
         }
 
         #endregion

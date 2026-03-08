@@ -35,11 +35,8 @@ namespace Telemachus
 
         public override void OnAwake()
         {
-            if (TelemachusBehaviour.instance == null)
-            {
-                TelemachusBehaviour.instance = GameObject.Find("TelemachusBehaviour")
-                    ?? new GameObject("TelemachusBehaviour", typeof(TelemachusBehaviour));
-            }
+            TelemachusBehaviour.instance ??= GameObject.Find("TelemachusBehaviour")
+                ?? new GameObject("TelemachusBehaviour", typeof(TelemachusBehaviour));
 
             base.OnAwake();
         }
