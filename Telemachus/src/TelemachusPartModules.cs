@@ -53,7 +53,8 @@ namespace Telemachus
 
         public override void OnUpdate()
         {
-            if (animSwitch == TelemachusPowerDrain.activeToggle)
+            var powerDrain = part.Modules.GetModule<TelemachusPowerDrain>();
+            if (powerDrain != null && animSwitch == powerDrain.activeToggle)
             {
                 if (status.Equals("Locked"))
                 {
@@ -78,13 +79,22 @@ namespace Telemachus
 
         static string[] dataUnits = new string[] { "Error", " bit/s", " kbit/s", " Mbit/s", "Gbit/s" };
 
-        static public bool isActive = true;
+        // Per-instance state (was static — caused #9: toggling one antenna toggled all)
+        public bool isActive = true;
 
         //On by default
         [KSPField(isPersistant = true)]
-        static public bool activeToggle = true;
+        public bool activeToggle = true;
 
-        static public float powerConsumption = 0f;
+        public float powerConsumption = 0f;
+
+        // Track all live instances so global queries can check if ANY antenna is active
+        private static readonly List<TelemachusPowerDrain> instances = new List<TelemachusPowerDrain>();
+        public static bool IsAnyActive => instances.Exists(i => i.isActive && i.activeToggle);
+        public static bool IsAnyToggled => instances.Exists(i => i.activeToggle);
+
+        void OnEnable() { instances.Add(this); }
+        void OnDisable() { instances.Remove(this); }
 
         [KSPField]
         public float powerConsumptionIncrease = 0.02f;

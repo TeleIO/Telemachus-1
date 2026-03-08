@@ -2120,6 +2120,9 @@ namespace Telemachus
     {
         #region ModuleCache
 
+        private float lastRefreshTime = 0f;
+        private const float REFRESH_INTERVAL = 0.5f;
+
         public ActiveResourceCache(VesselChangeDetector vesselChangeDetector)
         {
             vesselChangeDetector.UpdateNotify += update;
@@ -2127,11 +2130,12 @@ namespace Telemachus
 
         private void update(object sender, EventArgs eventArgs)
         {
-            if (vessel != null)
+            if (vessel != null && UnityEngine.Time.time - lastRefreshTime > REFRESH_INTERVAL)
             {
                 lock (cacheLock)
                 {
                     refresh(vessel);
+                    lastRefreshTime = UnityEngine.Time.time;
                 }
             }
         }
@@ -2270,11 +2274,12 @@ namespace Telemachus
                 {
                     foreach (var module in part.Modules.OfType<ModuleEnviroSensor>())
                     {
-                        if (!partModules.ContainsKey(module.sensorType.ToString()))
+                        string sensorKey = module.sensorType.ToString().ToLowerInvariant();
+                        if (!partModules.ContainsKey(sensorKey))
                         {
-                            partModules[module.sensorType.ToString().ToLowerInvariant()] = new List<ModuleEnviroSensor>();
+                            partModules[sensorKey] = new List<ModuleEnviroSensor>();
                         }
-                        partModules[module.sensorType.ToString().ToLowerInvariant()].Add(module);
+                        partModules[sensorKey].Add(module);
                     }
                 }
             }
@@ -2308,8 +2313,8 @@ namespace Telemachus
         public static int partPaused()
         {
             bool result = FlightDriver.Pause ||
-                !TelemachusPowerDrain.isActive ||
-                !TelemachusPowerDrain.activeToggle ||
+                !TelemachusPowerDrain.IsAnyActive ||
+                !TelemachusPowerDrain.IsAnyToggled ||
                 !VesselChangeDetector.hasTelemachusPart ||
                 !HighLogic.LoadedSceneIsFlight;
 
@@ -2326,12 +2331,12 @@ namespace Telemachus
                     return 1;
                 }
 
-                if (!TelemachusPowerDrain.isActive)
+                if (!TelemachusPowerDrain.IsAnyActive)
                 {
                     return 2;
                 }
 
-                if (!TelemachusPowerDrain.activeToggle)
+                if (!TelemachusPowerDrain.IsAnyToggled)
                 {
                     return 3;
                 }
