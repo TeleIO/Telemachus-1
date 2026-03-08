@@ -19,7 +19,13 @@ jobs:
         run: sudo apt-get install -y mono-complete curl unzip
 
       - name: Build
-        run: msbuild Telemachus.sln /p:Configuration=Release /p:Platform="Any CPU"
+        run: |
+          MONO_BCL=$(find /usr/lib/mono -maxdepth 1 -name "4.7*" -type d | sort -rV | head -1)
+          echo "Using Mono BCL: $MONO_BCL"
+          dotnet msbuild Telemachus.sln \
+            /p:Configuration=Release \
+            "/p:Platform=Any CPU" \
+            /p:FrameworkPathOverride="$MONO_BCL"
 
       - name: Zip GameData
         run: cd publish && zip -r GameData.zip GameData
