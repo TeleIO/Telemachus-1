@@ -185,6 +185,13 @@ namespace Telemachus
         {
             SimpleJson.SimpleJson.CurrentJsonSerializerStrategy = new SimpleJson.InfinityAsStringJsonSerializerStrategy();
 
+            // Ensure the static instance is set even in partless mode
+            // (TelemachusPowerDrain.OnAwake sets it when a part exists)
+            if (instance == null)
+            {
+                instance = gameObject;
+            }
+
             LookForModsToInject();
             DontDestroyOnLoad(this);
             startDataLink();

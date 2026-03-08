@@ -259,7 +259,7 @@ namespace Telemachus
                 {
                     PluginLogger.debug("Mechjeb part installed, reflecting.");
                     Type mechJebCoreType = mechJebCore.GetType();
-                    FieldInfo attitudeField = mechJebCoreType.GetField("attitude", BindingFlags.Public | BindingFlags.Instance);
+                    FieldInfo attitudeField = mechJebCoreType.GetField("Attitude", BindingFlags.Public | BindingFlags.Instance);
                     attitude = attitudeField.GetValue(mechJebCore);
 
                     Type attitudeReferenceType = attitude.GetType().GetProperty("attitudeReference",
@@ -278,58 +278,38 @@ namespace Telemachus
 
         private MechJebSimulation getStagingInfo(DataSources dataSources)
         {
-            object stagingInfo = null;
+            PartModule mechJebCore = findMechJeb(dataSources.vessel);
+            if (mechJebCore == null) return null;
 
-            PluginLogger.debug("Grabbing staging info");
-            Type stagingInfoType = getStagingInfoType(dataSources, ref stagingInfo);
-
-            MechJebSimulation stats = new MechJebSimulation();
-
-            if (stagingInfo != null)
+            try
             {
-                PluginLogger.debug("Found the staging type, getting the staging info");
+                Type mechJebCoreType = mechJebCore.GetType();
+                MethodInfo getModule = mechJebCoreType.GetMethod("GetComputerModule", new[] { typeof(string) });
+                object stagingInfo = getModule.Invoke(mechJebCore, new object[] { "MechJebModuleStageStats" });
+                if (stagingInfo == null) return null;
 
-                stats.convertMechJebData(stagingInfoType, stagingInfo);
+                Type stageStatsType = stagingInfo.GetType();
 
+                // Queue RequestUpdate on the main thread so the simulation
+                // runs for the next request (Unity APIs can't be called here)
+                MethodInfo requestUpdate = stageStatsType.GetMethod("RequestUpdate", BindingFlags.Public | BindingFlags.Instance);
+                if (requestUpdate != null)
+                {
+                    object captured = stagingInfo;
+                    TelemachusBehaviour.instance.BroadcastMessage("queueDelayedAPI",
+                        new DelayedAPIEntry(dataSources.Clone(),
+                            (x) => { requestUpdate.Invoke(captured, null); return 0; }),
+                        UnityEngine.SendMessageOptions.DontRequireReceiver);
+                }
+
+                // Read whatever data is currently available
+                MechJebSimulation stats = new MechJebSimulation();
+                stats.convertMechJebData(stageStatsType, stagingInfo);
                 return stats;
             }
-
-            PluginLogger.debug("Could not get staging info");
-            return null;
-        }
-
-        private Type getStagingInfoType(DataSources dataSources, ref object stagingInfo)
-        {
-            PluginLogger.debug("Finding part for staging");
-            PartModule mechJebCore = findMechJeb(dataSources.vessel);
-
-            if (mechJebCore == null)
+            catch (Exception e)
             {
-                PluginLogger.debug("No Mechjeb part installed.");
-                return null;
-            }
-            else
-            {
-                try
-                {
-                    PluginLogger.debug("Mechjeb part installed, reflecting.");
-                    Type mechJebCoreType = mechJebCore.GetType();
-                    PluginLogger.debug("Trying to get computermodule Method info");
-                    MethodInfo mechJebCoreGetComputerModuleMethodInfo = mechJebCoreType.GetMethod("GetComputerModule", new[] { typeof(string) });
-                    PluginLogger.debug("Trying to get calling computer method");
-                    stagingInfo = mechJebCoreGetComputerModuleMethodInfo.Invoke(mechJebCore, new object[] { "MechJebModuleStageStats" });
-
-                    PluginLogger.debug("Staging Info Type: " + stagingInfo.GetType().Name);
-                    PluginLogger.print("Staging Info Type: " + stagingInfo.GetType().Name);
-
-
-                    return stagingInfo.GetType();
-                }
-                catch (Exception e)
-                {
-                    PluginLogger.debug(e.Message + " " + e.StackTrace);
-                }
-
+                PluginLogger.debug(e.Message + " " + e.StackTrace);
                 return null;
             }
         }
@@ -393,62 +373,49 @@ namespace Telemachus
 
             public void convertMechJebData(Type stagingInfoType, object stagingInfo)
             {
-                FieldInfo atmoStatsField = stagingInfoType.GetField("atmoStats", BindingFlags.Public | BindingFlags.Instance);
+                // Modern MechJeb uses PascalCase List<FuelStats> instead of camelCase arrays
+                FieldInfo atmoStatsField = stagingInfoType.GetField("AtmoStats", BindingFlags.Public | BindingFlags.Instance)
+                    ?? stagingInfoType.GetField("atmoStats", BindingFlags.Public | BindingFlags.Instance);
                 PluginLogger.debug("Getting Atmo Stats");
-                Array atmoStats = (Array)atmoStatsField.GetValue(stagingInfo);
-
+                IEnumerable atmoStats = (IEnumerable)atmoStatsField.GetValue(stagingInfo);
                 this.populateStats(atmoStats, this.atmoStats);
 
-                FieldInfo vacStatsField = stagingInfoType.GetField("vacStats", BindingFlags.Public | BindingFlags.Instance);
+                FieldInfo vacStatsField = stagingInfoType.GetField("VacStats", BindingFlags.Public | BindingFlags.Instance)
+                    ?? stagingInfoType.GetField("vacStats", BindingFlags.Public | BindingFlags.Instance);
                 PluginLogger.debug("Getting Vac Stats");
-                Array vacStats = (Array)vacStatsField.GetValue(stagingInfo);
-
+                IEnumerable vacStats = (IEnumerable)vacStatsField.GetValue(stagingInfo);
                 this.populateStats(vacStats, this.vacuumStats);
-
             }
 
-            private void populateStats(Array mechJebStatsArray, List<MechJebStageSimulationStats> destinationStats)
+            private static float getFloatField(Type type, object obj, string pascalName, string camelName)
             {
-                PluginLogger.debug("Building stats object. Size: " + mechJebStatsArray.Length);
-                foreach (object mechJebStat in mechJebStatsArray)
+                FieldInfo field = type.GetField(pascalName) ?? type.GetField(camelName);
+                if (field == null) return 0f;
+                object val = field.GetValue(obj);
+                if (val is double d) return (float)d;
+                if (val is float f) return f;
+                return Convert.ToSingle(val);
+            }
+
+            private void populateStats(IEnumerable mechJebStats, List<MechJebStageSimulationStats> destinationStats)
+            {
+                foreach (object mechJebStat in mechJebStats)
                 {
                     MechJebStageSimulationStats stat = new MechJebStageSimulationStats();
-
-                    //PluginLogger.debug("Getting Type");
                     Type statType = mechJebStat.GetType();
-                    //PluginLogger.debug("Get start mass");
-                    stat.startMass = (float)statType.GetField("startMass").GetValue(mechJebStat);
 
-                    //PluginLogger.debug("Get end mass");
-                    stat.endMass = (float)statType.GetField("endMass").GetValue(mechJebStat);
-
-                    //PluginLogger.debug("Get start Thrust");
-                    stat.startThrust = (float)statType.GetField("startThrust").GetValue(mechJebStat);
-                    //PluginLogger.debug("startThrust: " + statType.GetField("startThrust").GetValue(mechJebStat).ToString());
-
-                    //PluginLogger.debug("Get max Accel");
-                    stat.maxAccel = (float)statType.GetField("maxAccel").GetValue(mechJebStat);
-
-                    //PluginLogger.debug("Get deltaTime");
-                    stat.deltaTime = (float)statType.GetField("deltaTime").GetValue(mechJebStat);
-
-                    //PluginLogger.debug("Get deltaV");
-                    stat.deltaV = (float)statType.GetField("deltaV").GetValue(mechJebStat);
-
-                    //PluginLogger.debug("Get resourceMass");
-                    stat.resourceMass = (float)statType.GetField("resourceMass").GetValue(mechJebStat);
-
-                    //PluginLogger.debug("Get isp");
-                    stat.isp = (float)statType.GetField("isp").GetValue(mechJebStat);
-                    //PluginLogger.debug("ISP: " + stat.stagedMass.ToString());
-
-                    //PluginLogger.debug("Get stagedMass");
-                    stat.stagedMass = (float)statType.GetField("stagedMass").GetValue(mechJebStat);
-                    //PluginLogger.debug("stagedMass: " + stat.stagedMass.ToString());
+                    // Modern MechJeb uses PascalCase doubles; legacy used camelCase floats
+                    stat.startMass = getFloatField(statType, mechJebStat, "StartMass", "startMass");
+                    stat.endMass = getFloatField(statType, mechJebStat, "EndMass", "endMass");
+                    stat.startThrust = getFloatField(statType, mechJebStat, "Thrust", "startThrust");
+                    stat.maxAccel = getFloatField(statType, mechJebStat, "MaxAccel", "maxAccel");
+                    stat.deltaTime = getFloatField(statType, mechJebStat, "DeltaTime", "deltaTime");
+                    stat.deltaV = getFloatField(statType, mechJebStat, "DeltaV", "deltaV");
+                    stat.resourceMass = getFloatField(statType, mechJebStat, "ResourceMass", "resourceMass");
+                    stat.isp = getFloatField(statType, mechJebStat, "Isp", "isp");
+                    stat.stagedMass = getFloatField(statType, mechJebStat, "StagedMass", "stagedMass");
 
                     destinationStats.AddUnique(stat);
-
-                    //PluginLogger.debug("Start Mass: " + stat.startMass.ToString());
                 }
             }
         }
