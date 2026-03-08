@@ -11,7 +11,7 @@ namespace Telemachus.CameraSnapshots
         public RenderTexture overviewTexture;
         public bool didRender;
         public byte[] imageBytes = null;
-        public bool mutex = false;
+        public volatile bool mutex = false;
         public int renderOffsetFactor = 0;
 
         public virtual string cameraManagerName()

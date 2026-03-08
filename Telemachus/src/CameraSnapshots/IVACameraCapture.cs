@@ -10,7 +10,7 @@ namespace Telemachus.CameraSnapshots
         public RenderTexture overviewTexture;
         public bool didRender;
         public byte[] imageBytes = null;
-        public bool mutex = false;
+        public volatile bool mutex = false;
 
         protected Dictionary<string, Camera> cameraDuplicates = new Dictionary<string, Camera>();
         protected List<string> activeCameras;
