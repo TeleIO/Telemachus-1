@@ -83,7 +83,7 @@ namespace Telemachus
             public override object prepareForSerialization(object input)
             {
                 var vec = (Vector3d)input;
-                if(vec == null) { return null; }
+                if (vec == null) { return null; }
                 return new[] { vec.x, vec.y, vec.z };
             }
         }
@@ -200,14 +200,17 @@ namespace Telemachus
                     if (!sensor.isEnabled)
                     {
                         sensorValues.Add(0);
-                    } else
+                    }
+                    else
                     {
                         float f = 0;
-                        try {
+                        try
+                        {
                             // Try to read the sensor as a float by grabbing the start
                             var numberOnly = Regex.Match(sensor.readoutInfo, "^[-+]?[0-9]*\\.?[0-9]*([eE][-+]?[0-9]+)?").Value;
                             float.TryParse(numberOnly, out f);
-                        } catch
+                        }
+                        catch
                         {
                             f = 0;
                         }
@@ -241,7 +244,7 @@ namespace Telemachus
             {
                 var simuluation = input as MechJebDataLinkHandler.MechJebSimulation;
 
-                if(simuluation == null) { return null; }
+                if (simuluation == null) { return null; }
 
                 var simulationData = new Dictionary<string, object>();
 
@@ -254,7 +257,7 @@ namespace Telemachus
             {
                 var result = new List<Dictionary<string, object>>();
 
-                foreach(var stat in stats)
+                foreach (var stat in stats)
                 {
                     var stage = new Dictionary<string, object>();
                     stage["startMass"] = stat.startMass;
@@ -313,7 +316,7 @@ namespace Telemachus
 
                 List<Orbit> orbitPatches = OrbitPatches.getPatchesForOrbit(orbit);
 
-                if(orbitPatches != null)
+                if (orbitPatches != null)
                 {
                     maneuverNodeData["orbitPatches"] = orbitPatchesFormatter.prepareForSerialization(orbitPatches);
                 }
@@ -335,8 +338,8 @@ namespace Telemachus
                 var maneuverNodeList = input as List<ManeuverNode>;
 
                 var maneuverNodeListData = new List<Dictionary<string, object>>();
-                
-                foreach(ManeuverNode node in maneuverNodeList)
+
+                foreach (ManeuverNode node in maneuverNodeList)
                 {
                     maneuverNodeListData.Add((Dictionary<string, object>)nodeFormatter.prepareForSerialization(node));
                 }
@@ -354,7 +357,7 @@ namespace Telemachus
                 if (orbit == null) { return null; }
 
                 var orbitPatchData = new Dictionary<string, object>();
-                
+
                 orbitPatchData["startUT"] = orbit.StartUT;
                 orbitPatchData["endUT"] = orbit.EndUT;
                 orbitPatchData["patchStartTransition"] = orbit.patchStartTransition.ToString();
@@ -396,7 +399,7 @@ namespace Telemachus
 
                 var orbitPatchListData = new List<Dictionary<string, object>>();
 
-                if(orbitPatchList == null) { return orbitPatchListData; }
+                if (orbitPatchList == null) { return orbitPatchListData; }
 
                 foreach (Orbit orbit in orbitPatchList)
                 {

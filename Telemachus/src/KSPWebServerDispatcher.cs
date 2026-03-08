@@ -21,12 +21,15 @@ namespace Telemachus
         {
             foreach (var responder in responderChain.Reverse<IHTTPRequestResponder>())
             {
-                try {
+                try
+                {
                     if (responder.process(request.Request, request.Response))
                     {
                         return;
                     }
-                } catch (Exception ex) {
+                }
+                catch (Exception ex)
+                {
                     PluginLogger.print("Caught exception in web handlers: " + ex.ToString());
                 }
             }

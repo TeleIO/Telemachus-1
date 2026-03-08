@@ -22,14 +22,15 @@ namespace Telemachus.CameraSnapshots
                     instance = GameObject.Find("CameraCaptureManager")
                         ?? new GameObject("CameraCaptureManager", typeof(CameraCaptureManager));
                 }
-                
+
                 return instance;
             }
         }
 
         public static CameraCaptureManager classedInstance
         {
-            get {
+            get
+            {
                 return (CameraCaptureManager)Instance.GetComponent(typeof(CameraCaptureManager));
             }
         }
@@ -68,7 +69,7 @@ namespace Telemachus.CameraSnapshots
 
         private void removeFlightCameraIfNotFlight(GameScenes data)
         {
-            if(data != GameScenes.FLIGHT && cameraCaptureTest)
+            if (data != GameScenes.FLIGHT && cameraCaptureTest)
             {
                 removeCamera(cameraCaptureTest.cameraManagerName());
                 Destroy(cameraCaptureTest.gameObject);
@@ -86,7 +87,8 @@ namespace Telemachus.CameraSnapshots
         public bool isRemoveCameraFromManager(Vessel vessel, string name)
         {
             //PluginLogger.debug("CHECKING FOR: " + name + " IN : " + vessel.id);
-            if (!vesselCameraMappings.ContainsKey(vessel.id)){
+            if (!vesselCameraMappings.ContainsKey(vessel.id))
+            {
                 return true;
             }
 
@@ -104,7 +106,7 @@ namespace Telemachus.CameraSnapshots
 
         public void addCamera(RasterPropMonitorCamera camera)
         {
-            if(camera == null)
+            if (camera == null)
             {
                 return;
             }

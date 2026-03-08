@@ -33,7 +33,7 @@ namespace Telemachus.CameraSnapshots
         {
             get
             {
-                if(rpmCameraName == null)
+                if (rpmCameraName == null)
                 {
                     if (rpmCameraModule != null)
                     {
@@ -99,7 +99,7 @@ namespace Telemachus.CameraSnapshots
 
         private void updateCameraManager(Vessel data)
         {
-            if(data == vessel)
+            if (data == vessel)
             {
                 addToManager();
             }

@@ -23,7 +23,7 @@ namespace Telemachus
         {
             if (UpdateNotify != null)
             {
-                UpdateNotify(this,updateEventArgs);
+                UpdateNotify(this, updateEventArgs);
             }
 
             if (vessel != null)

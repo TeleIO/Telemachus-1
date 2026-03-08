@@ -81,9 +81,11 @@ namespace Telemachus
                     webServer.AddWebSocketService("/datalink", () => new KSPWebSocketService(apiInstance, rateTracker));
 
                     // Finally, start serving requests!
-                    try {
+                    try
+                    {
                         webServer.Start();
-                    } catch (Exception ex)
+                    }
+                    catch (Exception ex)
                     {
                         PluginLogger.print("Error starting web server: " + ex.ToString());
                         throw;
@@ -114,11 +116,16 @@ namespace Telemachus
 
             // Read the port out of the config file
             int port = config.GetValue<int>("PORT");
-            if (port != 0 && port.IsPortNumber()) {
+            if (port != 0 && port.IsPortNumber())
+            {
                 serverConfig.port = port;
-            } else if (!port.IsPortNumber()) {
+            }
+            else if (!port.IsPortNumber())
+            {
                 PluginLogger.print("Port specified in configuration file '" + serverConfig.port + "' must be a value between 1 and 65535 inclusive");
-            } else {
+            }
+            else
+            {
                 PluginLogger.print("No port in configuration file - using default of " + serverConfig.port.ToString());
             }
 
@@ -130,7 +137,9 @@ namespace Telemachus
                 if (IPAddress.TryParse(ip, out ipAddress))
                 {
                     serverConfig.ipAddress = ipAddress;
-                } else {
+                }
+                else
+                {
                     PluginLogger.print("Invalid IP address in configuration file, falling back to default");
                 }
             }
@@ -145,7 +154,8 @@ namespace Telemachus
                 // Build a list of addresses we will be able to recieve at
                 serverConfig.ValidIpAddresses.Add(IPAddress.Loopback);
                 serverConfig.ValidIpAddresses.AddRange(Dns.GetHostAddresses(Dns.GetHostName()));
-            } else
+            }
+            else
             {
                 serverConfig.ValidIpAddresses.Add(serverConfig.ipAddress);
             }
@@ -174,7 +184,7 @@ namespace Telemachus
         public void Awake()
         {
             SimpleJson.SimpleJson.CurrentJsonSerializerStrategy = new SimpleJson.InfinityAsStringJsonSerializerStrategy();
-            
+
             LookForModsToInject();
             DontDestroyOnLoad(this);
             startDataLink();
@@ -193,7 +203,7 @@ namespace Telemachus
             {
                 vesselChangeDetector.update(FlightGlobals.ActiveVessel);
 
-                foreach (var client in webServer.WebSocketServices["/datalink"].Sessions.Sessions.OfType<KSPWebSocketService>()) 
+                foreach (var client in webServer.WebSocketServices["/datalink"].Sessions.Sessions.OfType<KSPWebSocketService>())
                 {
                     if (client.UpdateRequired(Time.time))
                     {
@@ -257,7 +267,8 @@ namespace Telemachus
             // Look for any mods in THIS assembly that inherit ITelemachusMinimalPlugin...
             foreach (var typ in Assembly.GetExecutingAssembly().GetTypes())
             {
-                try {
+                try
+                {
                     if (!typeof(IMinimalTelemachusPlugin).IsAssignableFrom(typ)) continue;
                     // Make sure we have a default constructor
                     if (typ.GetConstructor(Type.EmptyTypes) == null) continue;
@@ -266,7 +277,8 @@ namespace Telemachus
 
                     foundMods += "  - " + typ.ToString() + "\n";
                     found += 1;
-                } catch (Exception ex)
+                }
+                catch (Exception ex)
                 {
                     PluginLogger.print("Exception caught whilst loading internal plugin " + typ.ToString() + "; " + ex.ToString());
                 }
@@ -357,7 +369,7 @@ namespace Telemachus
             APIHandlers.Add(new TargetDataLinkHandler(formatters));
 
             APIHandlers.Add(new CompoundDataLinkHandler(
-                new List<DataLinkHandler>() { 
+                new List<DataLinkHandler>() {
                     new OrbitDataLinkHandler(formatters),
                     new SensorDataLinkHandler(vesselChangeDetector, formatters),
                     new VesselDataLinkHandler(formatters),
@@ -386,14 +398,16 @@ namespace Telemachus
             // Are we in flight mode, with a vessel?
             var cleanFlightMode = HighLogic.LoadedSceneIsFlight && data.vessel != null;
 
-            try {
+            try
+            {
                 // Get the API entry
                 APIEntry apiEntry = null;
                 process(name, out apiEntry);
                 if (apiEntry == null) return null;
 
                 // Can we run this variable at the moment?
-                if (!apiEntry.alwaysEvaluable && !cleanFlightMode) {
+                if (!apiEntry.alwaysEvaluable && !cleanFlightMode)
+                {
                     if (data.vessel == null) throw new VariableNotEvaluable(apistring, "No vessel!");
                     throw new VariableNotEvaluable(apistring, "Not in flight mode");
                 }
@@ -402,7 +416,8 @@ namespace Telemachus
                 var result = apiEntry.function(data);
                 // And return the serialization-ready value
                 return apiEntry.formatter.prepareForSerialization(result);
-            } catch (UnknownAPIException)
+            }
+            catch (UnknownAPIException)
             {
                 if (!cleanFlightMode) throw new VariableNotEvaluable(apistring, "Plugin variables not evaluable outside flight scene with vessel");
 
@@ -449,7 +464,7 @@ namespace Telemachus
 
             }
         }
-        
+
         protected List<DataLinkHandler> APIHandlers = new List<DataLinkHandler>();
 
         public void getAPIList(ref List<APIEntry> APIList)

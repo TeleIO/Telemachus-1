@@ -112,7 +112,7 @@ namespace Telemachus
             var optional_interfaces = new List<string>();
             if (handler.is_deregisterable) optional_interfaces.Add("Deregister");
             PluginLogger.print("Got plugin registration call for " + toRegister.GetType() + ".\n  Optional interfaces enabled: " + (optional_interfaces.Count == 0 ? "None" : string.Join(", ", optional_interfaces.ToArray())));
-            
+
             // Make a simple hashset of basic commands
             handler.commands = new HashSet<string>(commands.Where(x => !x.Contains("*")));
             // Now, deal with any wildcard plugin strings by building a regex
@@ -120,7 +120,7 @@ namespace Telemachus
                 .Where(x => x.Contains("*"))
                 .Select(x => new Regex("^" + x.Replace(".", "\\.").Replace("*", ".*") + "$")).ToList();
 
-            lock(_dataLock)
+            lock (_dataLock)
                 registeredPlugins.Add(handler);
         }
 
@@ -132,7 +132,7 @@ namespace Telemachus
         {
             PluginLogger.print("Removing registered plugin " + handler.instance.ToString());
             // Remove the handler caches
-            lock(_dataLock)
+            lock (_dataLock)
             {
                 foreach (var api in handler.known_handlers)
                 {
@@ -149,7 +149,7 @@ namespace Telemachus
         /// <returns>An API-processing delegate, or null if none were found</returns>
         public APIDelegate GetAPIDelegate(string APIname)
         {
-            lock(_dataLock)
+            lock (_dataLock)
             {
                 // Check our handler cache first.
                 if (handlers.ContainsKey(APIname))
@@ -181,7 +181,7 @@ namespace Telemachus
             }
             return null;
         }
-        
+
         private static string[] ReadCommandList(object pluginInstance)
         {
             var objType = pluginInstance.GetType();

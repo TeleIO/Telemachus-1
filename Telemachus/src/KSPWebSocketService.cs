@@ -14,7 +14,7 @@ namespace Telemachus
         /// The list of variables to send out every time we communicate
         private HashSet<string> subscriptions = new HashSet<string>();
         /// A list of variables to evaluate ONLY the next time we are triggered
-        private HashSet<string> oneShotRuns   = new HashSet<string>();
+        private HashSet<string> oneShotRuns = new HashSet<string>();
         /// A list of variables that the user has subscribed to binary updates of
         private string[] binarySubscriptions = new string[] { };
         ///  A lock to prevent simultaneous reading/updating of the client parameters
@@ -40,7 +40,7 @@ namespace Telemachus
         /// <param name="time">The current time, in seconds.</param>
         public bool UpdateRequired(float time)
         {
-            if ((time-lastUpdate) > streamRate/1000f)
+            if ((time - lastUpdate) > streamRate / 1000f)
             {
                 return readyToSend;
             }
@@ -57,7 +57,7 @@ namespace Telemachus
             // deserialize the message as JSON
             var json = SimpleJson.SimpleJson.DeserializeObject(e.Data) as SimpleJson.JsonObject;
 
-            lock(dataLock)
+            lock (dataLock)
             {
                 // Do any tasks requested here
                 foreach (var entry in json)
@@ -68,11 +68,12 @@ namespace Telemachus
                     if (entry.Value is SimpleJson.JsonArray)
                     {
                         listContents = (entry.Value as SimpleJson.JsonArray).OfType<string>().Select(x => x.Trim()).ToArray();
-                    } else if (entry.Value is string)
+                    }
+                    else if (entry.Value is string)
                     {
                         listContents = new[] { entry.Value as string };
                     }
-                    
+
                     // Process the possible API entries
                     if (entry.Key == "+")
                     {
@@ -93,15 +94,17 @@ namespace Telemachus
                     {
                         streamRate = Convert.ToInt32(entry.Value);
                         PluginLogger.print(string.Format("Client {0} setting rate {1}", ID, streamRate));
-                    } else if (entry.Key == "binary")
+                    }
+                    else if (entry.Key == "binary")
                     {
                         binarySubscriptions = listContents;
                         PluginLogger.print(string.Format("Client {0} requests binary packets {1}", ID, string.Join(", ", listContents)));
-                    } else
+                    }
+                    else
                     {
                         PluginLogger.print(String.Format("Client {0} send unrecognised key {1}", ID, entry.Key));
                     }
-                } 
+                }
             } // Lock
         } // OnMessage
 
@@ -136,10 +139,12 @@ namespace Telemachus
                 {
                     // IF we get this message, we know it was because no variable was found
                     unknowns.Add(apiString);
-                } catch (IKSPAPI.VariableNotEvaluable)
+                }
+                catch (IKSPAPI.VariableNotEvaluable)
                 {
                     // We can't evaluate this at the moment. Just ignore until we can.
-                } catch (Exception ex)
+                }
+                catch (Exception ex)
                 {
                     errors[apiString] = ex.ToString();
                 }
@@ -152,16 +157,20 @@ namespace Telemachus
             {
                 var variableValues = new List<float>();
                 // Read every binary value
-                foreach (var name in binarySubscriptions) {
-                    try {
+                foreach (var name in binarySubscriptions)
+                {
+                    try
+                    {
                         variableValues.Add(Convert.ToSingle(apiResults[name]));
-                    } catch (Exception ex)
+                    }
+                    catch (Exception ex)
                     {
                         variableValues.Add(0);
                         if (apiResults.ContainsKey(name))
                         {
                             errors[name] = "Error streaming to binary " + name + "='" + apiResults[name] + "'; " + ex.ToString();
-                        } else
+                        }
+                        else
                         {
                             errors[name] = "Error streaming to binary: value for " + name + " not found; " + ex.ToString();
                         }
@@ -203,7 +212,7 @@ namespace Telemachus
             readyToSend = false;
             try
             {
-               SendAsync(data, (b) => readyToSend = true);
+                SendAsync(data, (b) => readyToSend = true);
                 dataRates.SendDataToClient(data.Length);
             }
             catch (Exception ex)

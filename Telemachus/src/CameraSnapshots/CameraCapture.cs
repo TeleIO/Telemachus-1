@@ -42,16 +42,17 @@ namespace Telemachus.CameraSnapshots
         public Dictionary<string, Camera> gameCameraMapping = new Dictionary<string, Camera>();
 
 
-        protected string cameraContainerNamePrefix {
+        protected string cameraContainerNamePrefix
+        {
             get
             {
                 return "TelemachusCameraContainer:" + cameraManagerName();
             }
         }
-        
+
         protected const float fovAngle = 60f;
         protected const float aspect = 1.0f;
-        public  int cameraResolution = 300;
+        public int cameraResolution = 300;
 
         protected void OnEnable()
         {
@@ -91,7 +92,7 @@ namespace Telemachus.CameraSnapshots
                 camera.Render();
             }
 
-                //imageStopWatch.Start();
+            //imageStopWatch.Start();
             Texture2D texture = getTexture2DFromRenderTexture();
             this.imageBytes = texture.EncodeToJPG();
             this.didRender = true;
@@ -127,7 +128,7 @@ namespace Telemachus.CameraSnapshots
 
             foreach (Camera camera in Camera.allCameras)
             {
-                
+
                 // Don't duplicate any cameras we're going to skip
                 if (skippedCameras.IndexOf(camera.name) != -1)
                 {
@@ -194,7 +195,7 @@ namespace Telemachus.CameraSnapshots
 
         public virtual void repositionCamera()
         {
-           foreach (KeyValuePair<string, Camera> KVP in cameraDuplicates)
+            foreach (KeyValuePair<string, Camera> KVP in cameraDuplicates)
             {
                 Camera cameraDuplicate = KVP.Value;
                 Camera gameCamera = gameCameraMapping[KVP.Key];
@@ -287,15 +288,15 @@ namespace Telemachus.CameraSnapshots
             }
         }*/
 
-        public virtual void additionalCameraUpdates(Camera dupliateCam, Camera gameCamera){ }
+        public virtual void additionalCameraUpdates(Camera dupliateCam, Camera gameCamera) { }
 
         public virtual void debugCameraDetails(Camera cam)
         {
-            PluginLogger.debug("CAMERA: " + cam.name + " POS: " + cam.transform.position + "; ROT: " + cam.transform.rotation  + " ; NEAR:" + cam.nearClipPlane + "; FAR: " + cam.farClipPlane);
+            PluginLogger.debug("CAMERA: " + cam.name + " POS: " + cam.transform.position + "; ROT: " + cam.transform.rotation + " ; NEAR:" + cam.nearClipPlane + "; FAR: " + cam.farClipPlane);
         }
 
-        public virtual void BeforeRenderNewScreenshot(){ }
-        
+        public virtual void BeforeRenderNewScreenshot() { }
+
         /*public IEnumerator NewScreenshot()
         {
             if (mutex)

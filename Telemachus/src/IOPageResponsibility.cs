@@ -95,7 +95,8 @@ namespace Telemachus
             if (contentTypes.ContainsKey(extension))
             {
                 return contentTypes[extension];
-            } else
+            }
+            else
             {
                 return contentTypes[""];
             }

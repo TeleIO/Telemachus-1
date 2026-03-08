@@ -18,7 +18,7 @@ namespace Telemachus.CameraSnapshots
             return "FlightCamera";
         }
 
-        
+
 
         public override void BeforeRenderNewScreenshot()
         {
@@ -26,6 +26,6 @@ namespace Telemachus.CameraSnapshots
             //base.BeforeRenderNewScreenshot();
         }
 
-        
+
     }
 }

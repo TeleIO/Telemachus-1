@@ -72,7 +72,7 @@ namespace Telemachus
         public void RecieveDataFromClient(int bytes)
         {
             // Convert to bits for the data rate.
-            addGuardedPoint(DateTime.Now, bytes*8, upLinkRate);
+            addGuardedPoint(DateTime.Now, bytes * 8, upLinkRate);
         }
 
         /// <summary>
@@ -81,7 +81,7 @@ namespace Telemachus
         public void SendDataToClient(int bytes)
         {
             // Convert to bits for the data rate.
-            addGuardedPoint(DateTime.Now, bytes*8, downLinkRate);
+            addGuardedPoint(DateTime.Now, bytes * 8, downLinkRate);
         }
 
         /// <summary>
@@ -120,7 +120,7 @@ namespace Telemachus
             {
                 // Adds a new item to the top of the list.
                 rate.AddFirst(new KeyValuePair<DateTime, int>(time, bits));
-                
+
                 // Checks if the list has grown beyond averageSize.
                 if (rate.Count >= averageSize)
                 {
@@ -141,7 +141,7 @@ namespace Telemachus
             lock (rate)
             {
                 // Returns if we don't have at least two data points to average over a time interval.
-                if(rate.Count < 2)
+                if (rate.Count < 2)
                 {
                     return 0;
                 }
@@ -185,7 +185,7 @@ namespace Telemachus
                     }
 
                     // Returns 0 if we don't have any datapoints.
-                    if(irel <= 0)
+                    if (irel <= 0)
                     {
                         return 0;
                     }

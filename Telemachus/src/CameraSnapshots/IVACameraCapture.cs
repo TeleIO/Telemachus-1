@@ -21,21 +21,21 @@ namespace Telemachus.CameraSnapshots
 
         private const float defaultFovAngle = 60f;
         private const float aspect = 1.0f;
-        private  int camerares = 300;
+        private int camerares = 300;
 
         void LateUpdate()
         {
             PluginLogger.debug("LATEUPDATE FOR CAMERA");
-            if(InternalCamera.Instance != null)
+            if (InternalCamera.Instance != null)
             {
                 PluginLogger.debug("INTERNAL CAMERA Position: " + InternalCamera.Instance.transform.position.ToString());
                 PluginLogger.debug("INTERNAL CAMERA Rotation: " + InternalCamera.Instance.transform.rotation.ToString());
-                
+
                 if (CameraManager.Instance.currentCameraMode == CameraManager.CameraMode.IVA)
                 {
-                    foreach(Camera camera in Camera.allCameras)
+                    foreach (Camera camera in Camera.allCameras)
                     {
-                        if(camera.name == "InternalCamera")
+                        if (camera.name == "InternalCamera")
                         {
                             fovAngle = camera.fieldOfView;
                         }
@@ -52,8 +52,8 @@ namespace Telemachus.CameraSnapshots
             {
                 PluginLogger.debug("NO INTERNAL CAMERA");
             }
-            
-            if(CameraManager.Instance != null)
+
+            if (CameraManager.Instance != null)
             {
                 PluginLogger.debug("CAMERA FOUND, TAKING SCREENSHOT");
                 StartCoroutine(NewScreenshot());
@@ -103,9 +103,9 @@ namespace Telemachus.CameraSnapshots
 
         public void debugCameraDetails(Camera cam)
         {
-            PluginLogger.debug("CAMERA: " + cam.name + " ; NEAR CLIP PLANE: "+ cam.nearClipPlane +"; FAR CLIP PLANE: " + cam.farClipPlane + " FOV : " + cam.fieldOfView + " POSITION: " +  cam.transform.position.ToString() + " ROTATION: " + cam.transform.rotation.ToString());
+            PluginLogger.debug("CAMERA: " + cam.name + " ; NEAR CLIP PLANE: " + cam.nearClipPlane + "; FAR CLIP PLANE: " + cam.farClipPlane + " FOV : " + cam.fieldOfView + " POSITION: " + cam.transform.position.ToString() + " ROTATION: " + cam.transform.rotation.ToString());
         }
-        
+
         public IEnumerator NewScreenshot()
         {
             if (mutex)

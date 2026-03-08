@@ -13,7 +13,7 @@ namespace Telemachus
         {
 #if (DEBUG)
             Console.WriteLine(s);
-            UnityEngine.Debug.Log("[Telemachus Debug] " +  s);
+            UnityEngine.Debug.Log("[Telemachus Debug] " + s);
 #endif
         }
 

@@ -39,7 +39,7 @@ namespace Telemachus
 
         private UpLinkDownLinkRate dataRates = null;
 
-        
+
 
         #region Initialisation
 
@@ -52,13 +52,13 @@ namespace Telemachus
         public void setCameraCapture()
         {
             //PluginLogger.debug("START CAMERA CATPURE");
-            
+
             //PluginLogger.debug("CAM CAMPTURE CREATED");
         }
 
         #endregion
 
-        private static Dictionary<string,object> splitArguments(string argstring)
+        private static Dictionary<string, object> splitArguments(string argstring)
         {
             var ret = new Dictionary<string, object>();
             if (argstring.StartsWith("?")) argstring = argstring.Substring(1);
@@ -104,7 +104,7 @@ namespace Telemachus
 
             var jsonObject = new List<Dictionary<string, object>>();
 
-            foreach(KeyValuePair<string, CameraCapture> cameraKVP in CameraCaptureManager.classedInstance.cameras)
+            foreach (KeyValuePair<string, CameraCapture> cameraKVP in CameraCaptureManager.classedInstance.cameras)
             {
                 var jsonData = new Dictionary<string, object>();
                 jsonData["name"] = cameraKVP.Value.cameraManagerName();
@@ -163,14 +163,15 @@ namespace Telemachus
                 dataRates.RecieveDataFromClient(Convert.ToInt32(byteCount));
 
                 return processCameraManagerIndex(request, response);
-            } else if (cameraNameEndpointRegex.IsMatch(request.Url.AbsolutePath))
+            }
+            else if (cameraNameEndpointRegex.IsMatch(request.Url.AbsolutePath))
             {
                 Match match = cameraNameEndpointRegex.Match(request.Url.AbsolutePath);
                 string cameraName = UnityEngine.WWW.UnEscapeURL(match.Groups[1].Value);
                 //PluginLogger.debug("GET CAMERA: " + cameraName);
                 return processCameraImageRequest(cameraName, request, response);
             }
-            
+
             return false;
         }
     }

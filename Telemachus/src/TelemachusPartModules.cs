@@ -137,7 +137,8 @@ namespace Telemachus
 
         public override void OnUpdate()
         {
-            if (part.vessel != FlightGlobals.ActiveVessel) {
+            if (part.vessel != FlightGlobals.ActiveVessel)
+            {
                 return;
             }
             if (activeToggle)

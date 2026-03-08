@@ -35,7 +35,7 @@ namespace Telemachus.Plugins
             public VesselModule parent { get; private set; }
             private Type typ;
 
-            public Func<string,object> ProcessVariable { get; private set; }
+            public Func<string, object> ProcessVariable { get; private set; }
             //public Action FixedUpdate { get; private set; }
             public Action Update { get; private set; }
 
@@ -65,16 +65,18 @@ namespace Telemachus.Plugins
         {
             if (API == "rpm.available") return (v, a) => { return FindRPMModule(v) != null; };
 
-            return (vessel, args) => {
+            return (vessel, args) =>
+            {
                 var module = FindRPMModule(vessel);
-                if (module != null) {
+                if (module != null)
+                {
                     module.Update();
                     return module.ProcessVariable(API.Substring(4));
                 }
                 return null;
             };
         }
-        
+
         /// <summary>
         /// Scans all attached modules to a vessel, and returns the RasterPropMonitor vessel computer.
         /// </summary>

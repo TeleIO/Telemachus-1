@@ -17,7 +17,7 @@ namespace Telemachus.CameraSnapshots
         {
             get
             {
-                if(_cameraSkipRegex == null)
+                if (_cameraSkipRegex == null)
                 {
                     _cameraSkipRegex = new Regex("(" + String.Join("|", camerasToSkipPositionTransform) + ")$");
                 }

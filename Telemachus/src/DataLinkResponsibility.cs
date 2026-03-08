@@ -29,7 +29,7 @@ namespace Telemachus
 
         #endregion
 
-        private static Dictionary<string,object> splitArguments(string argstring)
+        private static Dictionary<string, object> splitArguments(string argstring)
         {
             var ret = new Dictionary<string, object>();
             if (argstring.StartsWith("?")) argstring = argstring.Substring(1);
@@ -73,22 +73,25 @@ namespace Telemachus
             var results = new Dictionary<string, object>();
             var unknowns = new List<string>();
             var errors = new Dictionary<string, string>();
-            
+
             foreach (var name in apiRequests.Keys)
             {
-                try {
+                try
+                {
                     results[name] = kspAPI.ProcessAPIString(apiRequests[name].ToString());
-                } catch (IKSPAPI.UnknownAPIException)
+                }
+                catch (IKSPAPI.UnknownAPIException)
                 {
                     unknowns.Add(apiRequests[name].ToString());
-                } catch (Exception ex)
+                }
+                catch (Exception ex)
                 {
                     errors[apiRequests[name].ToString()] = ex.ToString();
                 }
             }
             // If we had any unrecognised API keys, let the user know
             if (unknowns.Count > 0) results["unknown"] = unknowns;
-            if (errors.Count > 0)   results["errors"]  = errors;
+            if (errors.Count > 0) results["errors"] = errors;
 
             // Now, serialize the dictionary and write to the response
             var returnData = Encoding.UTF8.GetBytes(SimpleJson.SimpleJson.SerializeObject(results));
