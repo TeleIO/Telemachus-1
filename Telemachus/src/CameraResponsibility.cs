@@ -36,7 +36,7 @@ namespace Telemachus
         }
 
         /// The KSP API to use to access variable data
-        private IKSPAPI kspAPI = null;
+        private KSPAPIBase kspAPI = null;
 
         private UpLinkDownLinkRate dataRates = null;
 
@@ -44,41 +44,13 @@ namespace Telemachus
 
         #region Initialisation
 
-        public CameraResponsibility(IKSPAPI kspAPI, UpLinkDownLinkRate rateTracker)
+        public CameraResponsibility(KSPAPIBase kspAPI, UpLinkDownLinkRate rateTracker)
         {
             this.kspAPI = kspAPI;
             dataRates = rateTracker;
         }
 
-        public void setCameraCapture()
-        {
-            //PluginLogger.debug("START CAMERA CATPURE");
-
-            //PluginLogger.debug("CAM CAMPTURE CREATED");
-        }
-
         #endregion
-
-        private static Dictionary<string, object> splitArguments(string argstring)
-        {
-            var ret = new Dictionary<string, object>();
-            if (argstring.StartsWith("?")) argstring = argstring.Substring(1);
-
-            foreach (var part in argstring.Split('&'))
-            {
-                var subParts = part.Split('=');
-                if (subParts.Length != 2) continue;
-                var keyName = UnityEngine.WWW.UnEscapeURL(subParts[0]);
-                var apiName = UnityEngine.WWW.UnEscapeURL(subParts[1]);
-                ret[keyName] = apiName;
-            }
-            return ret;
-        }
-
-        private static IDictionary<string, object> parseJSONBody(string jsonBody)
-        {
-            return JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonBody);
-        }
 
         public string cameraURL(HttpListenerRequest request, CameraCapture camera)
         {

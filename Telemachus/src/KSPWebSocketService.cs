@@ -28,9 +28,9 @@ namespace Telemachus
         /// Prevent trying to send more data when the last lot hasn't finished yet
         private bool readyToSend = true;
         private float lastUpdate = -500;
-        private IKSPAPI api = null;
+        private KSPAPIBase api = null;
 
-        public KSPWebSocketService(IKSPAPI api, UpLinkDownLinkRate rateTracker)
+        public KSPWebSocketService(KSPAPIBase api, UpLinkDownLinkRate rateTracker)
         {
             this.api = api;
             dataRates = rateTracker;
@@ -137,12 +137,12 @@ namespace Telemachus
                 {
                     apiResults[apiString] = api.ProcessAPIString(apiString);
                 }
-                catch (IKSPAPI.UnknownAPIException)
+                catch (KSPAPIBase.UnknownAPIException)
                 {
                     // IF we get this message, we know it was because no variable was found
                     unknowns.Add(apiString);
                 }
-                catch (IKSPAPI.VariableNotEvaluable)
+                catch (KSPAPIBase.VariableNotEvaluable)
                 {
                     // We can't evaluate this at the moment. Just ignore until we can.
                 }

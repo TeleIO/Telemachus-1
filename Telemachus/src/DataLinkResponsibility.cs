@@ -16,13 +16,13 @@ namespace Telemachus
         /// The page prefix that this class handles
         public const String PAGE_PREFIX = "/telemachus/datalink";
         /// The KSP API to use to access variable data
-        private IKSPAPI kspAPI = null;
+        private KSPAPIBase kspAPI = null;
 
         private UpLinkDownLinkRate dataRates = null;
 
         #region Initialisation
 
-        public DataLinkResponsibility(IKSPAPI kspAPI, UpLinkDownLinkRate rateTracker)
+        public DataLinkResponsibility(KSPAPIBase kspAPI, UpLinkDownLinkRate rateTracker)
         {
             this.kspAPI = kspAPI;
             dataRates = rateTracker;
@@ -81,7 +81,7 @@ namespace Telemachus
                 {
                     results[name] = kspAPI.ProcessAPIString(apiRequests[name].ToString());
                 }
-                catch (IKSPAPI.UnknownAPIException)
+                catch (KSPAPIBase.UnknownAPIException)
                 {
                     unknowns.Add(apiRequests[name].ToString());
                 }

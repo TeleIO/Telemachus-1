@@ -21,154 +21,68 @@ namespace Telemachus
             : base(formatters)
         {
             registerAPI(new ActionAPIEntry(
-                dataSources =>
-                {
-                    TelemachusBehaviour.instance.BroadcastMessage("queueDelayedAPI", new DelayedAPIEntry(dataSources.Clone(),
-                        (x) => { return reflectOff(dataSources); }), UnityEngine.SendMessageOptions.DontRequireReceiver);
-                    return predictFailure(dataSources.vessel);
-                },
-               "mj.smartassoff", "Smart ASS Off", formatters.Default));
+                queueDelayed(x => reflectOff(x), predictFailure),
+                "mj.smartassoff", "Smart ASS Off", formatters.Default));
 
             registerAPI(new ActionAPIEntry(
-                dataSources =>
-                {
-                    TelemachusBehaviour.instance.BroadcastMessage("queueDelayedAPI", new DelayedAPIEntry(dataSources.Clone(),
-                        (x) => { return reflectAttitudeTo(dataSources, Vector3d.forward, "MANEUVER_NODE"); }),
-                        UnityEngine.SendMessageOptions.DontRequireReceiver); return predictFailure(dataSources.vessel);
-                },
-               "mj.node", "Node", formatters.Default));
+                queueDelayed(x => reflectAttitudeTo(x, Vector3d.forward, "MANEUVER_NODE"), predictFailure),
+                "mj.node", "Node", formatters.Default));
 
             registerAPI(new ActionAPIEntry(
-                dataSources =>
-                {
-                    TelemachusBehaviour.instance.BroadcastMessage("queueDelayedAPI", new DelayedAPIEntry(dataSources.Clone(),
-                        (x) => { return reflectAttitudeTo(dataSources, Vector3d.forward, "ORBIT"); }),
-                        UnityEngine.SendMessageOptions.DontRequireReceiver); return predictFailure(dataSources.vessel);
-                },
-               "mj.prograde", "Prograde", formatters.Default));
+                queueDelayed(x => reflectAttitudeTo(x, Vector3d.forward, "ORBIT"), predictFailure),
+                "mj.prograde", "Prograde", formatters.Default));
 
             registerAPI(new ActionAPIEntry(
-                dataSources =>
-                {
-                    TelemachusBehaviour.instance.BroadcastMessage("queueDelayedAPI", new DelayedAPIEntry(dataSources.Clone(),
-                        (x) => { return reflectAttitudeTo(dataSources, Vector3d.back, "ORBIT"); }),
-                        UnityEngine.SendMessageOptions.DontRequireReceiver); return predictFailure(dataSources.vessel);
-                },
-               "mj.retrograde", "Retrograde", formatters.Default));
+                queueDelayed(x => reflectAttitudeTo(x, Vector3d.back, "ORBIT"), predictFailure),
+                "mj.retrograde", "Retrograde", formatters.Default));
 
             registerAPI(new ActionAPIEntry(
-                dataSources =>
-                {
-                    TelemachusBehaviour.instance.BroadcastMessage("queueDelayedAPI", new DelayedAPIEntry(dataSources.Clone(),
-                        (x) => { return reflectAttitudeTo(dataSources, Vector3d.left, "ORBIT"); }),
-                        UnityEngine.SendMessageOptions.DontRequireReceiver); return predictFailure(dataSources.vessel);
-                },
-               "mj.normalplus", "Normal Plus", formatters.Default));
+                queueDelayed(x => reflectAttitudeTo(x, Vector3d.left, "ORBIT"), predictFailure),
+                "mj.normalplus", "Normal Plus", formatters.Default));
 
             registerAPI(new ActionAPIEntry(
-                dataSources =>
-                {
-                    TelemachusBehaviour.instance.BroadcastMessage("queueDelayedAPI", new DelayedAPIEntry(dataSources.Clone(),
-                        (x) => { return reflectAttitudeTo(dataSources, Vector3d.right, "ORBIT"); }),
-                        UnityEngine.SendMessageOptions.DontRequireReceiver); return predictFailure(dataSources.vessel);
-                },
-               "mj.normalminus", "Normal Minus", formatters.Default));
+                queueDelayed(x => reflectAttitudeTo(x, Vector3d.right, "ORBIT"), predictFailure),
+                "mj.normalminus", "Normal Minus", formatters.Default));
 
             registerAPI(new ActionAPIEntry(
-                dataSources =>
-                {
-                    TelemachusBehaviour.instance.BroadcastMessage("queueDelayedAPI", new DelayedAPIEntry(dataSources.Clone(),
-                        (x) => { return reflectAttitudeTo(dataSources, Vector3d.up, "ORBIT"); }),
-                        UnityEngine.SendMessageOptions.DontRequireReceiver); return predictFailure(dataSources.vessel);
-                },
-               "mj.radialplus", "Radial Plus", formatters.Default));
+                queueDelayed(x => reflectAttitudeTo(x, Vector3d.up, "ORBIT"), predictFailure),
+                "mj.radialplus", "Radial Plus", formatters.Default));
 
             registerAPI(new ActionAPIEntry(
-                dataSources =>
-                {
-                    TelemachusBehaviour.instance.BroadcastMessage("queueDelayedAPI", new DelayedAPIEntry(dataSources.Clone(),
-                        (x) => { return reflectAttitudeTo(dataSources, Vector3d.down, "ORBIT"); }),
-                        UnityEngine.SendMessageOptions.DontRequireReceiver); return predictFailure(dataSources.vessel);
-                },
-               "mj.radialminus", "Radial Minus", formatters.Default));
+                queueDelayed(x => reflectAttitudeTo(x, Vector3d.down, "ORBIT"), predictFailure),
+                "mj.radialminus", "Radial Minus", formatters.Default));
 
             registerAPI(new ActionAPIEntry(
-                dataSources =>
-                {
-                    TelemachusBehaviour.instance.BroadcastMessage("queueDelayedAPI", new DelayedAPIEntry(dataSources.Clone(),
-                        (x) => { return (FlightGlobals.fetch.VesselTarget != null ? reflectAttitudeTo(dataSources, Vector3d.forward, "TARGET") : false); }),
-                        UnityEngine.SendMessageOptions.DontRequireReceiver); return predictFailure(dataSources.vessel);
-                },
-               "mj.targetplus", "Target Plus", formatters.Default));
+                queueDelayed(x => FlightGlobals.fetch.VesselTarget != null ? reflectAttitudeTo(x, Vector3d.forward, "TARGET") : (object)false, predictFailure),
+                "mj.targetplus", "Target Plus", formatters.Default));
 
             registerAPI(new ActionAPIEntry(
-                dataSources =>
-                {
-                    TelemachusBehaviour.instance.BroadcastMessage("queueDelayedAPI", new DelayedAPIEntry(dataSources.Clone(),
-                        (x) => { return (FlightGlobals.fetch.VesselTarget != null ? reflectAttitudeTo(dataSources, Vector3d.back, "TARGET") : false); }),
-                        UnityEngine.SendMessageOptions.DontRequireReceiver); return predictFailure(dataSources.vessel);
-                },
-               "mj.targetminus", "Target Minus", formatters.Default));
+                queueDelayed(x => FlightGlobals.fetch.VesselTarget != null ? reflectAttitudeTo(x, Vector3d.back, "TARGET") : (object)false, predictFailure),
+                "mj.targetminus", "Target Minus", formatters.Default));
 
             registerAPI(new ActionAPIEntry(
-                dataSources =>
-                {
-                    TelemachusBehaviour.instance.BroadcastMessage("queueDelayedAPI", new DelayedAPIEntry(dataSources.Clone(),
-                        (x) => { return (FlightGlobals.fetch.VesselTarget != null ? reflectAttitudeTo(dataSources, Vector3d.forward, "RELATIVE_VELOCITY") : false); }),
-                        UnityEngine.SendMessageOptions.DontRequireReceiver); return predictFailure(dataSources.vessel);
-                },
-               "mj.relativeplus", "Relative Plus", formatters.Default));
+                queueDelayed(x => FlightGlobals.fetch.VesselTarget != null ? reflectAttitudeTo(x, Vector3d.forward, "RELATIVE_VELOCITY") : (object)false, predictFailure),
+                "mj.relativeplus", "Relative Plus", formatters.Default));
 
             registerAPI(new ActionAPIEntry(
-                dataSources =>
-                {
-                    TelemachusBehaviour.instance.BroadcastMessage("queueDelayedAPI", new DelayedAPIEntry(dataSources.Clone(),
-                        (x) => { return (FlightGlobals.fetch.VesselTarget != null ? reflectAttitudeTo(dataSources, Vector3d.back, "RELATIVE_VELOCITY") : false); }),
-                        UnityEngine.SendMessageOptions.DontRequireReceiver); return predictFailure(dataSources.vessel);
-                },
-               "mj.relativeminus", "Relative Minus", formatters.Default));
+                queueDelayed(x => FlightGlobals.fetch.VesselTarget != null ? reflectAttitudeTo(x, Vector3d.back, "RELATIVE_VELOCITY") : (object)false, predictFailure),
+                "mj.relativeminus", "Relative Minus", formatters.Default));
 
             registerAPI(new ActionAPIEntry(
-                dataSources =>
-                {
-                    TelemachusBehaviour.instance.BroadcastMessage("queueDelayedAPI", new DelayedAPIEntry(dataSources.Clone(),
-                        (x) => { return (FlightGlobals.fetch.VesselTarget != null ? reflectAttitudeTo(dataSources, Vector3d.forward, "TARGET_ORIENTATION") : false); }),
-                        UnityEngine.SendMessageOptions.DontRequireReceiver); return predictFailure(dataSources.vessel);
-                },
-               "mj.parallelplus", "Parallel Plus", formatters.Default));
+                queueDelayed(x => FlightGlobals.fetch.VesselTarget != null ? reflectAttitudeTo(x, Vector3d.forward, "TARGET_ORIENTATION") : (object)false, predictFailure),
+                "mj.parallelplus", "Parallel Plus", formatters.Default));
 
             registerAPI(new ActionAPIEntry(
-                dataSources =>
-                {
-                    TelemachusBehaviour.instance.BroadcastMessage("queueDelayedAPI", new DelayedAPIEntry(dataSources.Clone(),
-                        (x) => { return (FlightGlobals.fetch.VesselTarget != null ? reflectAttitudeTo(dataSources, Vector3d.back, "TARGET_ORIENTATION") : false); }),
-                        UnityEngine.SendMessageOptions.DontRequireReceiver); return predictFailure(dataSources.vessel);
-                },
-               "mj.parallelminus", "Parallel Minus", formatters.Default));
+                queueDelayed(x => FlightGlobals.fetch.VesselTarget != null ? reflectAttitudeTo(x, Vector3d.back, "TARGET_ORIENTATION") : (object)false, predictFailure),
+                "mj.parallelminus", "Parallel Minus", formatters.Default));
 
             registerAPI(new ActionAPIEntry(
-                dataSources =>
-                {
-                    TelemachusBehaviour.instance.BroadcastMessage("queueDelayedAPI", new DelayedAPIEntry(dataSources.Clone(),
-                        (x) => { return surface(dataSources); }),
-                        UnityEngine.SendMessageOptions.DontRequireReceiver);
-                    return predictFailure(dataSources.vessel);
-                },
-               "mj.surface", "Surface [float heading, float pitch]", formatters.Default));
+                queueDelayed(x => surface(x), predictFailure),
+                "mj.surface", "Surface [float heading, float pitch]", formatters.Default));
 
             registerAPI(new ActionAPIEntry(
-                dataSources =>
-                {
-                    TelemachusBehaviour.instance.BroadcastMessage("queueDelayedAPI", new DelayedAPIEntry(dataSources.Clone(),
-                        (x) =>
-                        {
-                            return reflectAttitudeTo(dataSources, double.Parse(dataSources.args[0]),
-                                double.Parse(dataSources.args[1]), double.Parse(dataSources.args[2])
-                                );
-                        }), UnityEngine.SendMessageOptions.DontRequireReceiver);
-                    return predictFailure(dataSources.vessel);
-                },
-               "mj.surface2", "Surface [double heading, double pitch, double roll]", formatters.Default));
+                queueDelayed(x => reflectAttitudeTo(x, double.Parse(x.args[0]), double.Parse(x.args[1]), double.Parse(x.args[2])), predictFailure),
+                "mj.surface2", "Surface [double heading, double pitch, double roll]", formatters.Default));
 
             registerAPI(new APIEntry(
                 dataSources =>
@@ -551,20 +465,11 @@ namespace Telemachus
             : base(formatters)
         {
             registerAPI(new ActionAPIEntry(
-                dataSources =>
-                {
-                    TelemachusBehaviour.instance.BroadcastMessage("queueDelayedAPI", new DelayedAPIEntry(dataSources.Clone(),
-                        (x) => { StageManager.ActivateNextStage(); return 0d; }), UnityEngine.SendMessageOptions.DontRequireReceiver);
-                    return predictFailure(dataSources.vessel);
-                }, "f.stage", "Stage", formatters.Default));
+                queueDelayed(x => { StageManager.ActivateNextStage(); return 0d; }, predictFailure),
+                "f.stage", "Stage", formatters.Default));
 
             registerAPI(new ActionAPIEntry(
-               dataSources =>
-               {
-                   TelemachusBehaviour.instance.BroadcastMessage("queueDelayedAPI", new DelayedAPIEntry(dataSources.Clone(),
-                       (x) => { setThrottle(x); return 0d; }), UnityEngine.SendMessageOptions.DontRequireReceiver);
-                   return predictFailure(dataSources.vessel);
-               },
+                queueDelayed(x => { setThrottle(x); return 0d; }, predictFailure),
                 "f.setThrottle", "Set Throttle [float magnitude]", formatters.Default));
 
             registerAPI(new PlotableAPIEntry(
@@ -576,39 +481,19 @@ namespace Telemachus
                 "f.throttle", "Throttle", formatters.Default, APIEntry.UnitType.UNITLESS));
 
             registerAPI(new ActionAPIEntry(
-               dataSources =>
-               {
-                   TelemachusBehaviour.instance.BroadcastMessage("queueDelayedAPI", new DelayedAPIEntry(dataSources.Clone(),
-                       (x) => { throttleUp(); return 0d; }), UnityEngine.SendMessageOptions.DontRequireReceiver);
-                   return predictFailure(dataSources.vessel);
-               },
+                queueDelayed(x => { throttleUp(); return 0d; }, predictFailure),
                 "f.throttleUp", "Throttle Up", formatters.Default));
 
             registerAPI(new ActionAPIEntry(
-                dataSources =>
-                {
-                    TelemachusBehaviour.instance.BroadcastMessage("queueDelayedAPI", new DelayedAPIEntry(dataSources.Clone(),
-                        (x) => { throttleZero(); return 0d; }), UnityEngine.SendMessageOptions.DontRequireReceiver);
-                    return predictFailure(dataSources.vessel);
-                },
+                queueDelayed(x => { throttleZero(); return 0d; }, predictFailure),
                 "f.throttleZero", "Throttle Zero", formatters.Default));
 
             registerAPI(new ActionAPIEntry(
-                dataSources =>
-                {
-                    TelemachusBehaviour.instance.BroadcastMessage("queueDelayedAPI", new DelayedAPIEntry(dataSources.Clone(),
-                        (x) => { throttleFull(); return 0d; }), UnityEngine.SendMessageOptions.DontRequireReceiver);
-                    return predictFailure(dataSources.vessel);
-                },
+                queueDelayed(x => { throttleFull(); return 0d; }, predictFailure),
                 "f.throttleFull", "Throttle Full", formatters.Default));
 
             registerAPI(new ActionAPIEntry(
-                dataSources =>
-                {
-                    TelemachusBehaviour.instance.BroadcastMessage("queueDelayedAPI", new DelayedAPIEntry(dataSources.Clone(),
-                        (x) => { throttleDown(); return 0d; }), UnityEngine.SendMessageOptions.DontRequireReceiver);
-                    return predictFailure(dataSources.vessel);
-                },
+                queueDelayed(x => { throttleDown(); return 0d; }, predictFailure),
                 "f.throttleDown", "Throttle Down", formatters.Default));
 
             registerAPI(new ActionAPIEntry(
@@ -636,32 +521,20 @@ namespace Telemachus
                 "f.abort", "Abort [optional bool on/off]", formatters.Default));
 
             registerAPI(new ActionAPIEntry(
-                dataSources =>
+                queueDelayed(x =>
                 {
-                    bool state = dataSources.args.Count > 0 ? bool.Parse(dataSources.args[0]) : !FlightInputHandler.fetch.precisionMode;
-
-                    TelemachusBehaviour.instance.BroadcastMessage("queueDelayedAPI", new DelayedAPIEntry(dataSources.Clone(),
-                        (x) =>
+                    bool state = x.args.Count > 0 ? bool.Parse(x.args[0]) : !FlightInputHandler.fetch.precisionMode;
+                    FlightInputHandler.fetch.precisionMode = state;
+                    var gauges = UnityEngine.Object.FindObjectOfType<KSP.UI.Screens.Flight.LinearControlGauges>();
+                    if (gauges != null)
+                    {
+                        for (int i = 0; i < gauges.inputGaugeImages.Count; ++i)
                         {
-
-                            FlightInputHandler.fetch.precisionMode = state;
-                            // Update the UI.
-                            // MOARdV: In 1.1, this only affects the normal flight display,
-                            // not the docking mode display.
-                            var gauges = UnityEngine.Object.FindObjectOfType<KSP.UI.Screens.Flight.LinearControlGauges>();
-                            if (gauges != null)
-                            {
-                                //JUtil.LogMessage(this, "{0} input gauge images", gauges.inputGaugeImages.Count);
-                                for (int i = 0; i < gauges.inputGaugeImages.Count; ++i)
-                                {
-                                    gauges.inputGaugeImages[i].color = (state) ? XKCDColors.BrightCyan : XKCDColors.Orange;
-                                }
-                            }
-                            return Convert.ToInt32(state);
-                        }),
-                        UnityEngine.SendMessageOptions.DontRequireReceiver);
-                    return predictFailure(dataSources.vessel);
-                },
+                            gauges.inputGaugeImages[i].color = state ? XKCDColors.BrightCyan : XKCDColors.Orange;
+                        }
+                    }
+                    return Convert.ToInt32(state);
+                }, predictFailure),
                 "f.precisionControl", "Precision controls [optional bool on/off]", formatters.Default));
 
             registerAPI(new ActionAPIEntry(
@@ -731,21 +604,14 @@ namespace Telemachus
 
         private DataLinkHandler.APIDelegate buildActionGroupToggleDelayedLamda(KSPActionGroup actionGroup)
         {
-            return dataSources =>
-                {
-                    if (dataSources.args.Count == 0)
-                    {
-                        TelemachusBehaviour.instance.BroadcastMessage("queueDelayedAPI", new DelayedAPIEntry(dataSources.Clone(),
-                            (x) => { dataSources.vessel.ActionGroups.ToggleGroup(actionGroup); return 0d; }),
-                            UnityEngine.SendMessageOptions.DontRequireReceiver); return predictFailure(dataSources.vessel);
-                    }
-                    else
-                    {
-                        TelemachusBehaviour.instance.BroadcastMessage("queueDelayedAPI", new DelayedAPIEntry(dataSources.Clone(),
-                            (x) => { dataSources.vessel.ActionGroups.SetGroup(actionGroup, bool.Parse(dataSources.args[0])); return 0d; }),
-                            UnityEngine.SendMessageOptions.DontRequireReceiver); return predictFailure(dataSources.vessel);
-                    }
-                };
+            return queueDelayed(x =>
+            {
+                if (x.args.Count == 0)
+                    x.vessel.ActionGroups.ToggleGroup(actionGroup);
+                else
+                    x.vessel.ActionGroups.SetGroup(actionGroup, bool.Parse(x.args[0]));
+                return 0d;
+            }, predictFailure);
         }
 
         #endregion
@@ -812,12 +678,7 @@ namespace Telemachus
             : base(formatters)
         {
             registerAPI(new ActionAPIEntry(
-                dataSources =>
-                {
-                    TelemachusBehaviour.instance.BroadcastMessage("queueDelayedAPI", new DelayedAPIEntry(dataSources.Clone(),
-                        (x) => { TimeWarp.SetRate(int.Parse(x.args[0]), false); return 0d; }),
-                        UnityEngine.SendMessageOptions.DontRequireReceiver); return false;
-                },
+                queueDelayed(x => { TimeWarp.SetRate(int.Parse(x.args[0]), false); return 0d; }),
                 "t.timeWarp", "Time Warp [int rate]", formatters.Default));
 
             registerAPI(new PlotableAPIEntry(
@@ -825,21 +686,11 @@ namespace Telemachus
                 "t.universalTime", "Universal Time", formatters.Default, APIEntry.UnitType.DATE, true));
 
             registerAPI(new ActionAPIEntry(
-               dataSources =>
-               {
-                   TelemachusBehaviour.instance.BroadcastMessage("queueDelayedAPI", new DelayedAPIEntry(dataSources.Clone(),
-                       (x) => { FlightDriver.SetPause(true); return 0d; }),
-                       UnityEngine.SendMessageOptions.DontRequireReceiver); return false;
-               },
-               "t.pause", "Pause game", formatters.Default));
+                queueDelayed(x => { FlightDriver.SetPause(true); return 0d; }),
+                "t.pause", "Pause game", formatters.Default));
 
             registerAPI(new ActionAPIEntry(
-                dataSources =>
-                {
-                    TelemachusBehaviour.instance.BroadcastMessage("queueDelayedAPI", new DelayedAPIEntry(dataSources.Clone(),
-                        (x) => { FlightDriver.SetPause(false); return 0d; }),
-                        UnityEngine.SendMessageOptions.DontRequireReceiver); return false;
-                },
+                queueDelayed(x => { FlightDriver.SetPause(false); return 0d; }),
                 "t.unpause", "Unpause game", formatters.Default));
         }
 
@@ -1158,43 +1009,16 @@ namespace Telemachus
             : base(formatters)
         {
             registerAPI(new ActionAPIEntry(
-                dataSources =>
-                {
-                    TelemachusBehaviour.instance.BroadcastMessage("queueDelayedAPI", new DelayedAPIEntry(dataSources.Clone(),
-                        (x) =>
-                        {
-                            if (MapView.MapIsEnabled)
-                            { MapView.ExitMapView(); }
-                            else { MapView.EnterMapView(); }
-                            return 0d;
-                        }),
-                        UnityEngine.SendMessageOptions.DontRequireReceiver); return false;
-                },
+                queueDelayed(x => { if (MapView.MapIsEnabled) MapView.ExitMapView(); else MapView.EnterMapView(); return 0d; }),
                 "m.toggleMapView", " Toggle Map View", formatters.Default));
 
             registerAPI(new ActionAPIEntry(
-               dataSources =>
-               {
-                   TelemachusBehaviour.instance.BroadcastMessage("queueDelayedAPI", new DelayedAPIEntry(dataSources.Clone(),
-                       (x) =>
-                       {
-                           MapView.EnterMapView(); return 0d;
-                       }),
-                       UnityEngine.SendMessageOptions.DontRequireReceiver); return false;
-               },
-               "m.enterMapView", " Enter Map View", formatters.Default));
+                queueDelayed(x => { MapView.EnterMapView(); return 0d; }),
+                "m.enterMapView", " Enter Map View", formatters.Default));
 
             registerAPI(new ActionAPIEntry(
-              dataSources =>
-              {
-                  TelemachusBehaviour.instance.BroadcastMessage("queueDelayedAPI", new DelayedAPIEntry(dataSources.Clone(),
-                      (x) =>
-                      {
-                          MapView.ExitMapView(); return 0d;
-                      }),
-                      UnityEngine.SendMessageOptions.DontRequireReceiver); return false;
-              },
-              "m.exitMapView", " Exit Map View", formatters.Default));
+                queueDelayed(x => { MapView.ExitMapView(); return 0d; }),
+                "m.exitMapView", " Exit Map View", formatters.Default));
 
             registerAPI(new APIEntry(
                 dataSources =>
@@ -2307,7 +2131,7 @@ namespace Telemachus
     {
         #region Initialisation
 
-        public APIDataLinkHandler(IKSPAPI kspAPI, FormatterProvider formatters,
+        public APIDataLinkHandler(KSPAPIBase kspAPI, FormatterProvider formatters,
             ServerConfiguration serverConfiguration)
             : base(formatters)
         {
@@ -2469,6 +2293,35 @@ namespace Telemachus
             }
 
             return Mathf.Clamp(f, -1f, 1f);
+        }
+
+        /// <summary>
+        /// Queue an action to run on the main thread via DelayedAPIEntry.
+        /// Returns a delegate suitable for use with ActionAPIEntry.
+        /// </summary>
+        protected static APIDelegate queueDelayed(APIDelegate action)
+        {
+            return dataSources =>
+            {
+                TelemachusBehaviour.instance.BroadcastMessage("queueDelayedAPI",
+                    new DelayedAPIEntry(dataSources.Clone(), action),
+                    UnityEngine.SendMessageOptions.DontRequireReceiver);
+                return false;
+            };
+        }
+
+        /// <summary>
+        /// Queue an action with a predictFailure return for handlers that need it.
+        /// </summary>
+        protected static APIDelegate queueDelayed(APIDelegate action, Func<Vessel, int> predictor)
+        {
+            return dataSources =>
+            {
+                TelemachusBehaviour.instance.BroadcastMessage("queueDelayedAPI",
+                    new DelayedAPIEntry(dataSources.Clone(), action),
+                    UnityEngine.SendMessageOptions.DontRequireReceiver);
+                return predictor(dataSources.vessel);
+            };
         }
 
         #endregion

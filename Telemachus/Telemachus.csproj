@@ -92,6 +92,7 @@
     <Compile Include="src\Plugins\RasterPropMonitorPlugin.cs" />
     <Compile Include="src\ServerConfiguration.cs" />
     <Compile Include="src\InfinityJsonConverter.cs" />
+    <Compile Include="src\KSPAPIBase.cs" />
     <Compile Include="src\TelemachusBehaviour.cs" />
     <Compile Include="src\TelemachusPartModules.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
