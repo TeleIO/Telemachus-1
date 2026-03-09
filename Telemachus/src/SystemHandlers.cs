@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 
 namespace Telemachus
 {
@@ -65,6 +67,52 @@ namespace Telemachus
         [TelemetryAPI("a.version", "Telemachus Version", AlwaysEvaluable = true)]
         object Version(DataSources ds) =>
             System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+
+        [TelemetryAPI("a.mods", "Detected Mod Integrations", Plotable = false, AlwaysEvaluable = true)]
+        object Mods(DataSources ds) => ModDetector.Detect();
+    }
+
+    /// <summary>
+    /// Checks which supported mods are installed by looking for known types
+    /// in loaded assemblies. Results are cached after first scan.
+    /// </summary>
+    static class ModDetector
+    {
+        static Dictionary<string, object> _cached;
+
+        static readonly (string key, string typeName)[] KnownMods =
+        {
+            ("far",       "FerramAerospaceResearch.FARAPI"),
+            ("mechjeb",   "MuMech.MechJebCore"),
+            ("scansat",   "SCANsat.SCANutil"),
+            ("rpm",       "JSI.RPMVesselComputer"),
+            ("realchute", "RealChute.RealChuteModule"),
+            ("kos",       "kOS.Core"),
+        };
+
+        public static Dictionary<string, object> Detect()
+        {
+            if (_cached != null) return _cached;
+
+            var result = new Dictionary<string, object>();
+            var loadedTypes = new HashSet<string>();
+
+            foreach (var asm in AssemblyLoader.loadedAssemblies)
+            {
+                try
+                {
+                    foreach (var type in asm.assembly.GetExportedTypes())
+                        loadedTypes.Add(type.FullName);
+                }
+                catch { }
+            }
+
+            foreach (var (key, typeName) in KnownMods)
+                result[key] = loadedTypes.Contains(typeName);
+
+            _cached = result;
+            return result;
+        }
     }
 
     public class CompoundDataLinkHandler : DataLinkHandler
