@@ -32,9 +32,8 @@
     <Reference Include="Assembly-CSharp-firstpass" Private="false">
       <HintPath>..\references\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
-    <Reference Include="websocket-sharp" Private="true">
-      <HintPath>..\packages\WebSocketSharp.1.0.3-rc11\lib\websocket-sharp.dll</HintPath>
-    </Reference>
+    <PackageReference Include="WebSocketSharp" Version="1.0.3-rc11" />
+
   </ItemGroup>
 
   <ItemGroup>
