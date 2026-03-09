@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -65,9 +66,9 @@ namespace Telemachus
                     // Try converting the item to a list - this is the most common expected.
                     // If we got a string, then add it to the list to allow "one-shot" submission
                     string[] listContents = new string[] { };
-                    if (entry.Value is List<object> arr)
+                    if (entry.Value is IList arr)
                     {
-                        listContents = arr.Select(x => x.ToString().Trim()).ToArray();
+                        listContents = arr.Cast<object>().Select(x => x.ToString().Trim()).ToArray();
                     }
                     else if (entry.Value is string s)
                     {
