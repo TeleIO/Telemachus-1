@@ -11,6 +11,7 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
 
   <ItemGroup>
@@ -33,7 +34,9 @@
       <HintPath>..\references\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
     <PackageReference Include="WebSocketSharp" Version="1.0.3-rc11" />
-
+    <ProjectReference Include="..\Telemachus.DocGen\Telemachus.DocGen.csproj"
+                      OutputItemType="Analyzer"
+                      ReferenceOutputAssembly="false" />
   </ItemGroup>
 
   <ItemGroup>
@@ -43,9 +46,9 @@
     </EmbeddedResource>
   </ItemGroup>
 
-  <Target Name="AfterBuild" AfterTargets="Build">
-    <Exec Command="./AfterBuild.sh $(ProjectDir) $(OutputPath)" Condition=" '$(OS)' != 'Windows_NT' " />
-    <Exec Command="powershell -ExecutionPolicy Bypass -File AfterBuild.ps1 -ProjectDir $(ProjectDir) -TargetDir $(OutputPath)" Condition=" '$(OS)' == 'Windows_NT' " />
+  <Target Name="PostBuild" AfterTargets="Build">
+    <Exec Command="./AfterBuild.sh $(ProjectDir) $(OutputPath)" WorkingDirectory="$(ProjectDir)" Condition=" '$(OS)' != 'Windows_NT' " />
+    <Exec Command="powershell -ExecutionPolicy Bypass -File AfterBuild.ps1 -ProjectDir $(ProjectDir) -TargetDir $(OutputPath)" WorkingDirectory="$(ProjectDir)" Condition=" '$(OS)' == 'Windows_NT' " />
   </Target>
 
 </Project>
