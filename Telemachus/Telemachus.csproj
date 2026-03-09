@@ -1,128 +1,52 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{AF7DF6B2-7D88-4399-92FC-E21EC15231DE}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Telemachus</RootNamespace>
+    <TargetFramework>net472</TargetFramework>
+    <LangVersion>12</LangVersion>
     <AssemblyName>Telemachus</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
+    <RootNamespace>Telemachus</RootNamespace>
+    <AssemblyVersion>1.7.0</AssemblyVersion>
+    <FileVersion>1.7.0</FileVersion>
+
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <LangVersion>9</LangVersion>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <LangVersion>9</LangVersion>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Xml" />
-    <Reference Include="UnityEngine">
+    <Reference Include="UnityEngine" Private="false">
       <HintPath>..\references\UnityEngine.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.UI">
+    <Reference Include="UnityEngine.UI" Private="false">
       <HintPath>..\references\UnityEngine.UI.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.CoreModule">
+    <Reference Include="UnityEngine.CoreModule" Private="false">
       <HintPath>..\references\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.ImageConversionModule">
+    <Reference Include="UnityEngine.ImageConversionModule" Private="false">
       <HintPath>..\references\UnityEngine.ImageConversionModule.dll</HintPath>
     </Reference>
-    <Reference Include="Assembly-CSharp">
+    <Reference Include="Assembly-CSharp" Private="false">
       <HintPath>..\references\Assembly-CSharp.dll</HintPath>
     </Reference>
-    <Reference Include="Assembly-CSharp-firstpass">
+    <Reference Include="Assembly-CSharp-firstpass" Private="false">
       <HintPath>..\references\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
-    <Reference Include="websocket-sharp, Version=1.0.2.59611, Culture=neutral, PublicKeyToken=5660b08a1845a91e, processorArchitecture=MSIL">
+    <Reference Include="websocket-sharp" Private="true">
       <HintPath>..\packages\WebSocketSharp.1.0.3-rc11\lib\websocket-sharp.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="src\CameraSnapshots\CameraCapture.cs" />
-    <Compile Include="src\CameraSnapshots\IVACameraCapture.cs" />
-    <Compile Include="src\CameraSnapshots\CurrentFlightCameraCapture.cs" />
-    <Compile Include="src\CameraSnapshots\RasterPropMonitorCamera.cs" />
-    <Compile Include="src\CameraSnapshots\RasterPropMonitorCameraCapture.cs" />
-    <Compile Include="src\CameraSnapshots\CameraCaptureManager.cs" />
-    <Compile Include="src\CameraSnapshots\SnapshotRenderer.cs" />
-    <Compile Include="src\DataLinkFormatters.cs" />
-    <Compile Include="src\DataLinkHandlerBase.cs" />
-    <Compile Include="src\ModuleCache.cs" />
-    <Compile Include="src\MechJebDataLinkHandler.cs" />
-    <Compile Include="src\FlightControlHandlers.cs" />
-    <Compile Include="src\NavigationHandlers.cs" />
-    <Compile Include="src\VesselDataHandlers.cs" />
-    <Compile Include="src\ResourceHandlers.cs" />
-    <Compile Include="src\SystemHandlers.cs" />
-    <Compile Include="src\DeltaVHandlers.cs" />
-    <Compile Include="src\AlarmClockHandlers.cs" />
-    <Compile Include="src\CameraResponsibility.cs" />
-    <Compile Include="src\DataLinkResponsibility.cs" />
-    <Compile Include="src\ElseResponsibility.cs" />
-    <Compile Include="src\IOPageResponsibility.cs" />
-    <Compile Include="src\KSPWebServerDispatcher.cs" />
-    <Compile Include="src\PluginLogger.cs" />
-    <Compile Include="src\PluginRegistration.cs" />
-    <Compile Include="src\Plugins\RasterPropMonitorPlugin.cs" />
-    <Compile Include="src\ServerConfiguration.cs" />
-    <Compile Include="src\IndexRangePolyfill.cs" />
-    <Compile Include="src\Json.cs" />
-    <Compile Include="src\KSPAPIBase.cs" />
-    <Compile Include="src\TelemachusBehaviour.cs" />
-    <Compile Include="src\TelemachusPartModules.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="src\UpLinkDownLinkRate.cs" />
-    <Compile Include="src\VesselChangeDetector.cs" />
-    <Compile Include="src\KSPWebSocketService.cs" />
-  </ItemGroup>
+
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="AfterBuild.bat" />
-    <Content Include="AfterBuild.sh" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>-->
-  <Target Name="AfterBuild">
-    <Exec Command="./AfterBuild.sh $(ProjectDir) $(TargetDir)" Condition=" '$(OS)' != 'Windows_NT' " />
-    <Exec Command="AfterBuild.bat $(ProjectDir) $(TargetDir)" Condition=" '$(OS)' == 'Windows_NT' " />
+
+  <Target Name="AfterBuild" AfterTargets="Build">
+    <Exec Command="./AfterBuild.sh $(ProjectDir) $(OutputPath)" Condition=" '$(OS)' != 'Windows_NT' " />
+    <Exec Command="powershell -ExecutionPolicy Bypass -File AfterBuild.ps1 -ProjectDir $(ProjectDir) -TargetDir $(OutputPath)" Condition=" '$(OS)' == 'Windows_NT' " />
   </Target>
+
 </Project>
