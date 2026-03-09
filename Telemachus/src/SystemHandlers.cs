@@ -12,7 +12,7 @@ namespace Telemachus
 
         [TelemetryAPI("p.paused",
             "Returns an integer indicating the state of antenna. 0 - Flight scene; 1 - Paused; 2 - No power; 3 - Off; 4 - Not found.",
-            AlwaysEvaluable = true)]
+            AlwaysEvaluable = true, Category = "system", ReturnType = "int")]
         object Paused(DataSources ds) => partPaused();
 
         public static int partPaused()
@@ -64,12 +64,16 @@ namespace Telemachus
                 formatters.APIEntry, APIEntry.UnitType.STRING, true));
         }
 
-        [TelemetryAPI("a.version", "Telemachus Version", AlwaysEvaluable = true)]
+        [TelemetryAPI("a.version", "Telemachus Version", AlwaysEvaluable = true, Category = "system", ReturnType = "string")]
         object Version(DataSources ds) =>
             System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
-        [TelemetryAPI("a.mods", "Detected Mod Integrations", Plotable = false, AlwaysEvaluable = true)]
+        [TelemetryAPI("a.mods", "Detected Mod Integrations", Plotable = false, AlwaysEvaluable = true, Category = "system", ReturnType = "object")]
         object Mods(DataSources ds) => ModDetector.Detect();
+
+        [TelemetryAPI("a.schema", "Full API Schema (JSON)", Plotable = false, AlwaysEvaluable = true,
+            Category = "system", ReturnType = "object")]
+        object Schema(DataSources ds) => Telemachus.Generated.TelemetrySchema.Json;
     }
 
     /// <summary>
@@ -89,6 +93,7 @@ namespace Telemachus
             ("realchute", "RealChute.RealChuteModule"),
             ("kos",       "kOS.Core"),
             ("vesselview", "VesselView.VesselViewer"),
+            ("astrogator", "Astrogator.Astrogator"),
         };
 
         public static Dictionary<string, object> Detect()
