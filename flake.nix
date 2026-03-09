@@ -19,6 +19,7 @@
             curl
             unzip
             p7zip
+            bun          # frontend runtime & package manager
             gitlint      # conventional commit linting
             git-cliff    # changelog generation
           ];
@@ -33,6 +34,7 @@ HOOK
               chmod +x .git/hooks/commit-msg
             fi
             echo "Build:     msbuild Telemachus.sln /p:Configuration=Release"
+            echo "Frontend: cd frontend && bun install && bun run dev"
             echo "Changelog: git cliff -o CHANGELOG.md"
           '';
         };

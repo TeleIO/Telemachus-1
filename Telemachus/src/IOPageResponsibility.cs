@@ -26,21 +26,32 @@ namespace Telemachus
             {
                 try
                 {
-                    var requestedFile = request.RawUrl.Substring(PAGE_PREFIX.Length);
-                    var contentType = GetContentType(Path.GetExtension(requestedFile));
-                    // Set a mime type, if we have one for this extension
+                    var requestedFile = escapeFileName(request.RawUrl.Substring(PAGE_PREFIX.Length));
+                    var fullPath = buildPath(requestedFile);
+
+                    // Directory index: try index.html inside directories
+                    if (!System.IO.File.Exists(fullPath))
+                    {
+                        var indexPath = buildPath(requestedFile.TrimEnd('/') + "/index.html");
+                        if (System.IO.File.Exists(indexPath))
+                            fullPath = indexPath;
+                    }
+
+                    // SPA fallback: serve index.html for unresolved paths
+                    if (!System.IO.File.Exists(fullPath))
+                        fullPath = buildPath("index.html");
+
+                    var contentType = GetContentType(Path.GetExtension(fullPath));
                     if (!string.IsNullOrEmpty(contentType.mimeType))
                     {
                         response.ContentType = contentType.mimeType;
                     }
 
-                    // Read the data, and set encoding type if text. Assume that any text encoding is UTF-8 (probably).
-                    byte[] contentData = System.IO.File.ReadAllBytes(buildPath(escapeFileName(requestedFile)));
+                    byte[] contentData = System.IO.File.ReadAllBytes(fullPath);
                     if (contentType.contentType == HTMLContentType.TextContent)
                     {
                         response.ContentEncoding = Encoding.UTF8;
                     }
-                    // Write out the response to the client
                     response.WriteContent(contentData);
 
                     return true;

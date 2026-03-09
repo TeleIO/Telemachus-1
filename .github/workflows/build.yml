@@ -20,6 +20,15 @@ jobs:
           sudo apt-get install -y mono-complete curl unzip
           curl -sL https://dist.nuget.org/win-x86-commandline/latest/nuget.exe -o /tmp/nuget.exe
 
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Build frontend
+        working-directory: frontend
+        run: bun install --frozen-lockfile && bun run build
+
       - name: Restore NuGet packages
         run: mono /tmp/nuget.exe restore Telemachus.sln
 

@@ -1,0 +1,25 @@
+@import 'tailwindcss';
+@import 'uplot/dist/uPlot.min.css';
+@import 'leaflet/dist/leaflet.css';
+
+@theme {
+	--color-bg: #0a0e17;
+	--color-surface: #111827;
+	--color-surface-bright: #1f2937;
+	--color-border: #374151;
+	--color-text: #e5e7eb;
+	--color-text-dim: #9ca3af;
+	--color-accent: #3b82f6;
+	--color-accent-bright: #60a5fa;
+	--color-success: #22c55e;
+	--color-warning: #eab308;
+	--color-danger: #ef4444;
+
+	--font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', ui-monospace, monospace;
+}
+
+html {
+	background-color: var(--color-bg);
+	color: var(--color-text);
+	font-family: var(--font-mono);
+}

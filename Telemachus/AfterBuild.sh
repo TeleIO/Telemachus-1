@@ -30,7 +30,11 @@ cp "$TargetDir/websocket-sharp.dll" "$ProjectDir/../publish/GameData/Telemachus/
 cp "$ProjectDir/../TelemachusReborn.version" "$ProjectDir/../publish/GameData/Telemachus/"
 
 cp -ra "$ProjectDir/../Parts/."                         "$ProjectDir/../publish/GameData/Telemachus/Parts/"
-cp -ra "$ProjectDir/../WebPages/WebPages/src/."         "$ProjectDir/../publish/GameData/Telemachus/Plugins/PluginData/Telemachus/"
+# Build Svelte frontend and copy output
+if [ ! -d "$ProjectDir/../frontend/build" ]; then
+  (cd "$ProjectDir/../frontend" && bun install --frozen-lockfile && bun run build)
+fi
+cp -ra "$ProjectDir/../frontend/build/."                "$ProjectDir/../publish/GameData/Telemachus/Plugins/PluginData/Telemachus/"
 cp -ra "$ProjectDir/../Licences/."                      "$ProjectDir/../publish/GameData/Telemachus/"
 cp     "$ProjectDir/../README.md"                       "$ProjectDir/../publish/GameData/Telemachus/"
 
@@ -53,7 +57,9 @@ kspDir="$ProjectDir/../ksp-telemachus-dev"
 if [ -d "$kspDir" ]; then
   rm -rf "$kspDir/GameData/Telemachus"
   mkdir -p "$kspDir/GameData/Telemachus/Plugins/PluginData/Telemachus/test"
-  cp -ra "$ProjectDir/../WebPages/WebPagesTest/src/." "$kspDir/GameData/Telemachus/Plugins/PluginData/Telemachus/test"
+  if [ -d "$ProjectDir/../WebPages/WebPagesTest/src" ]; then
+    cp -ra "$ProjectDir/../WebPages/WebPagesTest/src/." "$kspDir/GameData/Telemachus/Plugins/PluginData/Telemachus/test"
+  fi
   cp -ra "$ProjectDir/../publish/GameData/."          "$kspDir/GameData/"
 fi
 
