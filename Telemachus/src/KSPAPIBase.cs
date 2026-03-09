@@ -17,6 +17,7 @@ namespace Telemachus
             APIHandlers.Add(new FlightDataLinkHandler(formatters));
             APIHandlers.Add(new MechJebDataLinkHandler(formatters));
             APIHandlers.Add(new FARDataLinkHandler(formatters));
+            APIHandlers.Add(new RealChuteDataLinkHandler(formatters));
             APIHandlers.Add(new TimeWarpDataLinkHandler(formatters));
             APIHandlers.Add(new TargetDataLinkHandler(formatters));
 
