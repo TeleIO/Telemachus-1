@@ -88,6 +88,7 @@ namespace Telemachus
             ("rpm",       "JSI.RPMVesselComputer"),
             ("realchute", "RealChute.RealChuteModule"),
             ("kos",       "kOS.Core"),
+            ("vesselview", "VesselView.VesselViewer"),
         };
 
         public static Dictionary<string, object> Detect()

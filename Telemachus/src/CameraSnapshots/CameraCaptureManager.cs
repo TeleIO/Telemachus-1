@@ -33,6 +33,7 @@ namespace Telemachus.CameraSnapshots
         #endregion
 
         private CurrentFlightCameraCapture cameraCaptureTest = null;
+        private VesselViewCapture vesselViewCapture = null;
         public Dictionary<string, CameraCapture> cameras = new();
         public Dictionary<Guid, List<string>> vesselCameraMappings = new();
 
@@ -71,11 +72,20 @@ namespace Telemachus.CameraSnapshots
 
         private void removeFlightCameraIfNotFlight(GameScenes data)
         {
-            if (data != GameScenes.FLIGHT && cameraCaptureTest)
+            if (data != GameScenes.FLIGHT)
             {
-                removeCamera(cameraCaptureTest.cameraManagerName());
-                Destroy(cameraCaptureTest.gameObject);
-                cameraCaptureTest = null;
+                if (cameraCaptureTest)
+                {
+                    removeCamera(cameraCaptureTest.cameraManagerName());
+                    Destroy(cameraCaptureTest.gameObject);
+                    cameraCaptureTest = null;
+                }
+                if (vesselViewCapture)
+                {
+                    removeCamera(vesselViewCapture.cameraManagerName());
+                    Destroy(vesselViewCapture.gameObject);
+                    vesselViewCapture = null;
+                }
             }
         }
 
@@ -84,6 +94,15 @@ namespace Telemachus.CameraSnapshots
             GameObject obj = new GameObject("CurrentFlightCameraCapture", typeof(CurrentFlightCameraCapture));
             this.cameraCaptureTest = (CurrentFlightCameraCapture)obj.GetComponent(typeof(CurrentFlightCameraCapture));
             addCameraCapture(cameraCaptureTest);
+            addVesselViewCamera();
+        }
+
+        private void addVesselViewCamera()
+        {
+            if (vesselViewCapture != null) return;
+            var obj = new GameObject("VesselViewCapture", typeof(VesselViewCapture));
+            vesselViewCapture = obj.GetComponent<VesselViewCapture>();
+            addCameraCapture(vesselViewCapture);
         }
 
         public bool isRemoveCameraFromManager(Vessel vessel, string name)
