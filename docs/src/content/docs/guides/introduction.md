@@ -18,16 +18,16 @@ Telemachus Reborn is a KSP (Kerbal Space Program) plugin that exposes real-time 
 
 Telemachus runs an embedded HTTP/WebSocket server inside KSP. When the game is running with a vessel loaded, external clients can connect on port `8085` (configurable) to read telemetry and send commands.
 
-```
-┌──────────────┐         ┌───────────────┐
-│  KSP Game    │ ◄─────► │  Telemachus   │
-│  (Unity)     │         │  Plugin       │
-└──────────────┘         └──────┬────────┘
-                                │ :8085
-                    ┌───────────┼───────────┐
-                    │           │           │
-               HTTP REST   WebSocket   Static Files
-              /api/{key}   /datalink   /telemachus/
+```mermaid
+graph TD
+    KSP["KSP Game<br/>(Unity)"] <--> TM["Telemachus Plugin"]
+    TM --> SERVER[":8085 HTTP/WS Server"]
+    SERVER --> REST["REST API<br/><code>/api/{key}</code>"]
+    SERVER --> WS["WebSocket<br/><code>/datalink</code>"]
+    SERVER --> STATIC["Static Files<br/><code>/telemachus/</code>"]
+    REST --> CLIENT["External Clients<br/>Dashboards, Autopilots, etc."]
+    WS --> CLIENT
+    STATIC --> CLIENT
 ```
 
 ## Quick Start

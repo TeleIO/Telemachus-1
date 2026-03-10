@@ -2,6 +2,7 @@
 import { defineConfig } from "astro/config";
 import starlight from "@astrojs/starlight";
 import starlightOpenAPI, { openAPISidebarGroups } from "starlight-openapi";
+import starlightClientMermaid from "@pasqal-io/starlight-client-mermaid";
 
 // https://astro.build/config
 export default defineConfig({
@@ -18,6 +19,7 @@ export default defineConfig({
         },
       ],
       plugins: [
+        starlightClientMermaid(),
         starlightOpenAPI([
           {
             base: "api",
