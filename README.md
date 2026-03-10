@@ -18,11 +18,26 @@ A KSP plugin that exposes live telemetry data over HTTP and WebSocket, letting y
 - **Delta-V readouts** — per-stage and total delta-V, TWR, ISP, burn time, and mass breakdown
 - **Maneuver node management** — create, update, and delete maneuver nodes via the API
 - **Target tracking** — set targets, read distance/relative velocity, docking alignment angles
-- **MechJeb integration** — command SmartASS autopilot modes (requires MechJeb)
+- **Landing prediction** — impact time, suicide burn countdown, predicted coordinates and slope *(WIP — in testing)*
+- **Thermal monitoring** — hottest part/engine temperatures, heat shield flux, overheat warnings *(WIP — in testing)*
+- **Science & career** — experiment data, funds, reputation, science points, game mode *(WIP — in testing)*
+- **CommNet telemetry** — signal strength, control state, signal delay *(WIP — in testing)*
 - **Alarm clock integration** — read KSP alarm clock entries
 - **Antenna parts** — three antenna models (Blade, Fustek, Yagi) with configurable up/downlink rates; also runs "partless" if needed
 - **Resource & sensor monitoring** — query any resource or sensor by name
 - **Plugin API** — other mods can register custom telemetry handlers
+
+### Mod integrations
+
+| Mod | Prefix | Description | Status |
+|-----|--------|-------------|--------|
+| [MechJeb](https://github.com/MuMech/MechJeb2) | `mj.*` | SmartASS autopilot orientation commands | Released |
+| [FAR](https://github.com/dkavolis/Ferram-Aerospace-Research-Continued) | `far.*` | Aerodynamic coefficients, flaps, spoilers, stall detection | In testing |
+| [RealChute](https://github.com/StupidChris/RealChute) | `rc.*` | Parachute deployment status, safety, arm/deploy/cut | In testing |
+| [Astrogator](https://github.com/HebaruSan/Astrogator) | `astg.*` | Transfer window planning — delta-V, burn times, maneuver creation | In testing |
+| [Principia](https://github.com/mockingbirdnest/Principia) | `principia.*`, `o.mean.*` | N-body orbit analysis — mean elements, flight plan burns, recurrence | In testing |
+
+All mod integrations are soft dependencies via reflection — no mod DLLs are required at build time. Query `a.mods` at runtime to check which mods are detected, or `a.physicsMode` to check if Principia's N-body integrator is active (`"n_body"` vs `"patched_conics"`).
 
 ---
 
@@ -127,6 +142,10 @@ v.setPitchYawRollXYZ[0,0,0,1,0,0] — FBW attitude + translation
 ```
 
 ---
+
+### OpenAPI spec
+
+A machine-readable [OpenAPI 3.1 spec](docs/openapi.yaml) is auto-generated from the source code. It covers all endpoints below, including mod-specific ones (tagged with `x-requires-mod`). *(The OpenAPI spec and schema generation pipeline are not yet released — in testing.)*
 
 ## API reference
 
@@ -663,6 +682,9 @@ Example: `r.resource[ElectricCharge]`, `r.resource[LiquidFuel]`, `r.resource[Oxi
 | `a.ip` | Server IP addresses |
 | `a.api` | Full API listing |
 | `a.apiSubSet[key1,key2,...]` | Subset of API listing |
+| `a.mods` | Detected mod integrations (object) |
+| `a.physicsMode` | `"patched_conics"` or `"n_body"` (Principia) |
+| `a.schema` | Full API schema as JSON |
 
 ### Camera API
 
@@ -686,28 +708,223 @@ GET /telemachus/cameras/FlightCamera
 
 Returns `image/jpeg`. Returns 503 if the camera hasn't rendered yet, 404 if the camera name is unknown.
 
+### `far.*` — FAR aerodynamics (requires FAR) *(WIP — in testing)*
+
+<details><summary>Aerodynamic data & controls</summary>
+
+| Key | Description | Unit |
+|-----|-------------|------|
+| `far.available` | FAR is installed | bool |
+| `far.liftCoeff` | Lift coefficient (Cl) | — |
+| `far.dragCoeff` | Drag coefficient (Cd) | — |
+| `far.refArea` | Reference area | m^2 |
+| `far.ballisticCoeff` | Ballistic coefficient | — |
+| `far.dynPres` | Dynamic pressure (FAR) | kPa |
+| `far.termVel` | Terminal velocity | m/s |
+| `far.tsfc` | Thrust specific fuel consumption | — |
+| `far.aoa` | Angle of attack | deg |
+| `far.sideslip` | Sideslip angle | deg |
+| `far.stallFrac` | Stall fraction (0–1) | — |
+| `far.flapSetting` | Flap deflection level (0–3, -1 if none) | — |
+| `far.spoiler` | Spoilers active | bool |
+| `far.voxelized` | Vessel has valid voxelization | bool |
+| `far.increaseFlaps` | **Action:** increase flap deflection | |
+| `far.decreaseFlaps` | **Action:** decrease flap deflection | |
+| `far.setSpoilers[bool]` | **Action:** set spoilers | |
+
+</details>
+
+### `rc.*` — RealChute (requires RealChute) *(WIP — in testing)*
+
+| Key | Description |
+|-----|-------------|
+| `rc.available` | RealChute is installed |
+| `rc.count` | Number of RealChute parts |
+| `rc.anyDeployed` | Any chutes deployed |
+| `rc.safeState` | Deployment safety (SAFE / RISKY / DANGEROUS) |
+| `rc.chutes` | All chute status (object) |
+| `rc.deploy` | **Action:** deploy all chutes |
+| `rc.cut` | **Action:** cut all chutes |
+| `rc.arm` | **Action:** arm all chutes |
+| `rc.disarm` | **Action:** disarm all chutes |
+
+### `astg.*` — Astrogator (requires Astrogator) *(WIP — in testing)*
+
+<details><summary>Transfer planning</summary>
+
+| Key | Description |
+|-----|-------------|
+| `astg.available` | Astrogator is installed |
+| `astg.active` | Instance is active |
+| `astg.errorCondition` | Transfer calculation error |
+| `astg.retrogradeOrbit` | Retrograde orbit detected |
+| `astg.hyperbolicOrbit` | Hyperbolic orbit detected |
+| `astg.transferCount` | Number of available transfers |
+| `astg.transfers` | All transfer opportunities (object) |
+| `astg.transfer[index]` | Transfer by index (object) |
+| `astg.activeTransfer` | Transfer with active maneuver node |
+| `astg.nextDeltaV` | Next transfer total delta-V (m/s) |
+| `astg.nextDestination` | Next transfer destination name |
+| `astg.nextBurnTime` | Next transfer burn time (UT) |
+| `astg.nextBurnCountdown` | Seconds until next transfer burn |
+| `astg.createManeuver[index]` | **Action:** create maneuver for transfer |
+| `astg.warpToBurn[index]` | **Action:** warp to transfer burn |
+
+</details>
+
+### `principia.*` / `o.mean.*` — Principia N-body physics (requires Principia) *(WIP — in testing)*
+
+When [Principia](https://github.com/mockingbirdnest/Principia) is installed, KSP's patched-conic orbit propagator is replaced with an N-body integrator. Stock `o.*` values become osculating (instantaneous Keplerian) snapshots. Principia's orbit analyser computes **mean elements** averaged over many orbits — these are available under `o.mean.*`.
+
+> All data is read via reflection from Principia's runtime state. No Principia DLLs are needed at build time, and Principia's (removed) external API is not used.
+
+<details><summary>Detection & status</summary>
+
+| Key | Description |
+|-----|-------------|
+| `principia.available` | Principia is installed |
+| `principia.version` | Principia assembly version |
+| `principia.active` | Principia plugin is running |
+| `principia.analysisProgress` | Orbit analysis progress (0–1) |
+| `principia.missionDuration` | Analysis mission duration (s) |
+
+</details>
+
+<details><summary>Mean orbital elements</summary>
+
+These mirror the stock `o.*` keys but report mean (time-averaged) values from Principia's orbit analyser. Angles are in degrees, distances are altitudes (body radius subtracted).
+
+| Key | Description | Unit |
+|-----|-------------|------|
+| `o.mean.sma` | Mean semi-major axis | m |
+| `o.mean.eccentricity` | Mean eccentricity | — |
+| `o.mean.inclination` | Mean inclination | deg |
+| `o.mean.lan` | Mean longitude of ascending node | deg |
+| `o.mean.argumentOfPeriapsis` | Mean argument of periapsis | deg |
+| `o.mean.PeA` | Mean periapsis altitude | m |
+| `o.mean.ApA` | Mean apoapsis altitude | m |
+
+</details>
+
+<details><summary>Element ranges (min/max from N-body integration)</summary>
+
+Each returns `{ "min": number, "max": number }`.
+
+| Key | Description |
+|-----|-------------|
+| `o.mean.smaRange` | SMA range |
+| `o.mean.eccentricityRange` | Eccentricity range |
+| `o.mean.inclinationRange` | Inclination range (deg) |
+| `o.mean.PeARange` | Periapsis altitude range (m) |
+| `o.mean.ApARange` | Apoapsis altitude range (m) |
+
+</details>
+
+<details><summary>Periods, precession & recurrence</summary>
+
+| Key | Description | Unit |
+|-----|-------------|------|
+| `o.mean.siderealPeriod` | Sidereal period | s |
+| `o.mean.nodalPeriod` | Nodal period | s |
+| `o.mean.anomalisticPeriod` | Anomalistic period | s |
+| `o.mean.nodalPrecession` | Nodal precession rate | rad/s |
+| `o.mean.recurrence` | Orbit recurrence info (object) | — |
+
+</details>
+
+<details><summary>Flight plan</summary>
+
+| Key | Description |
+|-----|-------------|
+| `principia.plan.count` | Number of planned burns |
+| `principia.plan.guidance` | Navball guidance active |
+| `principia.plan.burns` | All planned burns (array of objects) |
+| `principia.plan.burn[index]` | Single burn by index |
+| `principia.analysis` | Complete orbit analysis dump (object) |
+
+Each burn object contains `{ tangent, normal, binormal, initial_time, duration }` in m/s and seconds.
+
+</details>
+
+### `land.*` — Landing prediction *(WIP — in testing)*
+
+| Key | Description | Unit |
+|-----|-------------|------|
+| `land.timeToImpact` | Estimated seconds to impact | s |
+| `land.speedAtImpact` | Predicted speed at impact (current thrust) | m/s |
+| `land.bestSpeedAtImpact` | Predicted speed at impact (max thrust) | m/s |
+| `land.suicideBurnCountdown` | Seconds until suicide burn start | s |
+| `land.predictedLat` | Predicted landing latitude | deg |
+| `land.predictedLon` | Predicted landing longitude | deg |
+| `land.predictedAlt` | Predicted landing terrain altitude | m |
+| `land.slopeAngle` | Terrain slope angle under vessel | deg |
+
+### `therm.*` — Thermal monitoring *(WIP — in testing)*
+
+| Key | Description | Unit |
+|-----|-------------|------|
+| `therm.hottestPartTemp` | Hottest part temperature | C |
+| `therm.hottestPartTempKelvin` | Hottest part temperature | K |
+| `therm.hottestPartMaxTemp` | Hottest part max temperature | K |
+| `therm.hottestPartTempRatio` | Hottest part temp ratio (0–1) | — |
+| `therm.hottestPartName` | Hottest part name | string |
+| `therm.hottestEngineTemp` | Hottest engine temperature | K |
+| `therm.hottestEngineMaxTemp` | Hottest engine max temperature | K |
+| `therm.hottestEngineTempRatio` | Hottest engine temp ratio (0–1) | — |
+| `therm.anyEnginesOverheating` | Any engine near overheat (>90%) | bool |
+| `therm.heatShieldTemp` | Heat shield temperature | K |
+| `therm.heatShieldTempCelsius` | Heat shield temperature | C |
+| `therm.heatShieldFlux` | Heat shield thermal flux | kW |
+
+### `sci.*` / `career.*` / `comm.*` — Science, career & comms *(WIP — in testing)*
+
+| Key | Description |
+|-----|-------------|
+| `sci.count` | Number of science experiments aboard |
+| `sci.dataAmount` | Total science data aboard |
+| `sci.experiments` | Experiments with data (object) |
+| `career.funds` | Available funds |
+| `career.reputation` | Current reputation |
+| `career.science` | Available science points |
+| `career.mode` | Game mode (CAREER / SCIENCE / SANDBOX) |
+| `comm.connected` | CommNet is connected |
+| `comm.signalStrength` | CommNet signal strength (0–1) |
+| `comm.controlState` | CommNet control state (0=none, 1=partial, 2=full) |
+| `comm.controlStateName` | CommNet control state name |
+| `comm.signalDelay` | CommNet signal delay (s) |
+
 ---
 
 ## Building
 
-Dependencies (Unity and KSP DLLs) are pre-committed to `references/`. No KSP installation is required to build.
+The project targets .NET Framework 4.7.2 via an SDK-style csproj and builds with the .NET SDK. Unity and KSP reference DLLs are pre-committed to `references/` — no KSP installation is required to build.
 
 ### With Nix (recommended)
 
 ```sh
 nix develop
-msbuild Telemachus.sln /p:Configuration=Release
+dotnet build Telemachus/Telemachus.csproj
+```
+
+### Without Nix
+
+Install the [.NET SDK 8+](https://dotnet.microsoft.com/download) (or Mono), then:
+
+```sh
+dotnet build Telemachus/Telemachus.csproj
 ```
 
 The post-build script stages the output to `publish/GameData/` and downloads the [Houston](https://github.com/TeleIO/houston) and [mkon](https://github.com/TeleIO/mkon) companion apps automatically.
 
-### Without Nix
+### OpenAPI spec
 
-Install [Mono](https://www.mono-project.com/) (which includes MSBuild), then:
+A [source generator](Telemachus.DocGen/) extracts all `[TelemetryAPI]` attributes at build time into `publish/api-schema.json`. To regenerate the OpenAPI spec and docs:
 
 ```sh
-msbuild Telemachus.sln /p:Configuration=Release
+bun tools/generate-openapi.ts
 ```
+
+This merges the auto-generated schema with `tools/manual-apis.json` (for constructor-registered APIs) and writes `docs/openapi.yaml`.
 
 ---
 
