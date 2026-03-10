@@ -11,258 +11,258 @@ namespace Telemachus
 
         // --- Position & Altitude ---
 
-        [TelemetryAPI("v.altitude", "Altitude", Units = APIEntry.UnitType.DISTANCE)]
+        [TelemetryAPI("v.altitude", "Altitude", Units = APIEntry.UnitType.DISTANCE, Category = "vessel", ReturnType = "double")]
         object Altitude(DataSources ds) => ds.vessel.altitude;
 
-        [TelemetryAPI("v.heightFromTerrain", "Height from Terrain", Units = APIEntry.UnitType.DISTANCE)]
+        [TelemetryAPI("v.heightFromTerrain", "Height from Terrain", Units = APIEntry.UnitType.DISTANCE, Category = "vessel", ReturnType = "double")]
         object HeightFromTerrain(DataSources ds) => ds.vessel.heightFromTerrain;
 
-        [TelemetryAPI("v.heightFromSurface", "Height from Surface", Units = APIEntry.UnitType.DISTANCE)]
+        [TelemetryAPI("v.heightFromSurface", "Height from Surface", Units = APIEntry.UnitType.DISTANCE, Category = "vessel", ReturnType = "double")]
         object HeightFromSurface(DataSources ds) => ds.vessel.heightFromSurface;
 
-        [TelemetryAPI("v.terrainHeight", "Terrain Height", Units = APIEntry.UnitType.DISTANCE)]
+        [TelemetryAPI("v.terrainHeight", "Terrain Height", Units = APIEntry.UnitType.DISTANCE, Category = "vessel", ReturnType = "double")]
         object TerrainHeight(DataSources ds) => ds.vessel.terrainAltitude;
 
-        [TelemetryAPI("v.pqsAltitude", "PQS Terrain Altitude", Units = APIEntry.UnitType.DISTANCE)]
+        [TelemetryAPI("v.pqsAltitude", "PQS Terrain Altitude", Units = APIEntry.UnitType.DISTANCE, Category = "vessel", ReturnType = "double")]
         object PqsAltitude(DataSources ds) => ds.vessel.pqsAltitude;
 
-        [TelemetryAPI("v.long", "Longitude", Units = APIEntry.UnitType.LATLON)]
+        [TelemetryAPI("v.long", "Longitude", Units = APIEntry.UnitType.LATLON, Category = "vessel", ReturnType = "double")]
         object Longitude(DataSources ds) =>
             ds.vessel.longitude > 180 ? ds.vessel.longitude - 360.0 : ds.vessel.longitude;
 
-        [TelemetryAPI("v.lat", "Latitude", Units = APIEntry.UnitType.LATLON)]
+        [TelemetryAPI("v.lat", "Latitude", Units = APIEntry.UnitType.LATLON, Category = "vessel", ReturnType = "double")]
         object Latitude(DataSources ds) => ds.vessel.latitude;
 
         // --- Velocity ---
 
-        [TelemetryAPI("v.surfaceVelocity", "Surface Velocity", Units = APIEntry.UnitType.VELOCITY)]
+        [TelemetryAPI("v.surfaceVelocity", "Surface Velocity", Units = APIEntry.UnitType.VELOCITY, Category = "vessel", ReturnType = "double")]
         object SurfaceVelocity(DataSources ds) => ds.vessel.srf_velocity.magnitude;
 
-        [TelemetryAPI("v.surfaceVelocityx", "Surface Velocity x", Units = APIEntry.UnitType.VELOCITY)]
+        [TelemetryAPI("v.surfaceVelocityx", "Surface Velocity x", Units = APIEntry.UnitType.VELOCITY, Category = "vessel", ReturnType = "double")]
         object SurfaceVelocityX(DataSources ds) => ds.vessel.srf_velocity.x;
 
-        [TelemetryAPI("v.surfaceVelocityy", "Surface Velocity y", Units = APIEntry.UnitType.VELOCITY)]
+        [TelemetryAPI("v.surfaceVelocityy", "Surface Velocity y", Units = APIEntry.UnitType.VELOCITY, Category = "vessel", ReturnType = "double")]
         object SurfaceVelocityY(DataSources ds) => ds.vessel.srf_velocity.y;
 
-        [TelemetryAPI("v.surfaceVelocityz", "Surface Velocity z", Units = APIEntry.UnitType.VELOCITY)]
+        [TelemetryAPI("v.surfaceVelocityz", "Surface Velocity z", Units = APIEntry.UnitType.VELOCITY, Category = "vessel", ReturnType = "double")]
         object SurfaceVelocityZ(DataSources ds) => ds.vessel.srf_velocity.z;
 
-        [TelemetryAPI("v.orbitalVelocity", "Orbital Velocity", Units = APIEntry.UnitType.VELOCITY)]
+        [TelemetryAPI("v.orbitalVelocity", "Orbital Velocity", Units = APIEntry.UnitType.VELOCITY, Category = "vessel", ReturnType = "double")]
         object OrbitalVelocity(DataSources ds) => ds.vessel.obt_velocity.magnitude;
 
-        [TelemetryAPI("v.orbitalVelocityx", "Orbital Velocity x", Units = APIEntry.UnitType.VELOCITY)]
+        [TelemetryAPI("v.orbitalVelocityx", "Orbital Velocity x", Units = APIEntry.UnitType.VELOCITY, Category = "vessel", ReturnType = "double")]
         object OrbitalVelocityX(DataSources ds) => ds.vessel.obt_velocity.x;
 
-        [TelemetryAPI("v.orbitalVelocityy", "Orbital Velocity y", Units = APIEntry.UnitType.VELOCITY)]
+        [TelemetryAPI("v.orbitalVelocityy", "Orbital Velocity y", Units = APIEntry.UnitType.VELOCITY, Category = "vessel", ReturnType = "double")]
         object OrbitalVelocityY(DataSources ds) => ds.vessel.obt_velocity.y;
 
-        [TelemetryAPI("v.orbitalVelocityz", "Orbital Velocity z", Units = APIEntry.UnitType.VELOCITY)]
+        [TelemetryAPI("v.orbitalVelocityz", "Orbital Velocity z", Units = APIEntry.UnitType.VELOCITY, Category = "vessel", ReturnType = "double")]
         object OrbitalVelocityZ(DataSources ds) => ds.vessel.obt_velocity.z;
 
-        [TelemetryAPI("v.surfaceSpeed", "Surface Speed", Units = APIEntry.UnitType.VELOCITY)]
+        [TelemetryAPI("v.surfaceSpeed", "Surface Speed", Units = APIEntry.UnitType.VELOCITY, Category = "vessel", ReturnType = "double")]
         object SurfaceSpeed(DataSources ds) => ds.vessel.horizontalSrfSpeed;
 
-        [TelemetryAPI("v.verticalSpeed", "Vertical Speed", Units = APIEntry.UnitType.VELOCITY)]
+        [TelemetryAPI("v.verticalSpeed", "Vertical Speed", Units = APIEntry.UnitType.VELOCITY, Category = "vessel", ReturnType = "double")]
         object VerticalSpeed(DataSources ds) => ds.vessel.verticalSpeed;
 
-        [TelemetryAPI("v.speed", "Speed", Units = APIEntry.UnitType.VELOCITY)]
+        [TelemetryAPI("v.speed", "Speed", Units = APIEntry.UnitType.VELOCITY, Category = "vessel", ReturnType = "double")]
         object Speed(DataSources ds) => ds.vessel.speed;
 
-        [TelemetryAPI("v.srfSpeed", "Surface Speed (direct)", Units = APIEntry.UnitType.VELOCITY)]
+        [TelemetryAPI("v.srfSpeed", "Surface Speed (direct)", Units = APIEntry.UnitType.VELOCITY, Category = "vessel", ReturnType = "double")]
         object SrfSpeed(DataSources ds) => ds.vessel.srfSpeed;
 
-        [TelemetryAPI("v.obtSpeed", "Orbital Speed (direct)", Units = APIEntry.UnitType.VELOCITY)]
+        [TelemetryAPI("v.obtSpeed", "Orbital Speed (direct)", Units = APIEntry.UnitType.VELOCITY, Category = "vessel", ReturnType = "double")]
         object ObtSpeed(DataSources ds) => ds.vessel.obt_speed;
 
-        [TelemetryAPI("v.angularVelocity", "Angular Velocity", Units = APIEntry.UnitType.VELOCITY)]
+        [TelemetryAPI("v.angularVelocity", "Angular Velocity", Units = APIEntry.UnitType.VELOCITY, Category = "vessel", ReturnType = "double")]
         object AngularVelocity(DataSources ds) => ds.vessel.angularVelocity.magnitude;
 
-        [TelemetryAPI("v.angularVelocityx", "Angular Velocity x", Units = APIEntry.UnitType.VELOCITY)]
+        [TelemetryAPI("v.angularVelocityx", "Angular Velocity x", Units = APIEntry.UnitType.VELOCITY, Category = "vessel", ReturnType = "double")]
         object AngularVelocityX(DataSources ds) => ds.vessel.angularVelocity.x;
 
-        [TelemetryAPI("v.angularVelocityy", "Angular Velocity y", Units = APIEntry.UnitType.VELOCITY)]
+        [TelemetryAPI("v.angularVelocityy", "Angular Velocity y", Units = APIEntry.UnitType.VELOCITY, Category = "vessel", ReturnType = "double")]
         object AngularVelocityY(DataSources ds) => ds.vessel.angularVelocity.y;
 
-        [TelemetryAPI("v.angularVelocityz", "Angular Velocity z", Units = APIEntry.UnitType.VELOCITY)]
+        [TelemetryAPI("v.angularVelocityz", "Angular Velocity z", Units = APIEntry.UnitType.VELOCITY, Category = "vessel", ReturnType = "double")]
         object AngularVelocityZ(DataSources ds) => ds.vessel.angularVelocity.z;
 
         // --- Acceleration & Forces ---
 
-        [TelemetryAPI("v.geeForce", "G-Force", Units = APIEntry.UnitType.G)]
+        [TelemetryAPI("v.geeForce", "G-Force", Units = APIEntry.UnitType.G, Category = "vessel", ReturnType = "double")]
         object GeeForce(DataSources ds) => ds.vessel.geeForce;
 
-        [TelemetryAPI("v.geeForceImmediate", "Instantaneous G-Force", Units = APIEntry.UnitType.G)]
+        [TelemetryAPI("v.geeForceImmediate", "Instantaneous G-Force", Units = APIEntry.UnitType.G, Category = "vessel", ReturnType = "double")]
         object GeeForceImmediate(DataSources ds) => ds.vessel.geeForce_immediate;
 
-        [TelemetryAPI("v.acceleration", "Acceleration Magnitude", Units = APIEntry.UnitType.ACC)]
+        [TelemetryAPI("v.acceleration", "Acceleration Magnitude", Units = APIEntry.UnitType.ACC, Category = "vessel", ReturnType = "double")]
         object Acceleration(DataSources ds) => ds.vessel.acceleration.magnitude;
 
-        [TelemetryAPI("v.accelerationx", "Acceleration x", Units = APIEntry.UnitType.ACC)]
+        [TelemetryAPI("v.accelerationx", "Acceleration x", Units = APIEntry.UnitType.ACC, Category = "vessel", ReturnType = "double")]
         object AccelerationX(DataSources ds) => ds.vessel.acceleration.x;
 
-        [TelemetryAPI("v.accelerationy", "Acceleration y", Units = APIEntry.UnitType.ACC)]
+        [TelemetryAPI("v.accelerationy", "Acceleration y", Units = APIEntry.UnitType.ACC, Category = "vessel", ReturnType = "double")]
         object AccelerationY(DataSources ds) => ds.vessel.acceleration.y;
 
-        [TelemetryAPI("v.accelerationz", "Acceleration z", Units = APIEntry.UnitType.ACC)]
+        [TelemetryAPI("v.accelerationz", "Acceleration z", Units = APIEntry.UnitType.ACC, Category = "vessel", ReturnType = "double")]
         object AccelerationZ(DataSources ds) => ds.vessel.acceleration.z;
 
-        [TelemetryAPI("v.specificAcceleration", "Specific Acceleration (thrust/mass)", Units = APIEntry.UnitType.ACC)]
+        [TelemetryAPI("v.specificAcceleration", "Specific Acceleration (thrust/mass)", Units = APIEntry.UnitType.ACC, Category = "vessel", ReturnType = "double")]
         object SpecificAcceleration(DataSources ds) => ds.vessel.specificAcceleration;
 
-        [TelemetryAPI("v.perturbation", "Orbital Perturbation Magnitude")]
+        [TelemetryAPI("v.perturbation", "Orbital Perturbation Magnitude", Category = "vessel", ReturnType = "double")]
         object Perturbation(DataSources ds) => ds.vessel.perturbation.magnitude;
 
-        [TelemetryAPI("v.perturbationx", "Orbital Perturbation x")]
+        [TelemetryAPI("v.perturbationx", "Orbital Perturbation x", Category = "vessel", ReturnType = "double")]
         object PerturbationX(DataSources ds) => ds.vessel.perturbation.x;
 
-        [TelemetryAPI("v.perturbationy", "Orbital Perturbation y")]
+        [TelemetryAPI("v.perturbationy", "Orbital Perturbation y", Category = "vessel", ReturnType = "double")]
         object PerturbationY(DataSources ds) => ds.vessel.perturbation.y;
 
-        [TelemetryAPI("v.perturbationz", "Orbital Perturbation z")]
+        [TelemetryAPI("v.perturbationz", "Orbital Perturbation z", Category = "vessel", ReturnType = "double")]
         object PerturbationZ(DataSources ds) => ds.vessel.perturbation.z;
 
         // --- Mass & Inertia ---
 
-        [TelemetryAPI("v.mass", "Total Mass")]
+        [TelemetryAPI("v.mass", "Total Mass", Category = "vessel", ReturnType = "double")]
         object Mass(DataSources ds) => ds.vessel.GetTotalMass();
 
-        [TelemetryAPI("v.angularMomentum", "Angular Momentum Magnitude")]
+        [TelemetryAPI("v.angularMomentum", "Angular Momentum Magnitude", Category = "vessel", ReturnType = "double")]
         object AngularMomentum(DataSources ds) => ds.vessel.angularMomentum.magnitude;
 
-        [TelemetryAPI("v.angularMomentumx", "Angular Momentum x")]
+        [TelemetryAPI("v.angularMomentumx", "Angular Momentum x", Category = "vessel", ReturnType = "double")]
         object AngularMomentumX(DataSources ds) => ds.vessel.angularMomentum.x;
 
-        [TelemetryAPI("v.angularMomentumy", "Angular Momentum y")]
+        [TelemetryAPI("v.angularMomentumy", "Angular Momentum y", Category = "vessel", ReturnType = "double")]
         object AngularMomentumY(DataSources ds) => ds.vessel.angularMomentum.y;
 
-        [TelemetryAPI("v.angularMomentumz", "Angular Momentum z")]
+        [TelemetryAPI("v.angularMomentumz", "Angular Momentum z", Category = "vessel", ReturnType = "double")]
         object AngularMomentumZ(DataSources ds) => ds.vessel.angularMomentum.z;
 
-        [TelemetryAPI("v.momentOfInertia", "Moment of Inertia", Plotable = false, Formatter = "Vector3d")]
+        [TelemetryAPI("v.momentOfInertia", "Moment of Inertia", Plotable = false, Formatter = "Vector3d", Category = "vessel", ReturnType = "Vector3d")]
         object MomentOfInertia(DataSources ds) => new Vector3d(ds.vessel.MOI.x, ds.vessel.MOI.y, ds.vessel.MOI.z);
 
-        [TelemetryAPI("v.CoM", "Center of Mass", Plotable = false, Formatter = "Vector3d")]
+        [TelemetryAPI("v.CoM", "Center of Mass", Plotable = false, Formatter = "Vector3d", Category = "vessel", ReturnType = "Vector3d")]
         object CenterOfMass(DataSources ds) => new Vector3d(ds.vessel.CoM.x, ds.vessel.CoM.y, ds.vessel.CoM.z);
 
         // --- Atmosphere & Environment ---
 
-        [TelemetryAPI("v.atmosphericDensity", "Atmospheric Density", Units = APIEntry.UnitType.DENSITY)]
+        [TelemetryAPI("v.atmosphericDensity", "Atmospheric Density", Units = APIEntry.UnitType.DENSITY, Category = "vessel", ReturnType = "double")]
         object AtmosphericDensity(DataSources ds) => ds.vessel.atmDensity;
 
-        [TelemetryAPI("v.dynamicPressurekPa", "Dynamic Pressure (kPa)", Units = APIEntry.UnitType.DYNAMICPRESSURE)]
+        [TelemetryAPI("v.dynamicPressurekPa", "Dynamic Pressure (kPa)", Units = APIEntry.UnitType.DYNAMICPRESSURE, Category = "vessel", ReturnType = "double")]
         object DynamicPressurekPa(DataSources ds) => ds.vessel.dynamicPressurekPa;
 
-        [TelemetryAPI("v.dynamicPressure", "Dynamic Pressure (Pa)", Units = APIEntry.UnitType.DYNAMICPRESSURE)]
+        [TelemetryAPI("v.dynamicPressure", "Dynamic Pressure (Pa)", Units = APIEntry.UnitType.DYNAMICPRESSURE, Category = "vessel", ReturnType = "double")]
         object DynamicPressure(DataSources ds) =>
             (ds.vessel.atmDensity * 0.5) * Math.Pow(ds.vessel.srf_velocity.magnitude, 2);
 
-        [TelemetryAPI("v.staticPressurekPa", "Static Pressure (kPa)", Units = APIEntry.UnitType.PRES)]
+        [TelemetryAPI("v.staticPressurekPa", "Static Pressure (kPa)", Units = APIEntry.UnitType.PRES, Category = "vessel", ReturnType = "double")]
         object StaticPressurekPa(DataSources ds) => ds.vessel.staticPressurekPa;
 
-        [TelemetryAPI("v.staticPressure", "Static Pressure (kPa, via FlightGlobals)", Units = APIEntry.UnitType.PRES)]
+        [TelemetryAPI("v.staticPressure", "Static Pressure (kPa, via FlightGlobals)", Units = APIEntry.UnitType.PRES, Category = "vessel", ReturnType = "double")]
         object StaticPressure(DataSources ds) =>
             FlightGlobals.getStaticPressure(ds.vessel.altitude, ds.vessel.mainBody);
 
-        [TelemetryAPI("v.atmosphericPressurePa", "Atmospheric Pressure (Pa)", Units = APIEntry.UnitType.PRES)]
+        [TelemetryAPI("v.atmosphericPressurePa", "Atmospheric Pressure (Pa)", Units = APIEntry.UnitType.PRES, Category = "vessel", ReturnType = "double")]
         object AtmosphericPressurePa(DataSources ds) =>
             FlightGlobals.getStaticPressure(ds.vessel.altitude, ds.vessel.mainBody) * 1000;
 
-        [TelemetryAPI("v.atmosphericPressure", "Atmospheric Pressure (atm)", Units = APIEntry.UnitType.PRES)]
+        [TelemetryAPI("v.atmosphericPressure", "Atmospheric Pressure (atm)", Units = APIEntry.UnitType.PRES, Category = "vessel", ReturnType = "double")]
         object AtmosphericPressure(DataSources ds) =>
             FlightGlobals.getStaticPressure(ds.vessel.altitude, ds.vessel.mainBody) * PhysicsGlobals.KpaToAtmospheres;
 
-        [TelemetryAPI("v.atmosphericTemperature", "Atmospheric Temperature", Units = APIEntry.UnitType.TEMP)]
+        [TelemetryAPI("v.atmosphericTemperature", "Atmospheric Temperature", Units = APIEntry.UnitType.TEMP, Category = "vessel", ReturnType = "double")]
         object AtmosphericTemperature(DataSources ds) => ds.vessel.atmosphericTemperature;
 
-        [TelemetryAPI("v.externalTemperature", "External Temperature", Units = APIEntry.UnitType.TEMP)]
+        [TelemetryAPI("v.externalTemperature", "External Temperature", Units = APIEntry.UnitType.TEMP, Category = "vessel", ReturnType = "double")]
         object ExternalTemperature(DataSources ds) => ds.vessel.externalTemperature;
 
-        [TelemetryAPI("v.mach", "Mach Number")]
+        [TelemetryAPI("v.mach", "Mach Number", Category = "vessel", ReturnType = "double")]
         object MachNumber(DataSources ds) => ds.vessel.mach;
 
-        [TelemetryAPI("v.speedOfSound", "Speed of Sound", Units = APIEntry.UnitType.VELOCITY)]
+        [TelemetryAPI("v.speedOfSound", "Speed of Sound", Units = APIEntry.UnitType.VELOCITY, Category = "vessel", ReturnType = "double")]
         object SpeedOfSound(DataSources ds) => ds.vessel.speedOfSound;
 
-        [TelemetryAPI("v.indicatedAirSpeed", "Indicated Air Speed", Units = APIEntry.UnitType.VELOCITY)]
+        [TelemetryAPI("v.indicatedAirSpeed", "Indicated Air Speed", Units = APIEntry.UnitType.VELOCITY, Category = "vessel", ReturnType = "double")]
         object IndicatedAirSpeed(DataSources ds) => ds.vessel.indicatedAirSpeed;
 
         // --- Solar & Thermal ---
 
-        [TelemetryAPI("v.directSunlight", "In Direct Sunlight")]
+        [TelemetryAPI("v.directSunlight", "In Direct Sunlight", Category = "vessel", ReturnType = "bool")]
         object DirectSunlight(DataSources ds) => ds.vessel.directSunlight;
 
-        [TelemetryAPI("v.distanceToSun", "Distance to Sun", Units = APIEntry.UnitType.DISTANCE)]
+        [TelemetryAPI("v.distanceToSun", "Distance to Sun", Units = APIEntry.UnitType.DISTANCE, Category = "vessel", ReturnType = "double")]
         object DistanceToSun(DataSources ds) => ds.vessel.distanceToSun;
 
-        [TelemetryAPI("v.solarFlux", "Solar Flux")]
+        [TelemetryAPI("v.solarFlux", "Solar Flux", Category = "vessel", ReturnType = "double")]
         object SolarFlux(DataSources ds) => ds.vessel.solarFlux;
 
         // --- Situation & State ---
 
-        [TelemetryAPI("v.name", "Name", Units = APIEntry.UnitType.STRING)]
+        [TelemetryAPI("v.name", "Name", Units = APIEntry.UnitType.STRING, Category = "vessel", ReturnType = "string")]
         object Name(DataSources ds) => ds.vessel.vesselName;
 
-        [TelemetryAPI("v.body", "Body Name", Units = APIEntry.UnitType.STRING)]
+        [TelemetryAPI("v.body", "Body Name", Units = APIEntry.UnitType.STRING, Category = "vessel", ReturnType = "string")]
         object Body(DataSources ds) => ds.vessel.orbit.referenceBody.name;
 
-        [TelemetryAPI("v.situation", "Vessel Situation", Units = APIEntry.UnitType.STRING)]
+        [TelemetryAPI("v.situation", "Vessel Situation", Units = APIEntry.UnitType.STRING, Category = "vessel", ReturnType = "string")]
         object Situation(DataSources ds) => ds.vessel.situation.ToString();
 
-        [TelemetryAPI("v.situationString", "Vessel Situation (readable)", Units = APIEntry.UnitType.STRING)]
+        [TelemetryAPI("v.situationString", "Vessel Situation (readable)", Units = APIEntry.UnitType.STRING, Category = "vessel", ReturnType = "string")]
         object SituationString(DataSources ds) => Vessel.GetSituationString(ds.vessel);
 
-        [TelemetryAPI("v.vesselType", "Vessel Type", Units = APIEntry.UnitType.STRING)]
+        [TelemetryAPI("v.vesselType", "Vessel Type", Units = APIEntry.UnitType.STRING, Category = "vessel", ReturnType = "string")]
         object VesselType(DataSources ds) => ds.vessel.vesselType.ToString();
 
-        [TelemetryAPI("v.landed", "Is Landed")]
+        [TelemetryAPI("v.landed", "Is Landed", Category = "vessel", ReturnType = "bool")]
         object Landed(DataSources ds) => ds.vessel.Landed;
 
-        [TelemetryAPI("v.splashed", "Is Splashed")]
+        [TelemetryAPI("v.splashed", "Is Splashed", Category = "vessel", ReturnType = "bool")]
         object Splashed(DataSources ds) => ds.vessel.Splashed;
 
-        [TelemetryAPI("v.landedOrSplashed", "Is Landed or Splashed")]
+        [TelemetryAPI("v.landedOrSplashed", "Is Landed or Splashed", Category = "vessel", ReturnType = "bool")]
         object LandedOrSplashed(DataSources ds) => ds.vessel.LandedOrSplashed;
 
-        [TelemetryAPI("v.landedAt", "Landed At (biome/location)", Units = APIEntry.UnitType.STRING)]
+        [TelemetryAPI("v.landedAt", "Landed At (biome/location)", Units = APIEntry.UnitType.STRING, Category = "vessel", ReturnType = "string")]
         object LandedAt(DataSources ds) => ds.vessel.landedAt;
 
-        [TelemetryAPI("v.isEVA", "Is EVA")]
+        [TelemetryAPI("v.isEVA", "Is EVA", Category = "vessel", ReturnType = "bool")]
         object IsEVA(DataSources ds) => ds.vessel.isEVA;
 
-        [TelemetryAPI("v.isActiveVessel", "Is Active Vessel")]
+        [TelemetryAPI("v.isActiveVessel", "Is Active Vessel", Category = "vessel", ReturnType = "bool")]
         object IsActiveVessel(DataSources ds) => ds.vessel.isActiveVessel;
 
-        [TelemetryAPI("v.isControllable", "Is Controllable")]
+        [TelemetryAPI("v.isControllable", "Is Controllable", Category = "vessel", ReturnType = "bool")]
         object IsControllable(DataSources ds) => ds.vessel.IsControllable;
 
-        [TelemetryAPI("v.isCommandable", "Is Commandable")]
+        [TelemetryAPI("v.isCommandable", "Is Commandable", Category = "vessel", ReturnType = "bool")]
         object IsCommandable(DataSources ds) => ds.vessel.isCommandable;
 
         // --- Time ---
 
-        [TelemetryAPI("v.missionTime", "Mission Time", Units = APIEntry.UnitType.TIME)]
+        [TelemetryAPI("v.missionTime", "Mission Time", Units = APIEntry.UnitType.TIME, Category = "vessel", ReturnType = "double")]
         object MissionTime(DataSources ds) => ds.vessel.missionTime;
 
-        [TelemetryAPI("v.missionTimeString", "Mission Elapsed Time (formatted)", Units = APIEntry.UnitType.STRING)]
+        [TelemetryAPI("v.missionTimeString", "Mission Elapsed Time (formatted)", Units = APIEntry.UnitType.STRING, Category = "vessel", ReturnType = "string")]
         object MissionTimeString(DataSources ds) => Vessel.GetMETString(ds.vessel);
 
-        [TelemetryAPI("v.launchTime", "Launch Time", Units = APIEntry.UnitType.DATE)]
+        [TelemetryAPI("v.launchTime", "Launch Time", Units = APIEntry.UnitType.DATE, Category = "vessel", ReturnType = "double")]
         object LaunchTime(DataSources ds) => ds.vessel.launchTime;
 
         // --- Stage ---
 
-        [TelemetryAPI("v.currentStage", "Current Stage")]
+        [TelemetryAPI("v.currentStage", "Current Stage", Category = "vessel", ReturnType = "int")]
         object CurrentStage(DataSources ds) => ds.vessel.currentStage;
 
         // --- Crew ---
 
-        [TelemetryAPI("v.crewCount", "Crew Count")]
+        [TelemetryAPI("v.crewCount", "Crew Count", Category = "vessel", ReturnType = "int")]
         object CrewCount(DataSources ds) => ds.vessel.GetCrewCount();
 
-        [TelemetryAPI("v.crewCapacity", "Crew Capacity")]
+        [TelemetryAPI("v.crewCapacity", "Crew Capacity", Category = "vessel", ReturnType = "int")]
         object CrewCapacity(DataSources ds) => ds.vessel.GetCrewCapacity();
 
-        [TelemetryAPI("v.crew", "Crew Names", Plotable = false, Formatter = "StringArray")]
+        [TelemetryAPI("v.crew", "Crew Names", Plotable = false, Formatter = "StringArray", Category = "vessel", ReturnType = "string[]")]
         object Crew(DataSources ds)
         {
             var names = new List<string>();
@@ -273,24 +273,24 @@ namespace Telemachus
 
         // --- Orientation ---
 
-        [TelemetryAPI("v.upAxis", "Local Up Axis", Plotable = false, Formatter = "Vector3d")]
+        [TelemetryAPI("v.upAxis", "Local Up Axis", Plotable = false, Formatter = "Vector3d", Category = "vessel", ReturnType = "Vector3d")]
         object UpAxis(DataSources ds) => ds.vessel.upAxis;
 
-        [TelemetryAPI("v.terrainNormal", "Terrain Normal", Plotable = false, Formatter = "Vector3d")]
+        [TelemetryAPI("v.terrainNormal", "Terrain Normal", Plotable = false, Formatter = "Vector3d", Category = "vessel", ReturnType = "Vector3d")]
         object TerrainNormal(DataSources ds) =>
             new Vector3d(ds.vessel.terrainNormal.x, ds.vessel.terrainNormal.y, ds.vessel.terrainNormal.z);
 
         // --- Physics State ---
 
-        [TelemetryAPI("v.loaded", "Is Loaded")]
+        [TelemetryAPI("v.loaded", "Is Loaded", Category = "vessel", ReturnType = "bool")]
         object Loaded(DataSources ds) => ds.vessel.loaded;
 
-        [TelemetryAPI("v.packed", "Is Packed (on rails)")]
+        [TelemetryAPI("v.packed", "Is Packed (on rails)", Category = "vessel", ReturnType = "bool")]
         object Packed(DataSources ds) => ds.vessel.packed;
 
         // --- Computed ---
 
-        [TelemetryAPI("v.angleToPrograde", "Angle to Prograde", Units = APIEntry.UnitType.DEG)]
+        [TelemetryAPI("v.angleToPrograde", "Angle to Prograde", Units = APIEntry.UnitType.DEG, Category = "vessel", ReturnType = "double")]
         object AngleToPrograde(DataSources ds)
         {
             if (ds.vessel.mainBody == Planetarium.fetch.Sun)
@@ -318,182 +318,182 @@ namespace Telemachus
 
         // --- Apsides ---
 
-        [TelemetryAPI("o.PeA", "Periapsis Altitude", Units = APIEntry.UnitType.DISTANCE)]
+        [TelemetryAPI("o.PeA", "Periapsis Altitude", Units = APIEntry.UnitType.DISTANCE, Category = "orbit", ReturnType = "double")]
         object PeA(DataSources ds) => ds.vessel.orbit.PeA;
 
-        [TelemetryAPI("o.ApA", "Apoapsis Altitude", Units = APIEntry.UnitType.DISTANCE)]
+        [TelemetryAPI("o.ApA", "Apoapsis Altitude", Units = APIEntry.UnitType.DISTANCE, Category = "orbit", ReturnType = "double")]
         object ApA(DataSources ds) => ds.vessel.orbit.ApA;
 
-        [TelemetryAPI("o.PeR", "Periapsis Radius", Units = APIEntry.UnitType.DISTANCE)]
+        [TelemetryAPI("o.PeR", "Periapsis Radius", Units = APIEntry.UnitType.DISTANCE, Category = "orbit", ReturnType = "double")]
         object PeR(DataSources ds) => ds.vessel.orbit.PeR;
 
-        [TelemetryAPI("o.ApR", "Apoapsis Radius", Units = APIEntry.UnitType.DISTANCE)]
+        [TelemetryAPI("o.ApR", "Apoapsis Radius", Units = APIEntry.UnitType.DISTANCE, Category = "orbit", ReturnType = "double")]
         object ApR(DataSources ds) => ds.vessel.orbit.ApR;
 
-        [TelemetryAPI("o.timeToAp", "Time to Apoapsis", Units = APIEntry.UnitType.TIME)]
+        [TelemetryAPI("o.timeToAp", "Time to Apoapsis", Units = APIEntry.UnitType.TIME, Category = "orbit", ReturnType = "double")]
         object TimeToAp(DataSources ds) => ds.vessel.orbit.timeToAp;
 
-        [TelemetryAPI("o.timeToPe", "Time to Periapsis", Units = APIEntry.UnitType.TIME)]
+        [TelemetryAPI("o.timeToPe", "Time to Periapsis", Units = APIEntry.UnitType.TIME, Category = "orbit", ReturnType = "double")]
         object TimeToPe(DataSources ds) => ds.vessel.orbit.timeToPe;
 
         // --- Orbital Elements ---
 
-        [TelemetryAPI("o.inclination", "Inclination", Units = APIEntry.UnitType.DEG)]
+        [TelemetryAPI("o.inclination", "Inclination", Units = APIEntry.UnitType.DEG, Category = "orbit", ReturnType = "double")]
         object Inclination(DataSources ds) => ds.vessel.orbit.inclination;
 
-        [TelemetryAPI("o.eccentricity", "Eccentricity")]
+        [TelemetryAPI("o.eccentricity", "Eccentricity", Category = "orbit", ReturnType = "double")]
         object Eccentricity(DataSources ds) => ds.vessel.orbit.eccentricity;
 
-        [TelemetryAPI("o.sma", "Semimajor Axis", Units = APIEntry.UnitType.DISTANCE)]
+        [TelemetryAPI("o.sma", "Semimajor Axis", Units = APIEntry.UnitType.DISTANCE, Category = "orbit", ReturnType = "double")]
         object Sma(DataSources ds) => ds.vessel.orbit.semiMajorAxis;
 
-        [TelemetryAPI("o.semiMinorAxis", "Semi-minor Axis", Units = APIEntry.UnitType.DISTANCE)]
+        [TelemetryAPI("o.semiMinorAxis", "Semi-minor Axis", Units = APIEntry.UnitType.DISTANCE, Category = "orbit", ReturnType = "double")]
         object SemiMinorAxis(DataSources ds) => ds.vessel.orbit.semiMinorAxis;
 
-        [TelemetryAPI("o.semiLatusRectum", "Semi-latus Rectum", Units = APIEntry.UnitType.DISTANCE)]
+        [TelemetryAPI("o.semiLatusRectum", "Semi-latus Rectum", Units = APIEntry.UnitType.DISTANCE, Category = "orbit", ReturnType = "double")]
         object SemiLatusRectum(DataSources ds) => ds.vessel.orbit.semiLatusRectum;
 
-        [TelemetryAPI("o.lan", "Longitude of Ascending Node", Units = APIEntry.UnitType.DEG)]
+        [TelemetryAPI("o.lan", "Longitude of Ascending Node", Units = APIEntry.UnitType.DEG, Category = "orbit", ReturnType = "double")]
         object Lan(DataSources ds) => ds.vessel.orbit.LAN;
 
-        [TelemetryAPI("o.argumentOfPeriapsis", "Argument of Periapsis", Units = APIEntry.UnitType.DEG)]
+        [TelemetryAPI("o.argumentOfPeriapsis", "Argument of Periapsis", Units = APIEntry.UnitType.DEG, Category = "orbit", ReturnType = "double")]
         object ArgumentOfPeriapsis(DataSources ds) => ds.vessel.orbit.argumentOfPeriapsis;
 
-        [TelemetryAPI("o.epoch", "Epoch")]
+        [TelemetryAPI("o.epoch", "Epoch", Category = "orbit", ReturnType = "double")]
         object Epoch(DataSources ds) => ds.vessel.orbit.epoch;
 
-        [TelemetryAPI("o.period", "Orbital Period", Units = APIEntry.UnitType.TIME)]
+        [TelemetryAPI("o.period", "Orbital Period", Units = APIEntry.UnitType.TIME, Category = "orbit", ReturnType = "double")]
         object Period(DataSources ds) => ds.vessel.orbit.period;
 
         // --- Anomalies ---
 
-        [TelemetryAPI("o.trueAnomaly", "True Anomaly", Units = APIEntry.UnitType.DEG)]
+        [TelemetryAPI("o.trueAnomaly", "True Anomaly", Units = APIEntry.UnitType.DEG, Category = "orbit", ReturnType = "double")]
         object TrueAnomaly(DataSources ds) =>
             ds.vessel.orbit.TrueAnomalyAtUT(Planetarium.GetUniversalTime()) * (180.0 / Math.PI);
 
-        [TelemetryAPI("o.meanAnomaly", "Mean Anomaly", Units = APIEntry.UnitType.DEG)]
+        [TelemetryAPI("o.meanAnomaly", "Mean Anomaly", Units = APIEntry.UnitType.DEG, Category = "orbit", ReturnType = "double")]
         object MeanAnomaly(DataSources ds) => ds.vessel.orbit.meanAnomaly * (180.0 / Math.PI);
 
-        [TelemetryAPI("o.eccentricAnomaly", "Eccentric Anomaly", Units = APIEntry.UnitType.DEG)]
+        [TelemetryAPI("o.eccentricAnomaly", "Eccentric Anomaly", Units = APIEntry.UnitType.DEG, Category = "orbit", ReturnType = "double")]
         object EccentricAnomaly(DataSources ds) => ds.vessel.orbit.eccentricAnomaly * (180.0 / Math.PI);
 
-        [TelemetryAPI("o.maae", "Mean Anomaly at Epoch")]
+        [TelemetryAPI("o.maae", "Mean Anomaly at Epoch", Category = "orbit", ReturnType = "double")]
         object Maae(DataSources ds)
         {
             Orbit orbit = ds.vessel.orbit;
             return orbit.getObtAtUT(0) / orbit.period * (2.0 * Math.PI);
         }
 
-        [TelemetryAPI("o.timeOfPeriapsisPassage", "Time of Periapsis Passage", Units = APIEntry.UnitType.DATE)]
+        [TelemetryAPI("o.timeOfPeriapsisPassage", "Time of Periapsis Passage", Units = APIEntry.UnitType.DATE, Category = "orbit", ReturnType = "double")]
         object TimeOfPeriapsisPassage(DataSources ds) =>
             Planetarium.GetUniversalTime() - ds.vessel.orbit.ObT;
 
-        [TelemetryAPI("o.orbitPercent", "Orbit Percent")]
+        [TelemetryAPI("o.orbitPercent", "Orbit Percent", Category = "orbit", ReturnType = "double")]
         object OrbitPercent(DataSources ds) => ds.vessel.orbit.orbitPercent;
 
         // --- Velocity ---
 
-        [TelemetryAPI("o.relativeVelocity", "Relative Velocity", Units = APIEntry.UnitType.VELOCITY)]
+        [TelemetryAPI("o.relativeVelocity", "Relative Velocity", Units = APIEntry.UnitType.VELOCITY, Category = "orbit", ReturnType = "double")]
         object RelativeVelocity(DataSources ds) => ds.vessel.orbit.GetRelativeVel().magnitude;
 
-        [TelemetryAPI("o.orbitalSpeed", "Orbital Speed", Units = APIEntry.UnitType.VELOCITY)]
+        [TelemetryAPI("o.orbitalSpeed", "Orbital Speed", Units = APIEntry.UnitType.VELOCITY, Category = "orbit", ReturnType = "double")]
         object OrbitalSpeed(DataSources ds) => ds.vessel.orbit.orbitalSpeed;
 
-        [TelemetryAPI("o.vel", "Orbital Velocity Vector", Plotable = false, Formatter = "Vector3d")]
+        [TelemetryAPI("o.vel", "Orbital Velocity Vector", Plotable = false, Formatter = "Vector3d", Category = "orbit", ReturnType = "Vector3d")]
         object Vel(DataSources ds) => ds.vessel.orbit.vel;
 
         // --- Position ---
 
-        [TelemetryAPI("o.radius", "Orbital Radius", Units = APIEntry.UnitType.DISTANCE)]
+        [TelemetryAPI("o.radius", "Orbital Radius", Units = APIEntry.UnitType.DISTANCE, Category = "orbit", ReturnType = "double")]
         object Radius(DataSources ds) => ds.vessel.orbit.radius;
 
-        [TelemetryAPI("o.pos", "Orbital Position Vector", Plotable = false, Formatter = "Vector3d")]
+        [TelemetryAPI("o.pos", "Orbital Position Vector", Plotable = false, Formatter = "Vector3d", Category = "orbit", ReturnType = "Vector3d")]
         object Pos(DataSources ds) => ds.vessel.orbit.pos;
 
         // --- Energy ---
 
-        [TelemetryAPI("o.orbitalEnergy", "Specific Orbital Energy")]
+        [TelemetryAPI("o.orbitalEnergy", "Specific Orbital Energy", Category = "orbit", ReturnType = "double")]
         object OrbitalEnergy(DataSources ds) => ds.vessel.orbit.orbitalEnergy;
 
         // --- Vectors ---
 
-        [TelemetryAPI("o.orbitNormal", "Orbit Normal Vector", Plotable = false, Formatter = "Vector3d")]
+        [TelemetryAPI("o.orbitNormal", "Orbit Normal Vector", Plotable = false, Formatter = "Vector3d", Category = "orbit", ReturnType = "Vector3d")]
         object OrbitNormal(DataSources ds) => ds.vessel.orbit.GetOrbitNormal();
 
-        [TelemetryAPI("o.eccVec", "Eccentricity Vector", Plotable = false, Formatter = "Vector3d")]
+        [TelemetryAPI("o.eccVec", "Eccentricity Vector", Plotable = false, Formatter = "Vector3d", Category = "orbit", ReturnType = "Vector3d")]
         object EccVec(DataSources ds) => ds.vessel.orbit.GetEccVector();
 
-        [TelemetryAPI("o.anVec", "Ascending Node Vector", Plotable = false, Formatter = "Vector3d")]
+        [TelemetryAPI("o.anVec", "Ascending Node Vector", Plotable = false, Formatter = "Vector3d", Category = "orbit", ReturnType = "Vector3d")]
         object AnVec(DataSources ds) => ds.vessel.orbit.GetANVector();
 
-        [TelemetryAPI("o.h", "Specific Angular Momentum Vector", Plotable = false, Formatter = "Vector3d")]
+        [TelemetryAPI("o.h", "Specific Angular Momentum Vector", Plotable = false, Formatter = "Vector3d", Category = "orbit", ReturnType = "Vector3d")]
         object AngularMomentumVec(DataSources ds) => ds.vessel.orbit.h;
 
         // --- Reference Body ---
 
-        [TelemetryAPI("o.referenceBody", "Reference Body Name", Units = APIEntry.UnitType.STRING)]
+        [TelemetryAPI("o.referenceBody", "Reference Body Name", Units = APIEntry.UnitType.STRING, Category = "orbit", ReturnType = "string")]
         object ReferenceBody(DataSources ds) => ds.vessel.orbit.referenceBody.name;
 
         // --- Transitions ---
 
-        [TelemetryAPI("o.timeToTransition1", "Time to Transition 1", Units = APIEntry.UnitType.TIME)]
+        [TelemetryAPI("o.timeToTransition1", "Time to Transition 1", Units = APIEntry.UnitType.TIME, Category = "orbit", ReturnType = "double")]
         object TimeToTransition1(DataSources ds) => ds.vessel.orbit.timeToTransition1;
 
-        [TelemetryAPI("o.timeToTransition2", "Time to Transition 2", Units = APIEntry.UnitType.TIME)]
+        [TelemetryAPI("o.timeToTransition2", "Time to Transition 2", Units = APIEntry.UnitType.TIME, Category = "orbit", ReturnType = "double")]
         object TimeToTransition2(DataSources ds) => ds.vessel.orbit.timeToTransition2;
 
-        [TelemetryAPI("o.patchStartTransition", "Patch Start Transition Type", Units = APIEntry.UnitType.STRING)]
+        [TelemetryAPI("o.patchStartTransition", "Patch Start Transition Type", Units = APIEntry.UnitType.STRING, Category = "orbit", ReturnType = "string")]
         object PatchStartTransition(DataSources ds) => ds.vessel.orbit.patchStartTransition.ToString();
 
-        [TelemetryAPI("o.patchEndTransition", "Patch End Transition Type", Units = APIEntry.UnitType.STRING)]
+        [TelemetryAPI("o.patchEndTransition", "Patch End Transition Type", Units = APIEntry.UnitType.STRING, Category = "orbit", ReturnType = "string")]
         object PatchEndTransition(DataSources ds) => ds.vessel.orbit.patchEndTransition.ToString();
 
-        [TelemetryAPI("o.StartUT", "Orbit Patch Start UT", Units = APIEntry.UnitType.DATE)]
+        [TelemetryAPI("o.StartUT", "Orbit Patch Start UT", Units = APIEntry.UnitType.DATE, Category = "orbit", ReturnType = "double")]
         object StartUT(DataSources ds) => ds.vessel.orbit.StartUT;
 
-        [TelemetryAPI("o.EndUT", "Orbit Patch End UT", Units = APIEntry.UnitType.DATE)]
+        [TelemetryAPI("o.EndUT", "Orbit Patch End UT", Units = APIEntry.UnitType.DATE, Category = "orbit", ReturnType = "double")]
         object EndUT(DataSources ds) => ds.vessel.orbit.EndUT;
 
-        [TelemetryAPI("o.UTsoi", "UT of SOI Transition", Units = APIEntry.UnitType.DATE)]
+        [TelemetryAPI("o.UTsoi", "UT of SOI Transition", Units = APIEntry.UnitType.DATE, Category = "orbit", ReturnType = "double")]
         object UTsoi(DataSources ds) => ds.vessel.orbit.UTsoi;
 
         // --- Closest Encounter ---
 
-        [TelemetryAPI("o.closestEncounterBody", "Closest Encounter Body Name", Units = APIEntry.UnitType.STRING)]
+        [TelemetryAPI("o.closestEncounterBody", "Closest Encounter Body Name", Units = APIEntry.UnitType.STRING, Category = "orbit", ReturnType = "string")]
         object ClosestEncounterBody(DataSources ds) =>
             ds.vessel.orbit.closestEncounterBody != null ? ds.vessel.orbit.closestEncounterBody.name : "";
 
-        [TelemetryAPI("o.closestTgtApprUT", "Closest Target Approach UT", Units = APIEntry.UnitType.DATE)]
+        [TelemetryAPI("o.closestTgtApprUT", "Closest Target Approach UT", Units = APIEntry.UnitType.DATE, Category = "orbit", ReturnType = "double")]
         object ClosestTgtApprUT(DataSources ds) => ds.vessel.orbit.closestTgtApprUT;
 
         // --- Speed At ---
 
-        [TelemetryAPI("o.orbitalSpeedAt", "Orbital Speed at Orbit Time [double obt]", Units = APIEntry.UnitType.VELOCITY)]
+        [TelemetryAPI("o.orbitalSpeedAt", "Orbital Speed at Orbit Time", Units = APIEntry.UnitType.VELOCITY, Category = "orbit", ReturnType = "double", Params = "double obt")]
         object OrbitalSpeedAt(DataSources ds) =>
             ds.vessel.orbit.getOrbitalSpeedAt(double.Parse(ds.args[0]));
 
-        [TelemetryAPI("o.orbitalSpeedAtDistance", "Orbital Speed at Distance [double distance]", Units = APIEntry.UnitType.VELOCITY)]
+        [TelemetryAPI("o.orbitalSpeedAtDistance", "Orbital Speed at Distance", Units = APIEntry.UnitType.VELOCITY, Category = "orbit", ReturnType = "double", Params = "double distance")]
         object OrbitalSpeedAtDistance(DataSources ds) =>
             ds.vessel.orbit.getOrbitalSpeedAtDistance(double.Parse(ds.args[0]));
 
-        [TelemetryAPI("o.radiusAtTrueAnomaly", "Radius at True Anomaly [double trueAnomaly]", Units = APIEntry.UnitType.DISTANCE)]
+        [TelemetryAPI("o.radiusAtTrueAnomaly", "Radius at True Anomaly", Units = APIEntry.UnitType.DISTANCE, Category = "orbit", ReturnType = "double", Params = "double trueAnomaly")]
         object RadiusAtTrueAnomaly(DataSources ds) =>
             ds.vessel.orbit.RadiusAtTrueAnomaly(double.Parse(ds.args[0]));
 
-        [TelemetryAPI("o.trueAnomalyAtRadius", "True Anomaly at Radius [double radius]", Units = APIEntry.UnitType.DEG)]
+        [TelemetryAPI("o.trueAnomalyAtRadius", "True Anomaly at Radius", Units = APIEntry.UnitType.DEG, Category = "orbit", ReturnType = "double", Params = "double radius")]
         object TrueAnomalyAtRadius(DataSources ds) =>
             ds.vessel.orbit.TrueAnomalyAtRadius(double.Parse(ds.args[0]));
 
         // --- Orbit Patches ---
 
-        [TelemetryAPI("o.orbitPatches", "Detailed Orbit Patches Info [object orbitPatchInfo]",
-            Plotable = false, Formatter = "OrbitPatchList")]
+        [TelemetryAPI("o.orbitPatches", "Detailed Orbit Patches Info",
+            Plotable = false, Formatter = "OrbitPatchList", Category = "orbit", ReturnType = "object")]
         object GetOrbitPatches(DataSources ds) =>
             OrbitPatches.getPatchesForOrbit(ds.vessel.orbit);
 
         [TelemetryAPI("o.trueAnomalyAtUTForOrbitPatch",
-            "The orbit patch's True Anomaly at Universal Time [orbit patch index, universal time]",
-            Units = APIEntry.UnitType.DEG)]
+            "The orbit patch's True Anomaly at Universal Time",
+            Units = APIEntry.UnitType.DEG, Category = "orbit", ReturnType = "double", Params = "int patchIndex, double UT")]
         object TrueAnomalyAtUTForOrbitPatch(DataSources ds)
         {
             int index = int.Parse(ds.args[0]);
@@ -504,8 +504,8 @@ namespace Telemachus
         }
 
         [TelemetryAPI("o.UTForTrueAnomalyForOrbitPatch",
-            "The orbit patch's True Anomaly at Universal Time [orbit patch index, universal time]",
-            Units = APIEntry.UnitType.DATE)]
+            "The orbit patch's Universal Time at True Anomaly",
+            Units = APIEntry.UnitType.DATE, Category = "orbit", ReturnType = "double", Params = "int patchIndex, double trueAnomaly")]
         object UTForTrueAnomalyForOrbitPatch(DataSources ds)
         {
             int index = int.Parse(ds.args[0]);
@@ -517,8 +517,8 @@ namespace Telemachus
         }
 
         [TelemetryAPI("o.relativePositionAtTrueAnomalyForOrbitPatch",
-            "The orbit patch's predicted displacement from the center of the main body at the given true anomaly [orbit patch index, true anomaly]",
-            Formatter = "Vector3d")]
+            "The orbit patch's predicted displacement from the center of the main body at the given true anomaly",
+            Formatter = "Vector3d", Category = "orbit", ReturnType = "Vector3d", Params = "int patchIndex, double trueAnomaly")]
         object RelativePositionAtTrueAnomalyForOrbitPatch(DataSources ds)
         {
             int index = int.Parse(ds.args[0]);
@@ -529,8 +529,8 @@ namespace Telemachus
         }
 
         [TelemetryAPI("o.relativePositionAtUTForOrbitPatch",
-            "The orbit patch's predicted displacement from the center of the main body at the given universal time [orbit patch index, universal time]",
-            Formatter = "Vector3d")]
+            "The orbit patch's predicted displacement from the center of the main body at the given universal time",
+            Formatter = "Vector3d", Category = "orbit", ReturnType = "Vector3d", Params = "int patchIndex, double UT")]
         object RelativePositionAtUTForOrbitPatch(DataSources ds)
         {
             int index = int.Parse(ds.args[0]);
@@ -546,63 +546,63 @@ namespace Telemachus
         public NavBallDataLinkHandler(FormatterProvider formatters)
             : base(formatters) { }
 
-        [TelemetryAPI("n.heading2", "Heading", Units = APIEntry.UnitType.DEG)]
+        [TelemetryAPI("n.heading2", "Heading", Units = APIEntry.UnitType.DEG, Category = "navigation", ReturnType = "double")]
         object Heading2(DataSources ds) =>
             UpdateHeadingPitchRoll(ds.vessel, ds.vessel.CoM).eulerAngles.y;
 
-        [TelemetryAPI("n.pitch2", "Pitch", Units = APIEntry.UnitType.DEG)]
+        [TelemetryAPI("n.pitch2", "Pitch", Units = APIEntry.UnitType.DEG, Category = "navigation", ReturnType = "double")]
         object Pitch2(DataSources ds)
         {
             var result = UpdateHeadingPitchRoll(ds.vessel, ds.vessel.CoM);
             return (result.eulerAngles.x > 180) ? (360.0 - result.eulerAngles.x) : -result.eulerAngles.x;
         }
 
-        [TelemetryAPI("n.roll2", "Roll", Units = APIEntry.UnitType.DEG)]
+        [TelemetryAPI("n.roll2", "Roll", Units = APIEntry.UnitType.DEG, Category = "navigation", ReturnType = "double")]
         object Roll2(DataSources ds)
         {
             var result = UpdateHeadingPitchRoll(ds.vessel, ds.vessel.CoM);
             return (result.eulerAngles.z > 180) ? (result.eulerAngles.z - 360.0) : result.eulerAngles.z;
         }
 
-        [TelemetryAPI("n.rawheading2", "Raw Heading", Units = APIEntry.UnitType.DEG)]
+        [TelemetryAPI("n.rawheading2", "Raw Heading", Units = APIEntry.UnitType.DEG, Category = "navigation", ReturnType = "double")]
         object RawHeading2(DataSources ds) =>
             UpdateHeadingPitchRoll(ds.vessel, ds.vessel.CoM).eulerAngles.y;
 
-        [TelemetryAPI("n.rawpitch2", "Raw Pitch", Units = APIEntry.UnitType.DEG)]
+        [TelemetryAPI("n.rawpitch2", "Raw Pitch", Units = APIEntry.UnitType.DEG, Category = "navigation", ReturnType = "double")]
         object RawPitch2(DataSources ds) =>
             UpdateHeadingPitchRoll(ds.vessel, ds.vessel.CoM).eulerAngles.x;
 
-        [TelemetryAPI("n.rawroll2", "Raw Roll", Units = APIEntry.UnitType.DEG)]
+        [TelemetryAPI("n.rawroll2", "Raw Roll", Units = APIEntry.UnitType.DEG, Category = "navigation", ReturnType = "double")]
         object RawRoll2(DataSources ds) =>
             UpdateHeadingPitchRoll(ds.vessel, ds.vessel.CoM).eulerAngles.z;
 
-        [TelemetryAPI("n.heading", "Heading calculated using the position of the vessels root part", Units = APIEntry.UnitType.DEG)]
+        [TelemetryAPI("n.heading", "Heading calculated using the position of the vessels root part", Units = APIEntry.UnitType.DEG, Category = "navigation", ReturnType = "double")]
         object Heading(DataSources ds) =>
             UpdateHeadingPitchRoll(ds.vessel, ds.vessel.rootPart.transform.position).eulerAngles.y;
 
-        [TelemetryAPI("n.pitch", "Pitch calculated using the position of the vessels root part", Units = APIEntry.UnitType.DEG)]
+        [TelemetryAPI("n.pitch", "Pitch calculated using the position of the vessels root part", Units = APIEntry.UnitType.DEG, Category = "navigation", ReturnType = "double")]
         object Pitch(DataSources ds)
         {
             var result = UpdateHeadingPitchRoll(ds.vessel, ds.vessel.rootPart.transform.position);
             return (result.eulerAngles.x > 180) ? (360.0 - result.eulerAngles.x) : -result.eulerAngles.x;
         }
 
-        [TelemetryAPI("n.roll", "Roll calculated using the position of the vessels root part", Units = APIEntry.UnitType.DEG)]
+        [TelemetryAPI("n.roll", "Roll calculated using the position of the vessels root part", Units = APIEntry.UnitType.DEG, Category = "navigation", ReturnType = "double")]
         object Roll(DataSources ds)
         {
             var result = UpdateHeadingPitchRoll(ds.vessel, ds.vessel.rootPart.transform.position);
             return (result.eulerAngles.z > 180) ? (result.eulerAngles.z - 360.0) : result.eulerAngles.z;
         }
 
-        [TelemetryAPI("n.rawheading", "Raw Heading calculated using the position of the vessels root part", Units = APIEntry.UnitType.DEG)]
+        [TelemetryAPI("n.rawheading", "Raw Heading calculated using the position of the vessels root part", Units = APIEntry.UnitType.DEG, Category = "navigation", ReturnType = "double")]
         object RawHeading(DataSources ds) =>
             UpdateHeadingPitchRoll(ds.vessel, ds.vessel.rootPart.transform.position).eulerAngles.y;
 
-        [TelemetryAPI("n.rawpitch", "Raw Pitch calculated using the position of the vessels root part", Units = APIEntry.UnitType.DEG)]
+        [TelemetryAPI("n.rawpitch", "Raw Pitch calculated using the position of the vessels root part", Units = APIEntry.UnitType.DEG, Category = "navigation", ReturnType = "double")]
         object RawPitch(DataSources ds) =>
             UpdateHeadingPitchRoll(ds.vessel, ds.vessel.rootPart.transform.position).eulerAngles.x;
 
-        [TelemetryAPI("n.rawroll", "Raw Roll calculated using the position of the vessels root part", Units = APIEntry.UnitType.DEG)]
+        [TelemetryAPI("n.rawroll", "Raw Roll calculated using the position of the vessels root part", Units = APIEntry.UnitType.DEG, Category = "navigation", ReturnType = "double")]
         object RawRoll(DataSources ds) =>
             UpdateHeadingPitchRoll(ds.vessel, ds.vessel.rootPart.transform.position).eulerAngles.z;
 
@@ -625,26 +625,26 @@ namespace Telemachus
 
         // --- Identity ---
 
-        [TelemetryAPI("b.name", "Body Name [body id]", Units = APIEntry.UnitType.STRING)]
+        [TelemetryAPI("b.name", "Body Name", Units = APIEntry.UnitType.STRING, Category = "body", ReturnType = "string", Params = "int bodyId")]
         object BodyName(DataSources ds) => FlightGlobals.Bodies[int.Parse(ds.args[0])].name;
 
-        [TelemetryAPI("b.description", "Body Description [body id]", Units = APIEntry.UnitType.STRING)]
+        [TelemetryAPI("b.description", "Body Description", Units = APIEntry.UnitType.STRING, Category = "body", ReturnType = "string", Params = "int bodyId")]
         object BodyDescription(DataSources ds) => FlightGlobals.Bodies[int.Parse(ds.args[0])].bodyDescription;
 
-        [TelemetryAPI("b.number", "Number of Bodies")]
+        [TelemetryAPI("b.number", "Number of Bodies", Category = "body", ReturnType = "int")]
         object BodyCount(DataSources ds) => FlightGlobals.Bodies.Count;
 
-        [TelemetryAPI("b.index", "Flight Globals Index [body id]")]
+        [TelemetryAPI("b.index", "Flight Globals Index", Category = "body", ReturnType = "int", Params = "int bodyId")]
         object BodyIndex(DataSources ds) => FlightGlobals.Bodies[int.Parse(ds.args[0])].flightGlobalsIndex;
 
-        [TelemetryAPI("b.referenceBody", "Reference Body Name [body id]", Units = APIEntry.UnitType.STRING)]
+        [TelemetryAPI("b.referenceBody", "Reference Body Name", Units = APIEntry.UnitType.STRING, Category = "body", ReturnType = "string", Params = "int bodyId")]
         object BodyReferenceBody(DataSources ds)
         {
             var body = FlightGlobals.Bodies[int.Parse(ds.args[0])];
             return body.referenceBody != null ? body.referenceBody.name : "";
         }
 
-        [TelemetryAPI("b.orbitingBodies", "Orbiting Body Names [body id]", Plotable = false, Formatter = "StringArray")]
+        [TelemetryAPI("b.orbitingBodies", "Orbiting Body Names", Plotable = false, Formatter = "StringArray", Category = "body", ReturnType = "string[]", Params = "int bodyId")]
         object BodyOrbitingBodies(DataSources ds)
         {
             var names = new List<string>();
@@ -655,62 +655,62 @@ namespace Telemachus
 
         // --- Physical Properties ---
 
-        [TelemetryAPI("b.radius", "Body Radius [body id]", Units = APIEntry.UnitType.DISTANCE)]
+        [TelemetryAPI("b.radius", "Body Radius", Units = APIEntry.UnitType.DISTANCE, Category = "body", ReturnType = "double", Params = "int bodyId")]
         object Radius(DataSources ds) => FlightGlobals.Bodies[int.Parse(ds.args[0])].Radius;
 
-        [TelemetryAPI("b.mass", "Body Mass [body id]")]
+        [TelemetryAPI("b.mass", "Body Mass", Category = "body", ReturnType = "double", Params = "int bodyId")]
         object BodyMass(DataSources ds) => FlightGlobals.Bodies[int.Parse(ds.args[0])].Mass;
 
-        [TelemetryAPI("b.geeASL", "Surface Gravity in G [body id]", Units = APIEntry.UnitType.G)]
+        [TelemetryAPI("b.geeASL", "Surface Gravity in G", Units = APIEntry.UnitType.G, Category = "body", ReturnType = "double", Params = "int bodyId")]
         object BodyGeeASL(DataSources ds) => FlightGlobals.Bodies[int.Parse(ds.args[0])].GeeASL;
 
-        [TelemetryAPI("b.soi", "Body Sphere of Influence [body id]", Units = APIEntry.UnitType.DISTANCE)]
+        [TelemetryAPI("b.soi", "Body Sphere of Influence", Units = APIEntry.UnitType.DISTANCE, Category = "body", ReturnType = "double", Params = "int bodyId")]
         object Soi(DataSources ds) => FlightGlobals.Bodies[int.Parse(ds.args[0])].sphereOfInfluence;
 
-        [TelemetryAPI("b.hillSphere", "Hill Sphere Radius [body id]", Units = APIEntry.UnitType.DISTANCE)]
+        [TelemetryAPI("b.hillSphere", "Hill Sphere Radius", Units = APIEntry.UnitType.DISTANCE, Category = "body", ReturnType = "double", Params = "int bodyId")]
         object HillSphere(DataSources ds) => FlightGlobals.Bodies[int.Parse(ds.args[0])].hillSphere;
 
         // --- Rotation ---
 
-        [TelemetryAPI("b.rotationPeriod", "Rotation Period [body id]", Units = APIEntry.UnitType.TIME)]
+        [TelemetryAPI("b.rotationPeriod", "Rotation Period", Units = APIEntry.UnitType.TIME, Category = "body", ReturnType = "double", Params = "int bodyId")]
         object RotationPeriod(DataSources ds) => FlightGlobals.Bodies[int.Parse(ds.args[0])].rotationPeriod;
 
-        [TelemetryAPI("b.rotationAngle", "Current Rotation Angle [body id]", Units = APIEntry.UnitType.DEG)]
+        [TelemetryAPI("b.rotationAngle", "Current Rotation Angle", Units = APIEntry.UnitType.DEG, Category = "body", ReturnType = "double", Params = "int bodyId")]
         object BodyRotationAngle(DataSources ds) => FlightGlobals.Bodies[int.Parse(ds.args[0])].rotationAngle;
 
-        [TelemetryAPI("b.angularV", "Angular Velocity [body id]")]
+        [TelemetryAPI("b.angularV", "Angular Velocity", Category = "body", ReturnType = "double", Params = "int bodyId")]
         object BodyAngularV(DataSources ds) => FlightGlobals.Bodies[int.Parse(ds.args[0])].angularV;
 
-        [TelemetryAPI("b.tidallyLocked", "Tidally Locked [body id]")]
+        [TelemetryAPI("b.tidallyLocked", "Tidally Locked", Category = "body", ReturnType = "bool", Params = "int bodyId")]
         object TidallyLocked(DataSources ds) => FlightGlobals.Bodies[int.Parse(ds.args[0])].tidallyLocked;
 
-        [TelemetryAPI("b.rotates", "Body Rotates [body id]")]
+        [TelemetryAPI("b.rotates", "Body Rotates", Category = "body", ReturnType = "bool", Params = "int bodyId")]
         object BodyRotates(DataSources ds) => FlightGlobals.Bodies[int.Parse(ds.args[0])].rotates;
 
         // --- Atmosphere ---
 
-        [TelemetryAPI("b.atmosphere", "Has Atmosphere [body id]")]
+        [TelemetryAPI("b.atmosphere", "Has Atmosphere", Category = "body", ReturnType = "bool", Params = "int bodyId")]
         object BodyHasAtmosphere(DataSources ds) => FlightGlobals.Bodies[int.Parse(ds.args[0])].atmosphere;
 
-        [TelemetryAPI("b.maxAtmosphere", "Body Atmosphere Depth [body id]", Units = APIEntry.UnitType.DISTANCE)]
+        [TelemetryAPI("b.maxAtmosphere", "Body Atmosphere Depth", Units = APIEntry.UnitType.DISTANCE, Category = "body", ReturnType = "double", Params = "int bodyId")]
         object MaxAtmosphere(DataSources ds) => FlightGlobals.Bodies[int.Parse(ds.args[0])].atmosphereDepth;
 
-        [TelemetryAPI("b.atmosphereContainsOxygen", "Atmosphere contains oxygen [body id]")]
+        [TelemetryAPI("b.atmosphereContainsOxygen", "Atmosphere contains oxygen", Category = "body", ReturnType = "bool", Params = "int bodyId")]
         object AtmosphereContainsOxygen(DataSources ds) => FlightGlobals.Bodies[int.Parse(ds.args[0])].atmosphereContainsOxygen;
 
         // --- Surface ---
 
-        [TelemetryAPI("b.ocean", "Has Ocean [body id]")]
+        [TelemetryAPI("b.ocean", "Has Ocean", Category = "body", ReturnType = "bool", Params = "int bodyId")]
         object BodyHasOcean(DataSources ds) => FlightGlobals.Bodies[int.Parse(ds.args[0])].ocean;
 
         // --- Position ---
 
-        [TelemetryAPI("b.position", "Body World Position [body id]", Plotable = false, Formatter = "Vector3d")]
+        [TelemetryAPI("b.position", "Body World Position", Plotable = false, Formatter = "Vector3d", Category = "body", ReturnType = "Vector3d", Params = "int bodyId")]
         object BodyPosition(DataSources ds) => FlightGlobals.Bodies[int.Parse(ds.args[0])].position;
 
         // --- Time Warp ---
 
-        [TelemetryAPI("b.timeWarpAltitudeLimits", "Time Warp Altitude Limits [body id]", Plotable = false)]
+        [TelemetryAPI("b.timeWarpAltitudeLimits", "Time Warp Altitude Limits", Plotable = false, Category = "body", ReturnType = "object", Params = "int bodyId")]
         object BodyTimeWarpAltitudeLimits(DataSources ds)
         {
             float[] limits = FlightGlobals.Bodies[int.Parse(ds.args[0])].timeWarpAltitudeLimits;
@@ -718,60 +718,60 @@ namespace Telemachus
             return result;
         }
 
-        [TelemetryAPI("b.o.gravParameter", "Body Gravitational Parameter [body id]", Units = APIEntry.UnitType.GRAV)]
+        [TelemetryAPI("b.o.gravParameter", "Body Gravitational Parameter", Units = APIEntry.UnitType.GRAV, Category = "body", ReturnType = "double", Params = "int bodyId")]
         object GravParameter(DataSources ds) => FlightGlobals.Bodies[int.Parse(ds.args[0])].gravParameter;
 
-        [TelemetryAPI("b.o.relativeVelocity", "Relative Velocity [body id]", Units = APIEntry.UnitType.VELOCITY)]
+        [TelemetryAPI("b.o.relativeVelocity", "Relative Velocity", Units = APIEntry.UnitType.VELOCITY, Category = "body", ReturnType = "double", Params = "int bodyId")]
         object BodyRelativeVelocity(DataSources ds) => FlightGlobals.Bodies[int.Parse(ds.args[0])].orbit.GetRelativeVel().magnitude;
 
-        [TelemetryAPI("b.o.PeA", "Periapsis [body id]", Units = APIEntry.UnitType.DISTANCE)]
+        [TelemetryAPI("b.o.PeA", "Periapsis", Units = APIEntry.UnitType.DISTANCE, Category = "body", ReturnType = "double", Params = "int bodyId")]
         object BodyPeA(DataSources ds) => FlightGlobals.Bodies[int.Parse(ds.args[0])].orbit.PeA;
 
-        [TelemetryAPI("b.o.ApA", "Apoapsis [body id]", Units = APIEntry.UnitType.DISTANCE)]
+        [TelemetryAPI("b.o.ApA", "Apoapsis", Units = APIEntry.UnitType.DISTANCE, Category = "body", ReturnType = "double", Params = "int bodyId")]
         object BodyApA(DataSources ds) => FlightGlobals.Bodies[int.Parse(ds.args[0])].orbit.ApA;
 
-        [TelemetryAPI("b.o.timeToAp", "Time to Apoapsis [body id]", Units = APIEntry.UnitType.TIME)]
+        [TelemetryAPI("b.o.timeToAp", "Time to Apoapsis", Units = APIEntry.UnitType.TIME, Category = "body", ReturnType = "double", Params = "int bodyId")]
         object BodyTimeToAp(DataSources ds) => FlightGlobals.Bodies[int.Parse(ds.args[0])].orbit.timeToAp;
 
-        [TelemetryAPI("b.o.timeToPe", "Time to Periapsis [body id]", Units = APIEntry.UnitType.TIME)]
+        [TelemetryAPI("b.o.timeToPe", "Time to Periapsis", Units = APIEntry.UnitType.TIME, Category = "body", ReturnType = "double", Params = "int bodyId")]
         object BodyTimeToPe(DataSources ds) => FlightGlobals.Bodies[int.Parse(ds.args[0])].orbit.timeToPe;
 
-        [TelemetryAPI("b.o.inclination", "Inclination [body id]", Units = APIEntry.UnitType.DEG)]
+        [TelemetryAPI("b.o.inclination", "Inclination", Units = APIEntry.UnitType.DEG, Category = "body", ReturnType = "double", Params = "int bodyId")]
         object BodyInclination(DataSources ds) => FlightGlobals.Bodies[int.Parse(ds.args[0])].orbit.inclination;
 
-        [TelemetryAPI("b.o.eccentricity", "Eccentricity [body id]")]
+        [TelemetryAPI("b.o.eccentricity", "Eccentricity", Category = "body", ReturnType = "double", Params = "int bodyId")]
         object BodyEccentricity(DataSources ds) => FlightGlobals.Bodies[int.Parse(ds.args[0])].orbit.eccentricity;
 
-        [TelemetryAPI("b.o.period", "Orbital Period [body id]", Units = APIEntry.UnitType.TIME)]
+        [TelemetryAPI("b.o.period", "Orbital Period", Units = APIEntry.UnitType.TIME, Category = "body", ReturnType = "double", Params = "int bodyId")]
         object BodyPeriod(DataSources ds) => FlightGlobals.Bodies[int.Parse(ds.args[0])].orbit.period;
 
-        [TelemetryAPI("b.o.argumentOfPeriapsis", "Argument of Periapsis [body id]", Units = APIEntry.UnitType.DEG)]
+        [TelemetryAPI("b.o.argumentOfPeriapsis", "Argument of Periapsis", Units = APIEntry.UnitType.DEG, Category = "body", ReturnType = "double", Params = "int bodyId")]
         object BodyArgumentOfPeriapsis(DataSources ds) => FlightGlobals.Bodies[int.Parse(ds.args[0])].orbit.argumentOfPeriapsis;
 
-        [TelemetryAPI("b.o.timeToTransition1", "Time to Transition 1 [body id]", Units = APIEntry.UnitType.TIME)]
+        [TelemetryAPI("b.o.timeToTransition1", "Time to Transition 1", Units = APIEntry.UnitType.TIME, Category = "body", ReturnType = "double", Params = "int bodyId")]
         object BodyTimeToTransition1(DataSources ds) => FlightGlobals.Bodies[int.Parse(ds.args[0])].orbit.timeToTransition1;
 
-        [TelemetryAPI("b.o.timeToTransition2", "Time to Transition 2 [body id]", Units = APIEntry.UnitType.TIME)]
+        [TelemetryAPI("b.o.timeToTransition2", "Time to Transition 2", Units = APIEntry.UnitType.TIME, Category = "body", ReturnType = "double", Params = "int bodyId")]
         object BodyTimeToTransition2(DataSources ds) => FlightGlobals.Bodies[int.Parse(ds.args[0])].orbit.timeToTransition2;
 
-        [TelemetryAPI("b.o.sma", "Semimajor Axis [body id]", Units = APIEntry.UnitType.DISTANCE)]
+        [TelemetryAPI("b.o.sma", "Semimajor Axis", Units = APIEntry.UnitType.DISTANCE, Category = "body", ReturnType = "double", Params = "int bodyId")]
         object BodySma(DataSources ds) => FlightGlobals.Bodies[int.Parse(ds.args[0])].orbit.semiMajorAxis;
 
-        [TelemetryAPI("b.o.lan", "Longitude of Ascending Node [body id]", Units = APIEntry.UnitType.DEG)]
+        [TelemetryAPI("b.o.lan", "Longitude of Ascending Node", Units = APIEntry.UnitType.DEG, Category = "body", ReturnType = "double", Params = "int bodyId")]
         object BodyLan(DataSources ds) => FlightGlobals.Bodies[int.Parse(ds.args[0])].orbit.LAN;
 
-        [TelemetryAPI("b.o.maae", "Mean Anomaly at Epoch [body id]")]
+        [TelemetryAPI("b.o.maae", "Mean Anomaly at Epoch", Category = "body", ReturnType = "double", Params = "int bodyId")]
         object BodyMaae(DataSources ds) => FlightGlobals.Bodies[int.Parse(ds.args[0])].orbit.meanAnomalyAtEpoch;
 
-        [TelemetryAPI("b.o.timeOfPeriapsisPassage", "Time of Periapsis Passage [body id]", Units = APIEntry.UnitType.DATE)]
+        [TelemetryAPI("b.o.timeOfPeriapsisPassage", "Time of Periapsis Passage", Units = APIEntry.UnitType.DATE, Category = "body", ReturnType = "double", Params = "int bodyId")]
         object BodyTimeOfPeriapsisPassage(DataSources ds) =>
             Planetarium.GetUniversalTime() - FlightGlobals.Bodies[int.Parse(ds.args[0])].orbit.ObT;
 
-        [TelemetryAPI("b.o.trueAnomaly", "True Anomaly [body id]", Units = APIEntry.UnitType.DEG)]
+        [TelemetryAPI("b.o.trueAnomaly", "True Anomaly", Units = APIEntry.UnitType.DEG, Category = "body", ReturnType = "double", Params = "int bodyId")]
         object BodyTrueAnomaly(DataSources ds) =>
             FlightGlobals.Bodies[int.Parse(ds.args[0])].orbit.TrueAnomalyAtUT(Planetarium.GetUniversalTime()) * (180.0 / Math.PI);
 
-        [TelemetryAPI("b.o.phaseAngle", "Phase Angle [body id]", Units = APIEntry.UnitType.DEG)]
+        [TelemetryAPI("b.o.phaseAngle", "Phase Angle", Units = APIEntry.UnitType.DEG, Category = "body", ReturnType = "double", Params = "int bodyId")]
         object BodyPhaseAngle(DataSources ds)
         {
             CelestialBody body = FlightGlobals.Bodies[int.Parse(ds.args[0])];
@@ -800,8 +800,8 @@ namespace Telemachus
             return (phaseAngle < 0) ? phaseAngle + 360 : phaseAngle;
         }
 
-        [TelemetryAPI("b.o.truePositionAtUT", "True Position at the given UT [body id, universal time]",
-            Plotable = false, Formatter = "Vector3d")]
+        [TelemetryAPI("b.o.truePositionAtUT", "True Position at the given UT",
+            Plotable = false, Formatter = "Vector3d", Category = "body", ReturnType = "Vector3d", Params = "int bodyId, double UT")]
         object BodyTruePositionAtUT(DataSources ds)
         {
             int bodyId = int.Parse(ds.args[0]);
@@ -817,36 +817,36 @@ namespace Telemachus
         public MapViewDataLinkHandler(FormatterProvider formatters)
             : base(formatters) { }
 
-        [TelemetryAPI("m.toggleMapView", " Toggle Map View", IsAction = true)]
+        [TelemetryAPI("m.toggleMapView", " Toggle Map View", IsAction = true, Category = "map", ReturnType = "double")]
         object ToggleMapView(DataSources ds)
         {
             if (MapView.MapIsEnabled) MapView.ExitMapView(); else MapView.EnterMapView();
             return 0d;
         }
 
-        [TelemetryAPI("m.enterMapView", " Enter Map View", IsAction = true)]
+        [TelemetryAPI("m.enterMapView", " Enter Map View", IsAction = true, Category = "map", ReturnType = "double")]
         object EnterMapView(DataSources ds) { MapView.EnterMapView(); return 0d; }
 
-        [TelemetryAPI("m.exitMapView", " Exit Map View", IsAction = true)]
+        [TelemetryAPI("m.exitMapView", " Exit Map View", IsAction = true, Category = "map", ReturnType = "double")]
         object ExitMapView(DataSources ds) { MapView.ExitMapView(); return 0d; }
 
-        [TelemetryAPI("m.mapIsEnabled", "Map View Is Enabled")]
+        [TelemetryAPI("m.mapIsEnabled", "Map View Is Enabled", Category = "map", ReturnType = "bool")]
         object MapIsEnabled(DataSources ds) => MapView.MapIsEnabled;
 
-        [TelemetryAPI("o.maneuverNodes", "Maneuver Nodes  [object maneuverNodes]",
-            Plotable = false, Formatter = "ManeuverNodeList")]
+        [TelemetryAPI("o.maneuverNodes", "Maneuver Nodes",
+            Plotable = false, Formatter = "ManeuverNodeList", Category = "maneuver", ReturnType = "object")]
         object ManeuverNodes(DataSources ds)
         {
             PluginLogger.debug("Start GET");
             return ds.vessel.patchedConicSolver.maneuverNodes;
         }
 
-        [TelemetryAPI("o.maneuverNodes.count", "Number of Maneuver Nodes")]
+        [TelemetryAPI("o.maneuverNodes.count", "Number of Maneuver Nodes", Category = "maneuver", ReturnType = "int")]
         object ManeuverNodeCount(DataSources ds) =>
             ds.vessel.patchedConicSolver.maneuverNodes.Count;
 
-        [TelemetryAPI("o.maneuverNodes.deltaV", "Maneuver Node Delta-V Vector [int id]",
-            Plotable = false, Formatter = "Vector3d")]
+        [TelemetryAPI("o.maneuverNodes.deltaV", "Maneuver Node Delta-V Vector",
+            Plotable = false, Formatter = "Vector3d", Category = "maneuver", ReturnType = "Vector3d", Params = "int id")]
         object ManeuverNodeDeltaV(DataSources ds)
         {
             ManeuverNode node = GetManeuverNode(ds, int.Parse(ds.args[0]));
@@ -854,8 +854,8 @@ namespace Telemachus
             return node.DeltaV;
         }
 
-        [TelemetryAPI("o.maneuverNodes.deltaVMagnitude", "Maneuver Node Delta-V Magnitude [int id]",
-            Units = APIEntry.UnitType.VELOCITY)]
+        [TelemetryAPI("o.maneuverNodes.deltaVMagnitude", "Maneuver Node Delta-V Magnitude",
+            Units = APIEntry.UnitType.VELOCITY, Category = "maneuver", ReturnType = "double", Params = "int id")]
         object ManeuverNodeDeltaVMagnitude(DataSources ds)
         {
             ManeuverNode node = GetManeuverNode(ds, int.Parse(ds.args[0]));
@@ -863,8 +863,8 @@ namespace Telemachus
             return node.DeltaV.magnitude;
         }
 
-        [TelemetryAPI("o.maneuverNodes.UT", "Maneuver Node Universal Time [int id]",
-            Units = APIEntry.UnitType.DATE)]
+        [TelemetryAPI("o.maneuverNodes.UT", "Maneuver Node Universal Time",
+            Units = APIEntry.UnitType.DATE, Category = "maneuver", ReturnType = "double", Params = "int id")]
         object ManeuverNodeUT(DataSources ds)
         {
             ManeuverNode node = GetManeuverNode(ds, int.Parse(ds.args[0]));
@@ -872,8 +872,8 @@ namespace Telemachus
             return node.UT;
         }
 
-        [TelemetryAPI("o.maneuverNodes.timeTo", "Time Until Maneuver Node [int id]",
-            Units = APIEntry.UnitType.TIME)]
+        [TelemetryAPI("o.maneuverNodes.timeTo", "Time Until Maneuver Node",
+            Units = APIEntry.UnitType.TIME, Category = "maneuver", ReturnType = "double", Params = "int id")]
         object ManeuverNodeTimeTo(DataSources ds)
         {
             ManeuverNode node = GetManeuverNode(ds, int.Parse(ds.args[0]));
@@ -881,8 +881,8 @@ namespace Telemachus
             return node.UT - Planetarium.GetUniversalTime();
         }
 
-        [TelemetryAPI("o.maneuverNodes.burnVector", "Maneuver Node Burn Vector (world space) [int id]",
-            Plotable = false, Formatter = "Vector3d")]
+        [TelemetryAPI("o.maneuverNodes.burnVector", "Maneuver Node Burn Vector (world space)",
+            Plotable = false, Formatter = "Vector3d", Category = "maneuver", ReturnType = "Vector3d", Params = "int id")]
         object ManeuverNodeBurnVector(DataSources ds)
         {
             ManeuverNode node = GetManeuverNode(ds, int.Parse(ds.args[0]));
@@ -891,8 +891,8 @@ namespace Telemachus
         }
 
         [TelemetryAPI("o.maneuverNodes.orbitPatches",
-            "Orbit Patches for Maneuver Node [int id]",
-            Plotable = false, Formatter = "OrbitPatchList")]
+            "Orbit Patches for Maneuver Node",
+            Plotable = false, Formatter = "OrbitPatchList", Category = "maneuver", ReturnType = "object", Params = "int id")]
         object ManeuverNodeOrbitPatches(DataSources ds)
         {
             ManeuverNode node = GetManeuverNode(ds, int.Parse(ds.args[0]));
@@ -901,8 +901,8 @@ namespace Telemachus
         }
 
         [TelemetryAPI("o.maneuverNodes.trueAnomalyAtUTForManeuverNodesOrbitPatch",
-            "For a maneuver node, The orbit patch's True Anomaly at Universal Time [int id, orbit patch index, universal time]",
-            Units = APIEntry.UnitType.DEG)]
+            "For a maneuver node, The orbit patch's True Anomaly at Universal Time",
+            Units = APIEntry.UnitType.DEG, Category = "maneuver", ReturnType = "double", Params = "int id, int patchIndex, double UT")]
         object TrueAnomalyAtUTForManeuverNodesOrbitPatch(DataSources ds)
         {
             ManeuverNode node = GetManeuverNode(ds, int.Parse(ds.args[0]));
@@ -915,8 +915,8 @@ namespace Telemachus
         }
 
         [TelemetryAPI("o.maneuverNodes.UTForTrueAnomalyForManeuverNodesOrbitPatch",
-            "For a maneuver node, The orbit patch's True Anomaly at Universal Time [int id, orbit patch index, universal time]",
-            Units = APIEntry.UnitType.DATE)]
+            "For a maneuver node, The orbit patch's Universal Time at True Anomaly",
+            Units = APIEntry.UnitType.DATE, Category = "maneuver", ReturnType = "double", Params = "int id, int patchIndex, double trueAnomaly")]
         object UTForTrueAnomalyForManeuverNodesOrbitPatch(DataSources ds)
         {
             ManeuverNode node = GetManeuverNode(ds, int.Parse(ds.args[0]));
@@ -930,8 +930,8 @@ namespace Telemachus
         }
 
         [TelemetryAPI("o.maneuverNodes.relativePositionAtTrueAnomalyForManeuverNodesOrbitPatch",
-            "For a maneuver node, The orbit patch's predicted displacement from the center of the main body at the given true anomaly [int id, orbit patch index, true anomaly]",
-            Formatter = "Vector3d")]
+            "For a maneuver node, The orbit patch's predicted displacement from the center of the main body at the given true anomaly",
+            Formatter = "Vector3d", Category = "maneuver", ReturnType = "Vector3d", Params = "int id, int patchIndex, double trueAnomaly")]
         object RelativePositionAtTrueAnomalyForManeuverNodesOrbitPatch(DataSources ds)
         {
             ManeuverNode node = GetManeuverNode(ds, int.Parse(ds.args[0]));
@@ -944,8 +944,8 @@ namespace Telemachus
         }
 
         [TelemetryAPI("o.maneuverNodes.relativePositionAtUTForManeuverNodesOrbitPatch",
-            "For a maneuver node, The orbit patch's predicted displacement from the center of the main body at the given universal time [int id, orbit patch index, universal time]",
-            Formatter = "Vector3d")]
+            "For a maneuver node, The orbit patch's predicted displacement from the center of the main body at the given universal time",
+            Formatter = "Vector3d", Category = "maneuver", ReturnType = "Vector3d", Params = "int id, int patchIndex, double UT")]
         object RelativePositionAtUTForManeuverNodesOrbitPatch(DataSources ds)
         {
             ManeuverNode node = GetManeuverNode(ds, int.Parse(ds.args[0]));
@@ -963,8 +963,8 @@ namespace Telemachus
         // then we add the remaining manual registrations.
 
         [TelemetryAPI("o.addManeuverNode",
-            "Add a manuever based on a UT and DeltaV X, Y and Z [float ut, float x, y, z]",
-            IsAction = true, Formatter = "ManeuverNode")]
+            "Add a manuever based on a UT and DeltaV X, Y and Z",
+            IsAction = true, Formatter = "ManeuverNode", Category = "maneuver", ReturnType = "object", Params = "float ut, float x, float y, float z")]
         object AddManeuverNode(DataSources ds)
         {
             ut = float.Parse(ds.args[0]);
@@ -979,8 +979,8 @@ namespace Telemachus
         }
 
         [TelemetryAPI("o.updateManeuverNode",
-            "Set a manuever node's UT and DeltaV X, Y and Z [int id, float ut, float x, y, z]",
-            IsAction = true, Formatter = "ManeuverNode")]
+            "Set a manuever node's UT and DeltaV X, Y and Z",
+            IsAction = true, Formatter = "ManeuverNode", Category = "maneuver", ReturnType = "object", Params = "int id, float ut, float x, float y, float z")]
         object UpdateManeuverNode(DataSources ds)
         {
             ManeuverNode node = GetManeuverNode(ds, int.Parse(ds.args[0]));
@@ -994,7 +994,7 @@ namespace Telemachus
             return node;
         }
 
-        [TelemetryAPI("o.removeManeuverNode", "Remove a manuever node [int id]", IsAction = true)]
+        [TelemetryAPI("o.removeManeuverNode", "Remove a manuever node", IsAction = true, Category = "maneuver", ReturnType = "bool", Params = "int id")]
         object RemoveManeuverNode(DataSources ds)
         {
             ManeuverNode node = GetManeuverNode(ds, int.Parse(ds.args[0]));
@@ -1019,7 +1019,7 @@ namespace Telemachus
         public LangDataLinkHandler(FormatterProvider formatters)
             : base(formatters) { }
 
-        [TelemetryAPI("o.gameLanguage", "Language  [object gameLanguage]", Units = APIEntry.UnitType.STRING)]
+        [TelemetryAPI("o.gameLanguage", "Language", Units = APIEntry.UnitType.STRING, Category = "orbit", ReturnType = "string")]
         object GameLanguage(DataSources ds)
         {
             PluginLogger.debug("Start GET");

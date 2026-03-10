@@ -15,35 +15,35 @@ namespace Telemachus
         public FlyByWireDataLinkHandler(FormatterProvider formatters)
             : base(formatters) { }
 
-        [TelemetryAPI("v.setYaw", "Yaw [float yaw]", IsAction = true)]
+        [TelemetryAPI("v.setYaw", "Yaw", IsAction = true, Category = "fbw", ReturnType = "int", Params = "float yaw")]
         object SetYaw(DataSources ds)
         {
             lock (fbwLock) { yaw = checkFlightStateParameters(float.Parse(ds.args[0])); }
             return 0;
         }
 
-        [TelemetryAPI("v.setPitch", "Pitch [float pitch]", IsAction = true)]
+        [TelemetryAPI("v.setPitch", "Pitch", IsAction = true, Category = "fbw", ReturnType = "int", Params = "float pitch")]
         object SetPitch(DataSources ds)
         {
             lock (fbwLock) { pitch = checkFlightStateParameters(float.Parse(ds.args[0])); }
             return 0;
         }
 
-        [TelemetryAPI("v.setRoll", "Roll [float roll]", IsAction = true)]
+        [TelemetryAPI("v.setRoll", "Roll", IsAction = true, Category = "fbw", ReturnType = "int", Params = "float roll")]
         object SetRoll(DataSources ds)
         {
             lock (fbwLock) { roll = checkFlightStateParameters(float.Parse(ds.args[0])); }
             return 0;
         }
 
-        [TelemetryAPI("v.setFbW", "Set Fly by Wire On or Off [int state]", IsAction = true)]
+        [TelemetryAPI("v.setFbW", "Set Fly by Wire On or Off", IsAction = true, Category = "fbw", ReturnType = "int", Params = "int state")]
         object SetFbW(DataSources ds)
         {
             lock (fbwLock) { on_attitude = int.Parse(ds.args[0]); }
             return 0;
         }
 
-        [TelemetryAPI("v.setPitchYawRollXYZ", "Set pitch, yaw, roll, X, Y and Z [float pitch, yaw, roll, x, y, z]", IsAction = true)]
+        [TelemetryAPI("v.setPitchYawRollXYZ", "Set pitch, yaw, roll, X, Y and Z", IsAction = true, Category = "fbw", ReturnType = "int", Params = "float pitch, float yaw, float roll, float x, float y, float z")]
         object SetPitchYawRollXYZ(DataSources ds)
         {
             lock (fbwLock)
@@ -58,7 +58,7 @@ namespace Telemachus
             return 0;
         }
 
-        [TelemetryAPI("v.setAttitude", "Set pitch, yaw, roll [float pitch, yaw, roll]", IsAction = true)]
+        [TelemetryAPI("v.setAttitude", "Set pitch, yaw, roll", IsAction = true, Category = "fbw", ReturnType = "int", Params = "float pitch, float yaw, float roll")]
         object SetAttitude(DataSources ds)
         {
             lock (fbwLock)
@@ -70,7 +70,7 @@ namespace Telemachus
             return 0;
         }
 
-        [TelemetryAPI("v.setTranslation", "Set X, Y and Z [float x, y, z]", IsAction = true)]
+        [TelemetryAPI("v.setTranslation", "Set X, Y and Z", IsAction = true, Category = "fbw", ReturnType = "int", Params = "float x, float y, float z")]
         object SetTranslation(DataSources ds)
         {
             lock (fbwLock)
@@ -194,110 +194,110 @@ namespace Telemachus
 
         // --- Throttle ---
 
-        [TelemetryAPI("f.throttle", "Throttle")]
+        [TelemetryAPI("f.throttle", "Throttle", Category = "flight", ReturnType = "double")]
         object Throttle(DataSources ds) => ds.vessel.ctrlState.mainThrottle;
 
         // --- Control Inputs (current frame) ---
 
-        [TelemetryAPI("f.pitchInput", "Pitch Control Input")]
+        [TelemetryAPI("f.pitchInput", "Pitch Control Input", Category = "flight", ReturnType = "double")]
         object PitchInput(DataSources ds) => ds.vessel.ctrlState.pitch;
 
-        [TelemetryAPI("f.yawInput", "Yaw Control Input")]
+        [TelemetryAPI("f.yawInput", "Yaw Control Input", Category = "flight", ReturnType = "double")]
         object YawInput(DataSources ds) => ds.vessel.ctrlState.yaw;
 
-        [TelemetryAPI("f.rollInput", "Roll Control Input")]
+        [TelemetryAPI("f.rollInput", "Roll Control Input", Category = "flight", ReturnType = "double")]
         object RollInput(DataSources ds) => ds.vessel.ctrlState.roll;
 
-        [TelemetryAPI("f.xInput", "RCS X Translation Input")]
+        [TelemetryAPI("f.xInput", "RCS X Translation Input", Category = "flight", ReturnType = "double")]
         object XInput(DataSources ds) => ds.vessel.ctrlState.X;
 
-        [TelemetryAPI("f.yInput", "RCS Y Translation Input")]
+        [TelemetryAPI("f.yInput", "RCS Y Translation Input", Category = "flight", ReturnType = "double")]
         object YInput(DataSources ds) => ds.vessel.ctrlState.Y;
 
-        [TelemetryAPI("f.zInput", "RCS Z Translation Input")]
+        [TelemetryAPI("f.zInput", "RCS Z Translation Input", Category = "flight", ReturnType = "double")]
         object ZInput(DataSources ds) => ds.vessel.ctrlState.Z;
 
         // --- Trim ---
 
-        [TelemetryAPI("f.pitchTrim", "Pitch Trim")]
+        [TelemetryAPI("f.pitchTrim", "Pitch Trim", Category = "flight", ReturnType = "double")]
         object PitchTrim(DataSources ds) => ds.vessel.ctrlState.pitchTrim;
 
-        [TelemetryAPI("f.yawTrim", "Yaw Trim")]
+        [TelemetryAPI("f.yawTrim", "Yaw Trim", Category = "flight", ReturnType = "double")]
         object YawTrim(DataSources ds) => ds.vessel.ctrlState.yawTrim;
 
-        [TelemetryAPI("f.rollTrim", "Roll Trim")]
+        [TelemetryAPI("f.rollTrim", "Roll Trim", Category = "flight", ReturnType = "double")]
         object RollTrim(DataSources ds) => ds.vessel.ctrlState.rollTrim;
 
         // --- Control State ---
 
-        [TelemetryAPI("f.isNeutral", "Controls Are Neutral")]
+        [TelemetryAPI("f.isNeutral", "Controls Are Neutral", Category = "flight", ReturnType = "bool")]
         object IsNeutral(DataSources ds) => ds.vessel.ctrlState.isNeutral;
 
-        [TelemetryAPI("f.killRot", "SAS Kill Rotation Active")]
+        [TelemetryAPI("f.killRot", "SAS Kill Rotation Active", Category = "flight", ReturnType = "bool")]
         object KillRot(DataSources ds) => ds.vessel.ctrlState.killRot;
 
         // --- Action Group Values ---
 
-        [TelemetryAPI("v.rcsValue", "Query RCS value")]
+        [TelemetryAPI("v.rcsValue", "Query RCS value", Category = "flight", ReturnType = "bool")]
         object RcsValue(DataSources ds) => ds.vessel.ActionGroups[KSPActionGroup.RCS];
 
-        [TelemetryAPI("v.sasValue", "Query SAS value")]
+        [TelemetryAPI("v.sasValue", "Query SAS value", Category = "flight", ReturnType = "bool")]
         object SasValue(DataSources ds) => ds.vessel.ActionGroups[KSPActionGroup.SAS];
 
-        [TelemetryAPI("v.lightValue", "Query light value")]
+        [TelemetryAPI("v.lightValue", "Query light value", Category = "flight", ReturnType = "bool")]
         object LightValue(DataSources ds) => ds.vessel.ActionGroups[KSPActionGroup.Light];
 
-        [TelemetryAPI("v.brakeValue", "Query brake value")]
+        [TelemetryAPI("v.brakeValue", "Query brake value", Category = "flight", ReturnType = "bool")]
         object BrakeValue(DataSources ds) => ds.vessel.ActionGroups[KSPActionGroup.Brakes];
 
-        [TelemetryAPI("v.gearValue", "Query gear value")]
+        [TelemetryAPI("v.gearValue", "Query gear value", Category = "flight", ReturnType = "bool")]
         object GearValue(DataSources ds) => ds.vessel.ActionGroups[KSPActionGroup.Gear];
 
-        [TelemetryAPI("v.abortValue", "Query abort value")]
+        [TelemetryAPI("v.abortValue", "Query abort value", Category = "flight", ReturnType = "bool")]
         object AbortValue(DataSources ds) => ds.vessel.ActionGroups[KSPActionGroup.Abort];
 
-        [TelemetryAPI("v.ag1Value", "Query Action Group 1 value")]
+        [TelemetryAPI("v.ag1Value", "Query Action Group 1 value", Category = "flight", ReturnType = "bool")]
         object Ag1Value(DataSources ds) => ds.vessel.ActionGroups[KSPActionGroup.Custom01];
 
-        [TelemetryAPI("v.ag2Value", "Query Action Group 2 value")]
+        [TelemetryAPI("v.ag2Value", "Query Action Group 2 value", Category = "flight", ReturnType = "bool")]
         object Ag2Value(DataSources ds) => ds.vessel.ActionGroups[KSPActionGroup.Custom02];
 
-        [TelemetryAPI("v.ag3Value", "Query Action Group 3 value")]
+        [TelemetryAPI("v.ag3Value", "Query Action Group 3 value", Category = "flight", ReturnType = "bool")]
         object Ag3Value(DataSources ds) => ds.vessel.ActionGroups[KSPActionGroup.Custom03];
 
-        [TelemetryAPI("v.ag4Value", "Query Action Group 4 value")]
+        [TelemetryAPI("v.ag4Value", "Query Action Group 4 value", Category = "flight", ReturnType = "bool")]
         object Ag4Value(DataSources ds) => ds.vessel.ActionGroups[KSPActionGroup.Custom04];
 
-        [TelemetryAPI("v.ag5Value", "Query Action Group 5 value")]
+        [TelemetryAPI("v.ag5Value", "Query Action Group 5 value", Category = "flight", ReturnType = "bool")]
         object Ag5Value(DataSources ds) => ds.vessel.ActionGroups[KSPActionGroup.Custom05];
 
-        [TelemetryAPI("v.ag6Value", "Query Action Group 6 value")]
+        [TelemetryAPI("v.ag6Value", "Query Action Group 6 value", Category = "flight", ReturnType = "bool")]
         object Ag6Value(DataSources ds) => ds.vessel.ActionGroups[KSPActionGroup.Custom06];
 
-        [TelemetryAPI("v.ag7Value", "Query Action Group 7 value")]
+        [TelemetryAPI("v.ag7Value", "Query Action Group 7 value", Category = "flight", ReturnType = "bool")]
         object Ag7Value(DataSources ds) => ds.vessel.ActionGroups[KSPActionGroup.Custom07];
 
-        [TelemetryAPI("v.ag8Value", "Query Action Group 8 value")]
+        [TelemetryAPI("v.ag8Value", "Query Action Group 8 value", Category = "flight", ReturnType = "bool")]
         object Ag8Value(DataSources ds) => ds.vessel.ActionGroups[KSPActionGroup.Custom08];
 
-        [TelemetryAPI("v.ag9Value", "Query Action Group 9 value")]
+        [TelemetryAPI("v.ag9Value", "Query Action Group 9 value", Category = "flight", ReturnType = "bool")]
         object Ag9Value(DataSources ds) => ds.vessel.ActionGroups[KSPActionGroup.Custom09];
 
-        [TelemetryAPI("v.ag10Value", "Query Action Group 10 value")]
+        [TelemetryAPI("v.ag10Value", "Query Action Group 10 value", Category = "flight", ReturnType = "bool")]
         object Ag10Value(DataSources ds) => ds.vessel.ActionGroups[KSPActionGroup.Custom10];
 
-        [TelemetryAPI("v.precisionControlValue", "Query precision controls value")]
+        [TelemetryAPI("v.precisionControlValue", "Query precision controls value", Category = "flight", ReturnType = "bool")]
         object PrecisionControlValue(DataSources ds) => FlightInputHandler.fetch.precisionMode;
 
         // --- SAS / Autopilot ---
 
-        [TelemetryAPI("f.sasMode", "Current SAS Mode", Units = APIEntry.UnitType.STRING)]
+        [TelemetryAPI("f.sasMode", "Current SAS Mode", Units = APIEntry.UnitType.STRING, Category = "flight", ReturnType = "string")]
         object SasMode(DataSources ds) => ds.vessel.Autopilot.Mode.ToString();
 
-        [TelemetryAPI("f.sasEnabled", "SAS Autopilot Enabled")]
+        [TelemetryAPI("f.sasEnabled", "SAS Autopilot Enabled", Category = "flight", ReturnType = "bool")]
         object SasEnabled(DataSources ds) => ds.vessel.Autopilot.Enabled;
 
-        [TelemetryAPI("f.setSASMode", "Set SAS Mode [string mode: StabilityAssist, Prograde, Retrograde, Normal, Antinormal, RadialIn, RadialOut, Target, AntiTarget, Maneuver]", IsAction = true)]
+        [TelemetryAPI("f.setSASMode", "Set SAS Mode", IsAction = true, Category = "flight", ReturnType = "string", Params = "string mode")]
         object SetSASMode(DataSources ds)
         {
             var mode = (VesselAutopilot.AutopilotMode)Enum.Parse(
@@ -308,21 +308,21 @@ namespace Telemachus
 
         // --- Trim Actions ---
 
-        [TelemetryAPI("f.setPitchTrim", "Set Pitch Trim [float trim]", IsAction = true)]
+        [TelemetryAPI("f.setPitchTrim", "Set Pitch Trim", IsAction = true, Category = "flight", ReturnType = "int", Params = "float trim")]
         object SetPitchTrim(DataSources ds)
         {
             ds.vessel.ctrlState.pitchTrim = checkFlightStateParameters(float.Parse(ds.args[0]));
             return 0;
         }
 
-        [TelemetryAPI("f.setYawTrim", "Set Yaw Trim [float trim]", IsAction = true)]
+        [TelemetryAPI("f.setYawTrim", "Set Yaw Trim", IsAction = true, Category = "flight", ReturnType = "int", Params = "float trim")]
         object SetYawTrim(DataSources ds)
         {
             ds.vessel.ctrlState.yawTrim = checkFlightStateParameters(float.Parse(ds.args[0]));
             return 0;
         }
 
-        [TelemetryAPI("f.setRollTrim", "Set Roll Trim [float trim]", IsAction = true)]
+        [TelemetryAPI("f.setRollTrim", "Set Roll Trim", IsAction = true, Category = "flight", ReturnType = "int", Params = "float trim")]
         object SetRollTrim(DataSources ds)
         {
             ds.vessel.ctrlState.rollTrim = checkFlightStateParameters(float.Parse(ds.args[0]));

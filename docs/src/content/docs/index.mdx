@@ -1,0 +1,38 @@
+---
+title: Telemachus Reborn
+description: Real-time telemetry and flight control for Kerbal Space Program.
+template: splash
+hero:
+  tagline: Stream live telemetry data from KSP over HTTP and WebSocket.
+  actions:
+    - text: Get Started
+      link: /Telemachus-1/guides/introduction/
+      icon: right-arrow
+    - text: API Reference
+      link: /Telemachus-1/api/
+      variant: minimal
+---
+
+import { Card, CardGrid } from "@astrojs/starlight/components";
+
+<CardGrid stagger>
+  <Card title="HTTP & WebSocket" icon="laptop">
+    Query 400+ telemetry variables via REST endpoints or subscribe to real-time
+    updates over WebSocket.
+  </Card>
+
+  <Card title="Flight Control" icon="rocket">
+    Send commands to your vessel — throttle, staging, SAS, RCS, action groups,
+    and fly-by-wire attitude control.
+  </Card>
+
+  <Card title="Mod Integrations" icon="puzzle">
+    Built-in support for FAR aerodynamics, MechJeb autopilot, RealChute,
+    Astrogator, and more.
+  </Card>
+
+  <Card title="Open API" icon="open-book">
+    Full OpenAPI 3.1 spec with 417 documented endpoints. Build dashboards,
+    autopilots, or mission control interfaces.
+  </Card>
+</CardGrid>

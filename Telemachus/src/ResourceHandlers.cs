@@ -13,23 +13,23 @@ namespace Telemachus
             sensorCache = new SensorCache(vesselChangeDetector);
         }
 
-        [TelemetryAPI("s.sensor", "Sensor Information [string sensor type]", Formatter = "SensorModuleList")]
+        [TelemetryAPI("s.sensor", "Sensor Information", Formatter = "SensorModuleList", Category = "sensor", ReturnType = "object", Params = "string sensorType")]
         object Sensor(DataSources ds) => GetSensorValues(ds);
 
         [TelemetryAPI("s.sensor.temp", "Temperature sensor information",
-            Formatter = "SensorModuleList", Units = APIEntry.UnitType.TEMP)]
+            Formatter = "SensorModuleList", Units = APIEntry.UnitType.TEMP, Category = "sensor", ReturnType = "object")]
         object SensorTemp(DataSources ds) { ds.args.Add("TEMP"); return GetSensorValues(ds); }
 
         [TelemetryAPI("s.sensor.pres", "Pressure sensor information",
-            Formatter = "SensorModuleList", Units = APIEntry.UnitType.PRES)]
+            Formatter = "SensorModuleList", Units = APIEntry.UnitType.PRES, Category = "sensor", ReturnType = "object")]
         object SensorPres(DataSources ds) { ds.args.Add("PRES"); return GetSensorValues(ds); }
 
         [TelemetryAPI("s.sensor.grav", "Gravity sensor information",
-            Formatter = "SensorModuleList", Units = APIEntry.UnitType.GRAV)]
+            Formatter = "SensorModuleList", Units = APIEntry.UnitType.GRAV, Category = "sensor", ReturnType = "object")]
         object SensorGrav(DataSources ds) { ds.args.Add("GRAV"); return GetSensorValues(ds); }
 
         [TelemetryAPI("s.sensor.acc", "Acceleration sensor information",
-            Formatter = "SensorModuleList", Units = APIEntry.UnitType.ACC)]
+            Formatter = "SensorModuleList", Units = APIEntry.UnitType.ACC, Category = "sensor", ReturnType = "object")]
         object SensorAcc(DataSources ds) { ds.args.Add("ACC"); return GetSensorValues(ds); }
 
         private List<ModuleEnviroSensor> GetSensorValues(DataSources datasources)
@@ -51,24 +51,24 @@ namespace Telemachus
             activeResourceCache = new ActiveResourceCache(vesselChangeDetector);
         }
 
-        [TelemetryAPI("r.resource", "Resource Information [string resource type]",
-            Plotable = false, Formatter = "ResourceList")]
+        [TelemetryAPI("r.resource", "Resource Information",
+            Plotable = false, Formatter = "ResourceList", Category = "resource", ReturnType = "object", Params = "string resourceName")]
         object Resource(DataSources ds) => GetResourceValues(ds);
 
-        [TelemetryAPI("r.resourceCurrent", "Resource Information for Current Stage [string resource type]",
-            Plotable = false, Formatter = "ActiveResourceList")]
+        [TelemetryAPI("r.resourceCurrent", "Resource Information for Current Stage",
+            Plotable = false, Formatter = "ActiveResourceList", Category = "resource", ReturnType = "object", Params = "string resourceName")]
         object ResourceCurrent(DataSources ds) => GetActiveResourceValues(ds);
 
-        [TelemetryAPI("r.resourceCurrentMax", "Max Resource Information for Current Stage [string resource type]",
-            Plotable = false, Formatter = "MaxCurrentResourceList")]
+        [TelemetryAPI("r.resourceCurrentMax", "Max Resource Information for Current Stage",
+            Plotable = false, Formatter = "MaxCurrentResourceList", Category = "resource", ReturnType = "object", Params = "string resourceName")]
         object ResourceCurrentMax(DataSources ds) => GetActiveResourceValues(ds);
 
-        [TelemetryAPI("r.resourceMax", "Max Resource Information [string resource type]",
-            Plotable = false, Formatter = "MaxResourceList")]
+        [TelemetryAPI("r.resourceMax", "Max Resource Information",
+            Plotable = false, Formatter = "MaxResourceList", Category = "resource", ReturnType = "object", Params = "string resourceName")]
         object ResourceMax(DataSources ds) => GetResourceValues(ds);
 
         [TelemetryAPI("r.resourceNameList", "List of resource names",
-            Plotable = false, Formatter = "StringArray")]
+            Plotable = false, Formatter = "StringArray", Category = "resource", ReturnType = "string[]")]
         object ResourceNameList(DataSources ds)
         {
             List<String> names = new List<String>();

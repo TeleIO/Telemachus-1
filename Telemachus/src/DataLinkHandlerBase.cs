@@ -19,6 +19,21 @@ namespace Telemachus
         /// </summary>
         public string Formatter { get; set; } = null;
 
+        /// <summary>Logical grouping: "vessel", "orbit", "flight", "deltav", etc.</summary>
+        public string Category { get; set; }
+        /// <summary>Return type hint: "double", "string", "bool", "Vector3d", "object".</summary>
+        public string ReturnType { get; set; }
+        /// <summary>Structured parameter signature, e.g. "int stage" or "float pitch, float yaw".</summary>
+        public string Params { get; set; }
+        /// <summary>Version when this endpoint was introduced.</summary>
+        public string Since { get; set; }
+        /// <summary>Mod dependency key matching ModDetector: "far", "mechjeb", "realchute", etc.</summary>
+        public string RequiresMod { get; set; }
+        /// <summary>Mark as deprecated.</summary>
+        public bool Deprecated { get; set; } = false;
+        /// <summary>Migration guidance for deprecated endpoints.</summary>
+        public string DeprecatedMessage { get; set; }
+
         public TelemetryAPIAttribute(string key, string description)
         {
             Key = key;
@@ -59,14 +74,25 @@ namespace Telemachus
                 var fn = (APIDelegate)Delegate.CreateDelegate(typeof(APIDelegate), this, method);
                 var formatter = ResolveFormatter(attr.Formatter);
 
+                APIEntry entry;
                 if (attr.IsAction)
-                    registerAPI(new ActionAPIEntry(fn, attr.Key, attr.Description, formatter));
+                    entry = new ActionAPIEntry(fn, attr.Key, attr.Description, formatter);
                 else if (attr.Plotable)
-                    registerAPI(new PlotableAPIEntry(fn, attr.Key, attr.Description,
-                        formatter, attr.Units, attr.AlwaysEvaluable));
+                    entry = new PlotableAPIEntry(fn, attr.Key, attr.Description,
+                        formatter, attr.Units, attr.AlwaysEvaluable);
                 else
-                    registerAPI(new APIEntry(fn, attr.Key, attr.Description,
-                        formatter, attr.Units, attr.AlwaysEvaluable));
+                    entry = new APIEntry(fn, attr.Key, attr.Description,
+                        formatter, attr.Units, attr.AlwaysEvaluable);
+
+                entry.isAction = attr.IsAction;
+                entry.category = attr.Category;
+                entry.returnType = attr.ReturnType;
+                entry.parameters = attr.Params;
+                entry.since = attr.Since;
+                entry.requiresMod = attr.RequiresMod;
+                entry.deprecated = attr.Deprecated;
+                entry.deprecatedMessage = attr.DeprecatedMessage;
+                registerAPI(entry);
             }
         }
 
@@ -161,6 +187,16 @@ namespace Telemachus
         public bool plotable { get; set; }
         public DataSourceResultFormatter formatter { get; set; }
         public bool alwaysEvaluable { get; set; }
+
+        // Extended metadata for docs/schema generation
+        public bool isAction { get; set; }
+        public string category { get; set; }
+        public string returnType { get; set; }
+        public string parameters { get; set; }
+        public string since { get; set; }
+        public string requiresMod { get; set; }
+        public bool deprecated { get; set; }
+        public string deprecatedMessage { get; set; }
 
         public APIEntry(DataLinkHandler.APIDelegate function, string APIString,
             string name, DataSourceResultFormatter formatter, UnitType units, bool alwaysEvaluable = false)

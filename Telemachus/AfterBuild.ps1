@@ -55,6 +55,19 @@ Copy-Item "$mkonTmp/mkon-master/*" "$pluginData/mkon" -Recurse -Force
 Remove-Item $houstonZip, $mkonZip -Force -ErrorAction SilentlyContinue
 Remove-Item $mkonTmp -Recurse -Force -ErrorAction SilentlyContinue
 
+# Extract API schema from source-generated file
+$schemaFile = Get-ChildItem "$ProjectDir/obj" -Filter "TelemetrySchema.g.cs" -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1
+if ($schemaFile) {
+    $content = Get-Content $schemaFile.FullName -Raw
+    if ($content -match 'internal const string Json = @"([\s\S]*?)";') {
+        $json = $Matches[1] -replace '""', '"'
+        Set-Content "$root/publish/api-schema.json" $json -NoNewline
+        Write-Host "Extracted API schema to publish/api-schema.json"
+    }
+} else {
+    Write-Host "Warning: TelemetrySchema.g.cs not found in obj/"
+}
+
 # Copy to local KSP install (local dev only)
 $kspDir = "$root/ksp-telemachus-dev"
 if (Test-Path $kspDir) {

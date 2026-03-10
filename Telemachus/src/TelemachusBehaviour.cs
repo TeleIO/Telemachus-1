@@ -71,6 +71,8 @@ namespace Telemachus
                     webDispatcher.AddResponder(cameraLink);
                     var dataLink = new DataLinkResponsibility(apiInstance, rateTracker);
                     webDispatcher.AddResponder(dataLink);
+                    var apiRoute = new APIRouteResponsibility(apiInstance, rateTracker);
+                    webDispatcher.AddResponder(apiRoute);
 
                     // Create the server and associate the dispatcher
                     webServer = new HttpServer(serverConfig.ipAddress, serverConfig.port);

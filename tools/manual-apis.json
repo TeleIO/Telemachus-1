@@ -1,0 +1,430 @@
+[
+  {
+    "key": "f.stage",
+    "description": "Activate Next Stage",
+    "units": "UNITLESS",
+    "plotable": false,
+    "isAction": true,
+    "category": "flight",
+    "returnType": "int"
+  },
+  {
+    "key": "f.setThrottle",
+    "description": "Set Throttle",
+    "units": "UNITLESS",
+    "plotable": false,
+    "isAction": true,
+    "category": "flight",
+    "returnType": "int",
+    "params": "float magnitude"
+  },
+  {
+    "key": "f.throttleUp",
+    "description": "Throttle Up",
+    "units": "UNITLESS",
+    "plotable": false,
+    "isAction": true,
+    "category": "flight",
+    "returnType": "int"
+  },
+  {
+    "key": "f.throttleZero",
+    "description": "Throttle Zero",
+    "units": "UNITLESS",
+    "plotable": false,
+    "isAction": true,
+    "category": "flight",
+    "returnType": "int"
+  },
+  {
+    "key": "f.throttleFull",
+    "description": "Throttle Full",
+    "units": "UNITLESS",
+    "plotable": false,
+    "isAction": true,
+    "category": "flight",
+    "returnType": "int"
+  },
+  {
+    "key": "f.throttleDown",
+    "description": "Throttle Down",
+    "units": "UNITLESS",
+    "plotable": false,
+    "isAction": true,
+    "category": "flight",
+    "returnType": "int"
+  },
+  {
+    "key": "f.rcs",
+    "description": "Toggle RCS",
+    "units": "UNITLESS",
+    "plotable": false,
+    "isAction": true,
+    "category": "flight",
+    "returnType": "int",
+    "params": "bool? onOff"
+  },
+  {
+    "key": "f.sas",
+    "description": "Toggle SAS",
+    "units": "UNITLESS",
+    "plotable": false,
+    "isAction": true,
+    "category": "flight",
+    "returnType": "int",
+    "params": "bool? onOff"
+  },
+  {
+    "key": "f.light",
+    "description": "Toggle Lights",
+    "units": "UNITLESS",
+    "plotable": false,
+    "isAction": true,
+    "category": "flight",
+    "returnType": "int",
+    "params": "bool? onOff"
+  },
+  {
+    "key": "f.gear",
+    "description": "Toggle Gear",
+    "units": "UNITLESS",
+    "plotable": false,
+    "isAction": true,
+    "category": "flight",
+    "returnType": "int",
+    "params": "bool? onOff"
+  },
+  {
+    "key": "f.brake",
+    "description": "Toggle Brakes",
+    "units": "UNITLESS",
+    "plotable": false,
+    "isAction": true,
+    "category": "flight",
+    "returnType": "int",
+    "params": "bool? onOff"
+  },
+  {
+    "key": "f.abort",
+    "description": "Toggle Abort",
+    "units": "UNITLESS",
+    "plotable": false,
+    "isAction": true,
+    "category": "flight",
+    "returnType": "int",
+    "params": "bool? onOff"
+  },
+  {
+    "key": "f.precisionControl",
+    "description": "Toggle Precision Controls",
+    "units": "UNITLESS",
+    "plotable": false,
+    "isAction": true,
+    "category": "flight",
+    "returnType": "int",
+    "params": "bool? onOff"
+  },
+  {
+    "key": "f.ag1",
+    "description": "Action Group 1",
+    "units": "UNITLESS",
+    "plotable": false,
+    "isAction": true,
+    "category": "flight",
+    "returnType": "int",
+    "params": "bool? onOff"
+  },
+  {
+    "key": "f.ag2",
+    "description": "Action Group 2",
+    "units": "UNITLESS",
+    "plotable": false,
+    "isAction": true,
+    "category": "flight",
+    "returnType": "int",
+    "params": "bool? onOff"
+  },
+  {
+    "key": "f.ag3",
+    "description": "Action Group 3",
+    "units": "UNITLESS",
+    "plotable": false,
+    "isAction": true,
+    "category": "flight",
+    "returnType": "int",
+    "params": "bool? onOff"
+  },
+  {
+    "key": "f.ag4",
+    "description": "Action Group 4",
+    "units": "UNITLESS",
+    "plotable": false,
+    "isAction": true,
+    "category": "flight",
+    "returnType": "int",
+    "params": "bool? onOff"
+  },
+  {
+    "key": "f.ag5",
+    "description": "Action Group 5",
+    "units": "UNITLESS",
+    "plotable": false,
+    "isAction": true,
+    "category": "flight",
+    "returnType": "int",
+    "params": "bool? onOff"
+  },
+  {
+    "key": "f.ag6",
+    "description": "Action Group 6",
+    "units": "UNITLESS",
+    "plotable": false,
+    "isAction": true,
+    "category": "flight",
+    "returnType": "int",
+    "params": "bool? onOff"
+  },
+  {
+    "key": "f.ag7",
+    "description": "Action Group 7",
+    "units": "UNITLESS",
+    "plotable": false,
+    "isAction": true,
+    "category": "flight",
+    "returnType": "int",
+    "params": "bool? onOff"
+  },
+  {
+    "key": "f.ag8",
+    "description": "Action Group 8",
+    "units": "UNITLESS",
+    "plotable": false,
+    "isAction": true,
+    "category": "flight",
+    "returnType": "int",
+    "params": "bool? onOff"
+  },
+  {
+    "key": "f.ag9",
+    "description": "Action Group 9",
+    "units": "UNITLESS",
+    "plotable": false,
+    "isAction": true,
+    "category": "flight",
+    "returnType": "int",
+    "params": "bool? onOff"
+  },
+  {
+    "key": "f.ag10",
+    "description": "Action Group 10",
+    "units": "UNITLESS",
+    "plotable": false,
+    "isAction": true,
+    "category": "flight",
+    "returnType": "int",
+    "params": "bool? onOff"
+  },
+  {
+    "key": "a.api",
+    "description": "API Listing",
+    "units": "UNITLESS",
+    "plotable": false,
+    "isAction": false,
+    "alwaysEvaluable": true,
+    "category": "system",
+    "returnType": "object"
+  },
+  {
+    "key": "a.ip",
+    "description": "IP Addresses",
+    "units": "UNITLESS",
+    "plotable": false,
+    "isAction": false,
+    "alwaysEvaluable": true,
+    "category": "system",
+    "returnType": "string[]"
+  },
+  {
+    "key": "a.apiSubSet",
+    "description": "Subset of the API Listing",
+    "units": "STRING",
+    "plotable": false,
+    "isAction": false,
+    "alwaysEvaluable": true,
+    "category": "system",
+    "returnType": "object",
+    "params": "string api1, string api2, ..., string apiN"
+  },
+  {
+    "key": "mj.smartassoff",
+    "description": "Smart ASS Off",
+    "units": "UNITLESS",
+    "plotable": false,
+    "isAction": true,
+    "category": "mechjeb",
+    "returnType": "bool",
+    "requiresMod": "mechjeb"
+  },
+  {
+    "key": "mj.node",
+    "description": "Orient to Maneuver Node",
+    "units": "UNITLESS",
+    "plotable": false,
+    "isAction": true,
+    "category": "mechjeb",
+    "returnType": "bool",
+    "requiresMod": "mechjeb"
+  },
+  {
+    "key": "mj.prograde",
+    "description": "Orient Prograde",
+    "units": "UNITLESS",
+    "plotable": false,
+    "isAction": true,
+    "category": "mechjeb",
+    "returnType": "bool",
+    "requiresMod": "mechjeb"
+  },
+  {
+    "key": "mj.retrograde",
+    "description": "Orient Retrograde",
+    "units": "UNITLESS",
+    "plotable": false,
+    "isAction": true,
+    "category": "mechjeb",
+    "returnType": "bool",
+    "requiresMod": "mechjeb"
+  },
+  {
+    "key": "mj.normalplus",
+    "description": "Orient Normal Plus",
+    "units": "UNITLESS",
+    "plotable": false,
+    "isAction": true,
+    "category": "mechjeb",
+    "returnType": "bool",
+    "requiresMod": "mechjeb"
+  },
+  {
+    "key": "mj.normalminus",
+    "description": "Orient Normal Minus",
+    "units": "UNITLESS",
+    "plotable": false,
+    "isAction": true,
+    "category": "mechjeb",
+    "returnType": "bool",
+    "requiresMod": "mechjeb"
+  },
+  {
+    "key": "mj.radialplus",
+    "description": "Orient Radial Plus",
+    "units": "UNITLESS",
+    "plotable": false,
+    "isAction": true,
+    "category": "mechjeb",
+    "returnType": "bool",
+    "requiresMod": "mechjeb"
+  },
+  {
+    "key": "mj.radialminus",
+    "description": "Orient Radial Minus",
+    "units": "UNITLESS",
+    "plotable": false,
+    "isAction": true,
+    "category": "mechjeb",
+    "returnType": "bool",
+    "requiresMod": "mechjeb"
+  },
+  {
+    "key": "mj.targetplus",
+    "description": "Orient Target Plus",
+    "units": "UNITLESS",
+    "plotable": false,
+    "isAction": true,
+    "category": "mechjeb",
+    "returnType": "bool",
+    "requiresMod": "mechjeb"
+  },
+  {
+    "key": "mj.targetminus",
+    "description": "Orient Target Minus",
+    "units": "UNITLESS",
+    "plotable": false,
+    "isAction": true,
+    "category": "mechjeb",
+    "returnType": "bool",
+    "requiresMod": "mechjeb"
+  },
+  {
+    "key": "mj.relativeplus",
+    "description": "Orient Relative Velocity Plus",
+    "units": "UNITLESS",
+    "plotable": false,
+    "isAction": true,
+    "category": "mechjeb",
+    "returnType": "bool",
+    "requiresMod": "mechjeb"
+  },
+  {
+    "key": "mj.relativeminus",
+    "description": "Orient Relative Velocity Minus",
+    "units": "UNITLESS",
+    "plotable": false,
+    "isAction": true,
+    "category": "mechjeb",
+    "returnType": "bool",
+    "requiresMod": "mechjeb"
+  },
+  {
+    "key": "mj.parallelplus",
+    "description": "Orient Parallel Plus",
+    "units": "UNITLESS",
+    "plotable": false,
+    "isAction": true,
+    "category": "mechjeb",
+    "returnType": "bool",
+    "requiresMod": "mechjeb"
+  },
+  {
+    "key": "mj.parallelminus",
+    "description": "Orient Parallel Minus",
+    "units": "UNITLESS",
+    "plotable": false,
+    "isAction": true,
+    "category": "mechjeb",
+    "returnType": "bool",
+    "requiresMod": "mechjeb"
+  },
+  {
+    "key": "mj.surface",
+    "description": "Orient to Surface Heading/Pitch",
+    "units": "UNITLESS",
+    "plotable": false,
+    "isAction": true,
+    "category": "mechjeb",
+    "returnType": "bool",
+    "requiresMod": "mechjeb",
+    "params": "float heading, float pitch"
+  },
+  {
+    "key": "mj.surface2",
+    "description": "Orient to Surface Heading/Pitch/Roll",
+    "units": "UNITLESS",
+    "plotable": false,
+    "isAction": true,
+    "category": "mechjeb",
+    "returnType": "bool",
+    "requiresMod": "mechjeb",
+    "params": "double heading, double pitch, double roll"
+  },
+  {
+    "key": "mj.stagingInfo",
+    "description": "MechJeb Staging Info",
+    "units": "UNITLESS",
+    "plotable": false,
+    "isAction": false,
+    "category": "mechjeb",
+    "returnType": "object",
+    "requiresMod": "mechjeb"
+  }
+]

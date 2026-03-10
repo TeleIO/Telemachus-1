@@ -13,3 +13,8 @@ WebPages/WebPages.v12.suo
 *.ide-wal
 .vs/
 .claude/settings.local.json
+
+# Docs build artifacts
+docs/node_modules/
+docs/dist/
+docs/.astro/

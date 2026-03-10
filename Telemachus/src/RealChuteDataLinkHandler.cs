@@ -105,15 +105,15 @@ namespace Telemachus
 
         // --- Availability ---
 
-        [TelemetryAPI("rc.available", "RealChute Is Installed", AlwaysEvaluable = true)]
+        [TelemetryAPI("rc.available", "RealChute Is Installed", AlwaysEvaluable = true, Category = "realchute", ReturnType = "bool", RequiresMod = "realchute")]
         object Available(DataSources ds) => FindRealChute() != null;
 
         // --- Vessel-level summary ---
 
-        [TelemetryAPI("rc.count", "Number of RealChute Parts")]
+        [TelemetryAPI("rc.count", "Number of RealChute Parts", Category = "realchute", ReturnType = "int", RequiresMod = "realchute")]
         object Count(DataSources ds) => FindModules(ds.vessel)?.Count ?? 0;
 
-        [TelemetryAPI("rc.anyDeployed", "Any Chute Deployed")]
+        [TelemetryAPI("rc.anyDeployed", "Any Chute Deployed", Category = "realchute", ReturnType = "bool", RequiresMod = "realchute")]
         object AnyDeployed(DataSources ds)
         {
             var modules = FindModules(ds.vessel);
@@ -126,7 +126,7 @@ namespace Telemachus
             return false;
         }
 
-        [TelemetryAPI("rc.safeState", "Deployment Safety (SAFE/RISKY/DANGEROUS)", Units = APIEntry.UnitType.STRING)]
+        [TelemetryAPI("rc.safeState", "Deployment Safety (SAFE/RISKY/DANGEROUS)", Units = APIEntry.UnitType.STRING, Category = "realchute", ReturnType = "string", RequiresMod = "realchute")]
         object SafeState(DataSources ds)
         {
             var modules = FindModules(ds.vessel);
@@ -144,7 +144,7 @@ namespace Telemachus
 
         // --- Per-chute detail ---
 
-        [TelemetryAPI("rc.chutes", "All Chute Status", Plotable = false)]
+        [TelemetryAPI("rc.chutes", "All Chute Status", Plotable = false, Category = "realchute", ReturnType = "object", RequiresMod = "realchute")]
         object Chutes(DataSources ds)
         {
             var modules = FindModules(ds.vessel);
@@ -183,16 +183,16 @@ namespace Telemachus
 
         // --- Actions ---
 
-        [TelemetryAPI("rc.deploy", "Deploy All Chutes", IsAction = true)]
+        [TelemetryAPI("rc.deploy", "Deploy All Chutes", IsAction = true, Category = "realchute", ReturnType = "bool", RequiresMod = "realchute")]
         object Deploy(DataSources ds) => InvokeOnAll(ds.vessel, _guiDeploy);
 
-        [TelemetryAPI("rc.cut", "Cut All Chutes", IsAction = true)]
+        [TelemetryAPI("rc.cut", "Cut All Chutes", IsAction = true, Category = "realchute", ReturnType = "bool", RequiresMod = "realchute")]
         object Cut(DataSources ds) => InvokeOnAll(ds.vessel, _guiCut);
 
-        [TelemetryAPI("rc.arm", "Arm All Chutes", IsAction = true)]
+        [TelemetryAPI("rc.arm", "Arm All Chutes", IsAction = true, Category = "realchute", ReturnType = "bool", RequiresMod = "realchute")]
         object Arm(DataSources ds) => InvokeOnAll(ds.vessel, _guiArm);
 
-        [TelemetryAPI("rc.disarm", "Disarm All Chutes", IsAction = true)]
+        [TelemetryAPI("rc.disarm", "Disarm All Chutes", IsAction = true, Category = "realchute", ReturnType = "bool", RequiresMod = "realchute")]
         object Disarm(DataSources ds) => InvokeOnAll(ds.vessel, _guiDisarm);
 
         static object InvokeOnAll(Vessel vessel, MethodInfo method)

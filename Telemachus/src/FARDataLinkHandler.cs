@@ -72,72 +72,72 @@ namespace Telemachus
 
         // --- Availability ---
 
-        [TelemetryAPI("far.available", "FAR Is Installed", AlwaysEvaluable = true)]
+        [TelemetryAPI("far.available", "FAR Is Installed", AlwaysEvaluable = true, Category = "far", ReturnType = "bool", RequiresMod = "far")]
         object Available(DataSources ds) => FindFARAPI() != null;
 
         // --- Aerodynamic coefficients ---
 
-        [TelemetryAPI("far.liftCoeff", "Lift Coefficient (Cl)")]
+        [TelemetryAPI("far.liftCoeff", "Lift Coefficient (Cl)", Category = "far", ReturnType = "double", RequiresMod = "far")]
         object LiftCoeff(DataSources ds) => InvokeStatic("ActiveVesselLiftCoeff");
 
-        [TelemetryAPI("far.dragCoeff", "Drag Coefficient (Cd)")]
+        [TelemetryAPI("far.dragCoeff", "Drag Coefficient (Cd)", Category = "far", ReturnType = "double", RequiresMod = "far")]
         object DragCoeff(DataSources ds) => InvokeStatic("ActiveVesselDragCoeff");
 
-        [TelemetryAPI("far.refArea", "Reference Area (m\u00b2)")]
+        [TelemetryAPI("far.refArea", "Reference Area (m\u00b2)", Category = "far", ReturnType = "double", RequiresMod = "far")]
         object RefArea(DataSources ds) => InvokeStatic("ActiveVesselRefArea");
 
-        [TelemetryAPI("far.ballisticCoeff", "Ballistic Coefficient")]
+        [TelemetryAPI("far.ballisticCoeff", "Ballistic Coefficient", Category = "far", ReturnType = "double", RequiresMod = "far")]
         object BallisticCoeff(DataSources ds) => InvokeStatic("ActiveVesselBallisticCoeff");
 
         // --- Flight parameters ---
 
-        [TelemetryAPI("far.dynPres", "Dynamic Pressure (FAR)", Units = APIEntry.UnitType.DYNAMICPRESSURE)]
+        [TelemetryAPI("far.dynPres", "Dynamic Pressure (FAR)", Units = APIEntry.UnitType.DYNAMICPRESSURE, Category = "far", ReturnType = "double", RequiresMod = "far")]
         object DynPres(DataSources ds) => InvokeStatic("ActiveVesselDynPres");
 
-        [TelemetryAPI("far.termVel", "Terminal Velocity", Units = APIEntry.UnitType.VELOCITY)]
+        [TelemetryAPI("far.termVel", "Terminal Velocity", Units = APIEntry.UnitType.VELOCITY, Category = "far", ReturnType = "double", RequiresMod = "far")]
         object TermVel(DataSources ds) => InvokeStatic("ActiveVesselTermVelEst");
 
-        [TelemetryAPI("far.tsfc", "Thrust Specific Fuel Consumption")]
+        [TelemetryAPI("far.tsfc", "Thrust Specific Fuel Consumption", Category = "far", ReturnType = "double", RequiresMod = "far")]
         object TSFC(DataSources ds) => InvokeStatic("ActiveVesselTSFC");
 
         // --- Attitude ---
 
-        [TelemetryAPI("far.aoa", "Angle of Attack", Units = APIEntry.UnitType.DEG)]
+        [TelemetryAPI("far.aoa", "Angle of Attack", Units = APIEntry.UnitType.DEG, Category = "far", ReturnType = "double", RequiresMod = "far")]
         object AoA(DataSources ds) => InvokeStatic("ActiveVesselAoA");
 
-        [TelemetryAPI("far.sideslip", "Sideslip Angle", Units = APIEntry.UnitType.DEG)]
+        [TelemetryAPI("far.sideslip", "Sideslip Angle", Units = APIEntry.UnitType.DEG, Category = "far", ReturnType = "double", RequiresMod = "far")]
         object Sideslip(DataSources ds) => InvokeStatic("ActiveVesselSideslip");
 
         // --- Stall ---
 
-        [TelemetryAPI("far.stallFrac", "Stall Fraction (0-1)")]
+        [TelemetryAPI("far.stallFrac", "Stall Fraction (0-1)", Category = "far", ReturnType = "double", RequiresMod = "far")]
         object StallFrac(DataSources ds) => InvokeStatic("ActiveVesselStallFrac");
 
         // --- Control surfaces ---
 
-        [TelemetryAPI("far.flapSetting", "Flap Deflection Level (0-3, -1 if no flaps)")]
+        [TelemetryAPI("far.flapSetting", "Flap Deflection Level (0-3, -1 if no flaps)", Category = "far", ReturnType = "int", RequiresMod = "far")]
         object FlapSetting(DataSources ds) => InvokeWithVessel("VesselFlapSetting", ds.vessel);
 
-        [TelemetryAPI("far.spoiler", "Spoilers Active")]
+        [TelemetryAPI("far.spoiler", "Spoilers Active", Category = "far", ReturnType = "bool", RequiresMod = "far")]
         object Spoiler(DataSources ds) => InvokeWithVessel("VesselSpoilerSetting", ds.vessel);
 
         // --- Actions ---
 
-        [TelemetryAPI("far.increaseFlaps", "Increase Flap Deflection", IsAction = true)]
+        [TelemetryAPI("far.increaseFlaps", "Increase Flap Deflection", IsAction = true, Category = "far", ReturnType = "bool", RequiresMod = "far")]
         object IncreaseFlaps(DataSources ds)
         {
             InvokeWithVessel("VesselIncreaseFlapDeflection", ds.vessel);
             return true;
         }
 
-        [TelemetryAPI("far.decreaseFlaps", "Decrease Flap Deflection", IsAction = true)]
+        [TelemetryAPI("far.decreaseFlaps", "Decrease Flap Deflection", IsAction = true, Category = "far", ReturnType = "bool", RequiresMod = "far")]
         object DecreaseFlaps(DataSources ds)
         {
             InvokeWithVessel("VesselDecreaseFlapDeflection", ds.vessel);
             return true;
         }
 
-        [TelemetryAPI("far.setSpoilers", "Set Spoilers [bool active]", IsAction = true)]
+        [TelemetryAPI("far.setSpoilers", "Set Spoilers", IsAction = true, Category = "far", ReturnType = "bool", RequiresMod = "far", Params = "bool active")]
         object SetSpoilers(DataSources ds)
         {
             var api = FindFARAPI();
@@ -153,7 +153,7 @@ namespace Telemachus
 
         // --- Voxelization state ---
 
-        [TelemetryAPI("far.voxelized", "Vessel Has Valid Voxelization")]
+        [TelemetryAPI("far.voxelized", "Vessel Has Valid Voxelization", Category = "far", ReturnType = "bool", RequiresMod = "far")]
         object Voxelized(DataSources ds) => InvokeWithVessel("VesselVoxelizationCompletedAndValid", ds.vessel);
 
         protected override int pausedHandler() => PausedDataLinkHandler.partPaused();

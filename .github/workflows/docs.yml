@@ -1,0 +1,74 @@
+name: Deploy Docs
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      # Build C# — source generator emits TelemetrySchema.g.cs
+      # SkipPostBuild avoids downloading Houston/mkon (not needed for docs)
+      - name: Build Telemachus
+        run: dotnet build Telemachus.sln -c Release /p:SkipPostBuild=true
+
+      # Extract schema from source-generated file
+      - name: Extract API schema
+        run: |
+          schema=$(find Telemachus/obj -name "TelemetrySchema.g.cs" -type f | head -1)
+          if [ -z "$schema" ]; then echo "ERROR: TelemetrySchema.g.cs not found"; exit 1; fi
+          mkdir -p publish
+          sed -n '/SCHEMA_JSON_BEGIN/,/SCHEMA_JSON_END/p' "$schema" \
+            | grep -v 'SCHEMA_JSON' \
+            | sed 's/.*internal const string Json = @"//;s/";//' \
+            | sed 's/""/"/g' \
+            > publish/api-schema.json
+          echo "Extracted $(python3 -c "import json; print(len(json.load(open('publish/api-schema.json'))))" ) API entries"
+
+      # Generate OpenAPI spec
+      - name: Generate OpenAPI spec
+        run: bun run tools/generate-openapi.ts
+
+      # Build Starlight docs
+      - name: Install docs dependencies
+        run: bun install --frozen-lockfile
+        working-directory: docs
+
+      - name: Build docs
+        run: bun run build
+        working-directory: docs
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs/dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

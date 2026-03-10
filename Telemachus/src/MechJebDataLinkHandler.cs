@@ -86,7 +86,7 @@ namespace Telemachus
                 formatters.MechJebSimulation, APIEntry.UnitType.UNITLESS));
         }
 
-        [TelemetryAPI("mj.available", "MechJeb Is Installed")]
+        [TelemetryAPI("mj.available", "MechJeb Is Installed", Category = "mechjeb", ReturnType = "bool", RequiresMod = "mechjeb")]
         object Available(DataSources ds) => FindMechJeb(ds.vessel) != null;
 
         #region Flight Control

@@ -102,11 +102,24 @@ namespace Telemachus
 
                 foreach (var api in apiList)
                 {
-                    var apiDict = new Dictionary<string, object>();
-                    apiDict["apistring"] = api.APIString;
-                    apiDict["name"] = api.name;
-                    apiDict["units"] = api.units.ToString();
-                    apiDict["plotable"] = api.plotable;
+                    var apiDict = new Dictionary<string, object>
+                    {
+                        ["apistring"] = api.APIString,
+                        ["name"] = api.name,
+                        ["units"] = api.units.ToString(),
+                        ["plotable"] = api.plotable,
+                        ["isAction"] = api.isAction,
+                        ["alwaysEvaluable"] = api.alwaysEvaluable
+                    };
+
+                    if (api.category != null) apiDict["category"] = api.category;
+                    if (api.returnType != null) apiDict["returnType"] = api.returnType;
+                    if (api.parameters != null) apiDict["params"] = api.parameters;
+                    if (api.since != null) apiDict["since"] = api.since;
+                    if (api.requiresMod != null) apiDict["requiresMod"] = api.requiresMod;
+                    if (api.deprecated) apiDict["deprecated"] = true;
+                    if (api.deprecatedMessage != null) apiDict["deprecatedMessage"] = api.deprecatedMessage;
+
                     apiData.Add(apiDict);
                 }
 

@@ -22,25 +22,25 @@ namespace Telemachus
                 "t.unpause", "Unpause game", formatters.Default));
         }
 
-        [TelemetryAPI("t.universalTime", "Universal Time", Units = APIEntry.UnitType.DATE, AlwaysEvaluable = true)]
+        [TelemetryAPI("t.universalTime", "Universal Time", Units = APIEntry.UnitType.DATE, AlwaysEvaluable = true, Category = "timewarp", ReturnType = "double")]
         object UniversalTime(DataSources ds) => Planetarium.GetUniversalTime();
 
-        [TelemetryAPI("t.currentRate", "Current Warp Rate")]
+        [TelemetryAPI("t.currentRate", "Current Warp Rate", Category = "timewarp", ReturnType = "double")]
         object CurrentRate(DataSources ds) => TimeWarp.CurrentRate;
 
-        [TelemetryAPI("t.currentRateIndex", "Current Warp Rate Index")]
+        [TelemetryAPI("t.currentRateIndex", "Current Warp Rate Index", Category = "timewarp", ReturnType = "double")]
         object CurrentRateIndex(DataSources ds) => TimeWarp.CurrentRateIndex;
 
-        [TelemetryAPI("t.warpMode", "Warp Mode (HIGH or LOW)", Units = APIEntry.UnitType.STRING)]
+        [TelemetryAPI("t.warpMode", "Warp Mode (HIGH or LOW)", Units = APIEntry.UnitType.STRING, Category = "timewarp", ReturnType = "string")]
         object WarpMode(DataSources ds) => TimeWarp.WarpMode.ToString();
 
-        [TelemetryAPI("t.maxPhysicsRate", "Max Physics Warp Rate")]
+        [TelemetryAPI("t.maxPhysicsRate", "Max Physics Warp Rate", Category = "timewarp", ReturnType = "double")]
         object MaxPhysicsRate(DataSources ds) => TimeWarp.MaxPhysicsRate;
 
-        [TelemetryAPI("t.deltaTime", "Delta Time")]
+        [TelemetryAPI("t.deltaTime", "Delta Time", Category = "timewarp", ReturnType = "double")]
         object DeltaTime(DataSources ds) => TimeWarp.deltaTime;
 
-        [TelemetryAPI("t.isPaused", "Game Is Paused")]
+        [TelemetryAPI("t.isPaused", "Game Is Paused", Category = "timewarp", ReturnType = "bool")]
         object IsPaused(DataSources ds) => FlightDriver.Pause;
     }
 
@@ -49,77 +49,77 @@ namespace Telemachus
         public TargetDataLinkHandler(FormatterProvider formatters)
             : base(formatters) { }
 
-        [TelemetryAPI("tar.name", "Target Name", Units = APIEntry.UnitType.STRING)]
+        [TelemetryAPI("tar.name", "Target Name", Units = APIEntry.UnitType.STRING, Category = "target", ReturnType = "string")]
         object TargetName(DataSources ds) =>
             FlightGlobals.fetch.VesselTarget != null ? FlightGlobals.fetch.VesselTarget.GetName() : "No Target Selected.";
 
-        [TelemetryAPI("tar.type", "Target Type", Units = APIEntry.UnitType.STRING)]
+        [TelemetryAPI("tar.type", "Target Type", Units = APIEntry.UnitType.STRING, Category = "target", ReturnType = "string")]
         object TargetType(DataSources ds) =>
             FlightGlobals.fetch.VesselTarget != null ? FlightGlobals.fetch.VesselTarget.GetType().ToString() : "";
 
-        [TelemetryAPI("tar.distance", "Target Distance", Units = APIEntry.UnitType.DISTANCE)]
+        [TelemetryAPI("tar.distance", "Target Distance", Units = APIEntry.UnitType.DISTANCE, Category = "target", ReturnType = "double")]
         object TargetDistance(DataSources ds) =>
             FlightGlobals.fetch.VesselTarget != null
                 ? Vector3.Distance(FlightGlobals.fetch.VesselTarget.GetTransform().position, ds.vessel.GetTransform().position) : 0;
 
-        [TelemetryAPI("tar.o.relativeVelocity", "Target Relative Velocity", Units = APIEntry.UnitType.VELOCITY)]
+        [TelemetryAPI("tar.o.relativeVelocity", "Target Relative Velocity", Units = APIEntry.UnitType.VELOCITY, Category = "target", ReturnType = "double")]
         object TargetRelativeVelocity(DataSources ds) =>
             FlightGlobals.fetch.VesselTarget != null
                 ? (FlightGlobals.fetch.VesselTarget.GetOrbit().GetVel() - ds.vessel.orbit.GetVel()).magnitude : 0;
 
-        [TelemetryAPI("tar.o.velocity", "Target Velocity", Units = APIEntry.UnitType.VELOCITY)]
+        [TelemetryAPI("tar.o.velocity", "Target Velocity", Units = APIEntry.UnitType.VELOCITY, Category = "target", ReturnType = "double")]
         object TargetVelocity(DataSources ds) =>
             FlightGlobals.fetch.VesselTarget != null ? FlightGlobals.fetch.VesselTarget.GetOrbit().vel.magnitude : 0;
 
-        [TelemetryAPI("tar.o.PeA", "Target Periapsis", Units = APIEntry.UnitType.DISTANCE)]
+        [TelemetryAPI("tar.o.PeA", "Target Periapsis", Units = APIEntry.UnitType.DISTANCE, Category = "target", ReturnType = "double")]
         object TargetPeA(DataSources ds) =>
             FlightGlobals.fetch.VesselTarget != null ? FlightGlobals.fetch.VesselTarget.GetOrbit().PeA : 0;
 
-        [TelemetryAPI("tar.o.ApA", "Target Apoapsis", Units = APIEntry.UnitType.DISTANCE)]
+        [TelemetryAPI("tar.o.ApA", "Target Apoapsis", Units = APIEntry.UnitType.DISTANCE, Category = "target", ReturnType = "double")]
         object TargetApA(DataSources ds) =>
             FlightGlobals.fetch.VesselTarget != null ? FlightGlobals.fetch.VesselTarget.GetOrbit().ApA : 0;
 
-        [TelemetryAPI("tar.o.timeToAp", "Target Time to Apoapsis", Units = APIEntry.UnitType.TIME)]
+        [TelemetryAPI("tar.o.timeToAp", "Target Time to Apoapsis", Units = APIEntry.UnitType.TIME, Category = "target", ReturnType = "double")]
         object TargetTimeToAp(DataSources ds) =>
             FlightGlobals.fetch.VesselTarget != null ? FlightGlobals.fetch.VesselTarget.GetOrbit().timeToAp : 0;
 
-        [TelemetryAPI("tar.o.timeToPe", "Target Time to Periapsis", Units = APIEntry.UnitType.TIME)]
+        [TelemetryAPI("tar.o.timeToPe", "Target Time to Periapsis", Units = APIEntry.UnitType.TIME, Category = "target", ReturnType = "double")]
         object TargetTimeToPe(DataSources ds) =>
             FlightGlobals.fetch.VesselTarget != null ? FlightGlobals.fetch.VesselTarget.GetOrbit().timeToPe : 0;
 
-        [TelemetryAPI("tar.o.inclination", "Target Inclination", Units = APIEntry.UnitType.DEG)]
+        [TelemetryAPI("tar.o.inclination", "Target Inclination", Units = APIEntry.UnitType.DEG, Category = "target", ReturnType = "double")]
         object TargetInclination(DataSources ds) =>
             FlightGlobals.fetch.VesselTarget != null ? FlightGlobals.fetch.VesselTarget.GetOrbit().inclination : 0;
 
-        [TelemetryAPI("tar.o.eccentricity", "Target Eccentricity")]
+        [TelemetryAPI("tar.o.eccentricity", "Target Eccentricity", Category = "target", ReturnType = "double")]
         object TargetEccentricity(DataSources ds) =>
             FlightGlobals.fetch.VesselTarget != null ? FlightGlobals.fetch.VesselTarget.GetOrbit().eccentricity : 0;
 
-        [TelemetryAPI("tar.o.period", "Target Orbital Period", Units = APIEntry.UnitType.TIME)]
+        [TelemetryAPI("tar.o.period", "Target Orbital Period", Units = APIEntry.UnitType.TIME, Category = "target", ReturnType = "double")]
         object TargetPeriod(DataSources ds) =>
             FlightGlobals.fetch.VesselTarget != null ? FlightGlobals.fetch.VesselTarget.GetOrbit().period : 0;
 
-        [TelemetryAPI("tar.o.argumentOfPeriapsis", "Target Argument of Periapsis", Units = APIEntry.UnitType.DEG)]
+        [TelemetryAPI("tar.o.argumentOfPeriapsis", "Target Argument of Periapsis", Units = APIEntry.UnitType.DEG, Category = "target", ReturnType = "double")]
         object TargetArgumentOfPeriapsis(DataSources ds) =>
             FlightGlobals.fetch.VesselTarget != null ? FlightGlobals.fetch.VesselTarget.GetOrbit().argumentOfPeriapsis : 0;
 
-        [TelemetryAPI("tar.o.timeToTransition1", "Target Time to Transition 1", Units = APIEntry.UnitType.TIME)]
+        [TelemetryAPI("tar.o.timeToTransition1", "Target Time to Transition 1", Units = APIEntry.UnitType.TIME, Category = "target", ReturnType = "double")]
         object TargetTimeToTransition1(DataSources ds) =>
             FlightGlobals.fetch.VesselTarget != null ? FlightGlobals.fetch.VesselTarget.GetOrbit().timeToTransition1 : 0;
 
-        [TelemetryAPI("tar.o.timeToTransition2", "Target Time to Transition 2", Units = APIEntry.UnitType.TIME)]
+        [TelemetryAPI("tar.o.timeToTransition2", "Target Time to Transition 2", Units = APIEntry.UnitType.TIME, Category = "target", ReturnType = "double")]
         object TargetTimeToTransition2(DataSources ds) =>
             FlightGlobals.fetch.VesselTarget != null ? FlightGlobals.fetch.VesselTarget.GetOrbit().timeToTransition2 : 0;
 
-        [TelemetryAPI("tar.o.sma", "Target Semimajor Axis", Units = APIEntry.UnitType.DISTANCE)]
+        [TelemetryAPI("tar.o.sma", "Target Semimajor Axis", Units = APIEntry.UnitType.DISTANCE, Category = "target", ReturnType = "double")]
         object TargetSma(DataSources ds) =>
             FlightGlobals.fetch.VesselTarget != null ? FlightGlobals.fetch.VesselTarget.GetOrbit().semiMajorAxis : 0;
 
-        [TelemetryAPI("tar.o.lan", "Target Longitude of Ascending Node", Units = APIEntry.UnitType.DEG)]
+        [TelemetryAPI("tar.o.lan", "Target Longitude of Ascending Node", Units = APIEntry.UnitType.DEG, Category = "target", ReturnType = "double")]
         object TargetLan(DataSources ds) =>
             FlightGlobals.fetch.VesselTarget != null ? FlightGlobals.fetch.VesselTarget.GetOrbit().LAN : 0;
 
-        [TelemetryAPI("tar.o.maae", "Target Mean Anomaly at Epoch")]
+        [TelemetryAPI("tar.o.maae", "Target Mean Anomaly at Epoch", Category = "target", ReturnType = "double")]
         object TargetMaae(DataSources ds)
         {
             if (FlightGlobals.fetch.VesselTarget == null) return 0;
@@ -127,22 +127,22 @@ namespace Telemachus
             return orbit.getObtAtUT(0) / orbit.period * (2.0 * Math.PI);
         }
 
-        [TelemetryAPI("tar.o.timeOfPeriapsisPassage", "Target Time of Periapsis Passage", Units = APIEntry.UnitType.DATE)]
+        [TelemetryAPI("tar.o.timeOfPeriapsisPassage", "Target Time of Periapsis Passage", Units = APIEntry.UnitType.DATE, Category = "target", ReturnType = "double")]
         object TargetTimeOfPeriapsisPassage(DataSources ds) =>
             FlightGlobals.fetch.VesselTarget != null
                 ? Planetarium.GetUniversalTime() - FlightGlobals.fetch.VesselTarget.GetOrbit().ObT : 0;
 
-        [TelemetryAPI("tar.o.trueAnomaly", "Target True Anomaly", Units = APIEntry.UnitType.DEG)]
+        [TelemetryAPI("tar.o.trueAnomaly", "Target True Anomaly", Units = APIEntry.UnitType.DEG, Category = "target", ReturnType = "double")]
         object TargetTrueAnomaly(DataSources ds) =>
             FlightGlobals.fetch.VesselTarget != null
                 ? FlightGlobals.fetch.VesselTarget.GetOrbit().TrueAnomalyAtUT(Planetarium.GetUniversalTime()) * (180.0 / Math.PI) : double.NaN;
 
-        [TelemetryAPI("tar.o.orbitingBody", "Target Orbiting Body", Units = APIEntry.UnitType.STRING)]
+        [TelemetryAPI("tar.o.orbitingBody", "Target Orbiting Body", Units = APIEntry.UnitType.STRING, Category = "target", ReturnType = "string")]
         object TargetOrbitingBody(DataSources ds) =>
             FlightGlobals.fetch.VesselTarget != null ? FlightGlobals.fetch.VesselTarget.GetOrbit().referenceBody.name : "";
 
-        [TelemetryAPI("tar.o.orbitPatches", "Detailed Orbit Patches Info [object orbitPatchInfo]",
-            Plotable = false, Formatter = "OrbitPatchList")]
+        [TelemetryAPI("tar.o.orbitPatches", "Detailed Orbit Patches Info",
+            Plotable = false, Formatter = "OrbitPatchList", Category = "target", ReturnType = "double")]
         object TargetOrbitPatches(DataSources ds)
         {
             if (FlightGlobals.fetch.VesselTarget == null) return null;
@@ -150,8 +150,8 @@ namespace Telemachus
         }
 
         [TelemetryAPI("tar.o.trueAnomalyAtUTForOrbitPatch",
-            "The orbit patch's True Anomaly at Universal Time [orbit patch index, universal time]",
-            Units = APIEntry.UnitType.DEG)]
+            "The orbit patch's True Anomaly at Universal Time",
+            Units = APIEntry.UnitType.DEG, Category = "target", ReturnType = "double", Params = "int orbitPatchIndex, float universalTime")]
         object TargetTrueAnomalyAtUTForOrbitPatch(DataSources ds)
         {
             if (FlightGlobals.fetch.VesselTarget == null) return null;
@@ -163,8 +163,8 @@ namespace Telemachus
         }
 
         [TelemetryAPI("tar.o.UTForTrueAnomalyForOrbitPatch",
-            "The orbit patch's True Anomaly at Universal Time [orbit patch index, universal time]",
-            Units = APIEntry.UnitType.DATE)]
+            "The orbit patch's Universal Time for True Anomaly",
+            Units = APIEntry.UnitType.DATE, Category = "target", ReturnType = "double", Params = "int orbitPatchIndex, float trueAnomaly")]
         object TargetUTForTrueAnomalyForOrbitPatch(DataSources ds)
         {
             if (FlightGlobals.fetch.VesselTarget == null) return null;
@@ -177,8 +177,8 @@ namespace Telemachus
         }
 
         [TelemetryAPI("tar.o.relativePositionAtTrueAnomalyForOrbitPatch",
-            "The orbit patch's predicted displacement from the center of the main body at the given true anomaly [orbit patch index, true anomaly]",
-            Formatter = "Vector3d")]
+            "The orbit patch's predicted displacement from the center of the main body at the given true anomaly",
+            Formatter = "Vector3d", Category = "target", ReturnType = "double", Params = "int orbitPatchIndex, float trueAnomaly")]
         object TargetRelativePositionAtTrueAnomalyForOrbitPatch(DataSources ds)
         {
             if (FlightGlobals.fetch.VesselTarget == null) return null;
@@ -190,8 +190,8 @@ namespace Telemachus
         }
 
         [TelemetryAPI("tar.o.relativePositionAtUTForOrbitPatch",
-            "The orbit patch's predicted displacement from the center of the main body at the given universal time [orbit patch index, universal time]",
-            Formatter = "Vector3d")]
+            "The orbit patch's predicted displacement from the center of the main body at the given universal time",
+            Formatter = "Vector3d", Category = "target", ReturnType = "double", Params = "int orbitPatchIndex, double universalTime")]
         object TargetRelativePositionAtUTForOrbitPatch(DataSources ds)
         {
             if (FlightGlobals.fetch.VesselTarget == null) return null;
@@ -204,7 +204,7 @@ namespace Telemachus
 
         // --- Target Actions ---
 
-        [TelemetryAPI("tar.setTargetBody", "Set Target to Celestial Body [int body id]", IsAction = true)]
+        [TelemetryAPI("tar.setTargetBody", "Set Target to Celestial Body", IsAction = true, Category = "target", ReturnType = "int", Params = "int bodyId")]
         object SetTargetBody(DataSources ds)
         {
             int bodyId = int.Parse(ds.args[0]);
@@ -213,7 +213,7 @@ namespace Telemachus
             return true;
         }
 
-        [TelemetryAPI("tar.setTargetVessel", "Set Target to Vessel by Index [int vessel index]", IsAction = true)]
+        [TelemetryAPI("tar.setTargetVessel", "Set Target to Vessel by Index", IsAction = true, Category = "target", ReturnType = "int", Params = "int vesselIndex")]
         object SetTargetVessel(DataSources ds)
         {
             int vesselIdx = int.Parse(ds.args[0]);
@@ -222,7 +222,7 @@ namespace Telemachus
             return true;
         }
 
-        [TelemetryAPI("tar.clearTarget", "Clear Current Target", IsAction = true)]
+        [TelemetryAPI("tar.clearTarget", "Clear Current Target", IsAction = true, Category = "target", ReturnType = "int")]
         object ClearTarget(DataSources ds)
         {
             FlightGlobals.fetch.SetVesselTarget(null);
@@ -245,7 +245,7 @@ namespace Telemachus
         public DockingDataLinkHandler(FormatterProvider formatters)
             : base(formatters) { }
 
-        [TelemetryAPI("dock.ax", "Docking x Angle", Units = APIEntry.UnitType.DEG)]
+        [TelemetryAPI("dock.ax", "Docking x Angle", Units = APIEntry.UnitType.DEG, Category = "docking", ReturnType = "double")]
         object DockAx(DataSources ds)
         {
             if (FlightGlobals.fetch.VesselTarget == null) return 0;
@@ -253,7 +253,7 @@ namespace Telemachus
             return orientationDeviation.x;
         }
 
-        [TelemetryAPI("dock.ay", "Relative Pitch Angle", Units = APIEntry.UnitType.DEG)]
+        [TelemetryAPI("dock.ay", "Relative Pitch Angle", Units = APIEntry.UnitType.DEG, Category = "docking", ReturnType = "double")]
         object DockAy(DataSources ds)
         {
             if (FlightGlobals.fetch.VesselTarget == null) return 0;
@@ -261,7 +261,7 @@ namespace Telemachus
             return orientationDeviation.y;
         }
 
-        [TelemetryAPI("dock.az", "Docking z Angle", Units = APIEntry.UnitType.DEG)]
+        [TelemetryAPI("dock.az", "Docking z Angle", Units = APIEntry.UnitType.DEG, Category = "docking", ReturnType = "double")]
         object DockAz(DataSources ds)
         {
             if (FlightGlobals.fetch.VesselTarget == null) return 0;
@@ -269,12 +269,12 @@ namespace Telemachus
             return orientationDeviation.z;
         }
 
-        [TelemetryAPI("dock.x", "Target x Distance", Units = APIEntry.UnitType.DISTANCE)]
+        [TelemetryAPI("dock.x", "Target x Distance", Units = APIEntry.UnitType.DISTANCE, Category = "docking", ReturnType = "double")]
         object DockX(DataSources ds) =>
             FlightGlobals.fetch.VesselTarget != null
                 ? (FlightGlobals.fetch.VesselTarget.GetTransform().position - ds.vessel.GetTransform().position).x : 0;
 
-        [TelemetryAPI("dock.y", "Target y Distance", Units = APIEntry.UnitType.DISTANCE)]
+        [TelemetryAPI("dock.y", "Target y Distance", Units = APIEntry.UnitType.DISTANCE, Category = "docking", ReturnType = "double")]
         object DockY(DataSources ds) =>
             FlightGlobals.fetch.VesselTarget != null
                 ? (FlightGlobals.fetch.VesselTarget.GetTransform().position - ds.vessel.GetTransform().position).y : 0;

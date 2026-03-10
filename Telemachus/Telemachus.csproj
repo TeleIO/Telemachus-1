@@ -12,6 +12,8 @@
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+    <CompilerGeneratedFilesOutputPath>$(BaseIntermediateOutputPath)/generated</CompilerGeneratedFilesOutputPath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -46,7 +48,7 @@
     </EmbeddedResource>
   </ItemGroup>
 
-  <Target Name="PostBuild" AfterTargets="Build">
+  <Target Name="PostBuild" AfterTargets="Build" Condition=" '$(SkipPostBuild)' != 'true' ">
     <Exec Command="./AfterBuild.sh $(ProjectDir) $(OutputPath)" WorkingDirectory="$(ProjectDir)" Condition=" '$(OS)' != 'Windows_NT' " />
     <Exec Command="powershell -ExecutionPolicy Bypass -File AfterBuild.ps1 -ProjectDir $(ProjectDir) -TargetDir $(OutputPath)" WorkingDirectory="$(ProjectDir)" Condition=" '$(OS)' == 'Windows_NT' " />
   </Target>

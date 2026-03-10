@@ -48,6 +48,20 @@ cp -ra mkon-master/. "$ProjectDir/../publish/GameData/Telemachus/Plugins/PluginD
 rm Houston.zip mkon.zip
 rm -rf mkon-master
 
+# Extract API schema from source-generated file
+schemaFile=$(find "$ProjectDir/obj" -name "TelemetrySchema.g.cs" -type f 2>/dev/null | head -1)
+if [ -n "$schemaFile" ]; then
+  # Extract the JSON from between the @" and "; markers, un-doubling quotes
+  sed -n '/SCHEMA_JSON_BEGIN/,/SCHEMA_JSON_END/p' "$schemaFile" \
+    | grep -v 'SCHEMA_JSON' \
+    | sed 's/.*internal const string Json = @"//;s/";//' \
+    | sed 's/""/"/g' \
+    > "$ProjectDir/../publish/api-schema.json"
+  echo "Extracted API schema to publish/api-schema.json"
+else
+  echo "Warning: TelemetrySchema.g.cs not found in obj/"
+fi
+
 # Copy to local KSP install (local dev only — skipped in CI)
 kspDir="$ProjectDir/../ksp-telemachus-dev"
 if [ -d "$kspDir" ]; then

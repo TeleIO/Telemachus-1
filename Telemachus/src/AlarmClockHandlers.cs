@@ -9,14 +9,14 @@ namespace Telemachus
         public AlarmClockDataLinkHandler(FormatterProvider formatters)
             : base(formatters) { }
 
-        [TelemetryAPI("alarm.count", "Number of Active Alarms")]
+        [TelemetryAPI("alarm.count", "Number of Active Alarms", Category = "alarm", ReturnType = "int")]
         object Count(DataSources ds)
         {
             var scenario = AlarmClockScenario.Instance;
             return scenario?.alarms?.Count ?? 0;
         }
 
-        [TelemetryAPI("alarm.list", "All Alarms", Plotable = false, Formatter = "AlarmList")]
+        [TelemetryAPI("alarm.list", "All Alarms", Plotable = false, Formatter = "AlarmList", Category = "alarm", ReturnType = "object")]
         object AlarmList(DataSources ds)
         {
             var scenario = AlarmClockScenario.Instance;
@@ -24,7 +24,7 @@ namespace Telemachus
             return scenario.alarms.Values.ToList();
         }
 
-        [TelemetryAPI("alarm.nextAlarm", "Next Alarm to Trigger", Plotable = false, Formatter = "Alarm")]
+        [TelemetryAPI("alarm.nextAlarm", "Next Alarm to Trigger", Plotable = false, Formatter = "Alarm", Category = "alarm", ReturnType = "object")]
         object NextAlarm(DataSources ds)
         {
             var scenario = AlarmClockScenario.Instance;
@@ -44,7 +44,7 @@ namespace Telemachus
             return nearest;
         }
 
-        [TelemetryAPI("alarm.timeToNext", "Time Until Next Alarm", Units = APIEntry.UnitType.TIME)]
+        [TelemetryAPI("alarm.timeToNext", "Time Until Next Alarm", Units = APIEntry.UnitType.TIME, Category = "alarm", ReturnType = "double")]
         object TimeToNext(DataSources ds)
         {
             var scenario = AlarmClockScenario.Instance;
