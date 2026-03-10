@@ -42,6 +42,15 @@ namespace Telemachus
         static PropertyInfo _radialProp;
         static PropertyInfo _totalDeltaVProp;
 
+        // Loader members (for lazy-triggering calculations)
+        static Type _loaderType;           // Astrogator.AstrogationLoadBehaviorette
+        static PropertyInfo _loaderProp;   // Astrogator.loader (private)
+        static PropertyInfo _numOpenDisplaysProp;
+        static MethodInfo _tryStartLoadMethod;
+        static Delegate _noopCallback;
+        static bool _loadTriggered;
+        static object _lastInstance;
+
         public AstrogatorDataLinkHandler(FormatterProvider formatters)
             : base(formatters) { }
 
@@ -108,7 +117,27 @@ namespace Telemachus
                 _radialProp = _burnType.GetProperty("radial", publicInst);
                 _totalDeltaVProp = _burnType.GetProperty("totalDeltaV", publicInst);
             }
+
+            // Loader — for triggering calculations without the UI
+            _loaderProp = _astrogatorType.GetProperty("loader", nonPublicInst);
+            if (_loaderProp != null)
+            {
+                _loaderType = _loaderProp.PropertyType;
+                _numOpenDisplaysProp = _loaderType.GetProperty("numOpenDisplays", nonPublicInst);
+                _tryStartLoadMethod = _loaderType.GetMethod("TryStartLoad",
+                    BindingFlags.Public | BindingFlags.Instance);
+
+                // Build a no-op delegate matching LoadDoneCallback
+                var callbackType = _loaderType.GetNestedType("LoadDoneCallback",
+                    BindingFlags.Public | BindingFlags.NonPublic);
+                if (callbackType != null)
+                    _noopCallback = Delegate.CreateDelegate(callbackType,
+                        typeof(AstrogatorDataLinkHandler).GetMethod(nameof(Noop),
+                            BindingFlags.Static | BindingFlags.NonPublic));
+            }
         }
+
+        static void Noop() { }
 
         /// <summary>
         /// Find the active FlightAstrogator instance via Unity's FindObjectOfType (reflected).
@@ -126,6 +155,14 @@ namespace Telemachus
         {
             var instance = FindInstance();
             if (instance == null || _modelProp == null) return null;
+
+            // Reset trigger flag when the Astrogator instance changes (new scene/vessel)
+            if (instance != _lastInstance)
+            {
+                _lastInstance = instance;
+                _loadTriggered = false;
+            }
+
             return _modelProp.GetValue(instance);
         }
 
@@ -133,7 +170,57 @@ namespace Telemachus
         {
             var model = GetModel();
             if (model == null || _transfersProp == null) return null;
-            return _transfersProp.GetValue(model) as IList;
+            var transfers = _transfersProp.GetValue(model) as IList;
+
+            // Lazy-trigger: if transfers are empty, poke Astrogator to calculate
+            if ((transfers == null || transfers.Count == 0) && !_loadTriggered)
+                TriggerLoad();
+
+            return transfers;
+        }
+
+        /// <summary>
+        /// Fakes the "window open" state and triggers a background calculation.
+        /// Astrogator gates calculations behind numOpenDisplays > 0; we increment
+        /// it, call TryStartLoad, then decrement so we don't leak state.
+        /// </summary>
+        static void TriggerLoad()
+        {
+            _loadTriggered = true;
+            var instance = FindInstance();
+            if (instance == null || _loaderProp == null || _tryStartLoadMethod == null)
+                return;
+
+            var loader = _loaderProp.GetValue(instance);
+            if (loader == null) return;
+
+            // Bump numOpenDisplays so AllowStart() passes
+            int prev = 0;
+            if (_numOpenDisplaysProp != null)
+            {
+                prev = (int)(_numOpenDisplaysProp.GetValue(loader) ?? 0);
+                if (prev < 1)
+                    _numOpenDisplaysProp.SetValue(loader, 1);
+            }
+
+            try
+            {
+                var origin = FlightGlobals.ActiveVessel as ITargetable
+                    ?? (ITargetable)FlightGlobals.getMainBody();
+                // TryStartLoad(ITargetable, LoadDoneCallback, LoadDoneCallback, LoadDoneCallback, bool)
+                _tryStartLoadMethod.Invoke(loader, new object[]
+                    { origin, _noopCallback, _noopCallback, _noopCallback, true });
+            }
+            catch (Exception ex)
+            {
+                PluginLogger.debug("Astrogator TriggerLoad failed: " + ex.Message);
+            }
+            finally
+            {
+                // Restore original count so we don't interfere with Astrogator's UI
+                if (_numOpenDisplaysProp != null && prev < 1)
+                    _numOpenDisplaysProp.SetValue(loader, prev);
+            }
         }
 
         // --- Availability ---
