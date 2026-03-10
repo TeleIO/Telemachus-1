@@ -78,6 +78,13 @@ const categoryLabels: Record<string, string> = {
   mechjeb: "MechJeb (mod)",
   far: "FAR Aerodynamics (mod)",
   realchute: "RealChute (mod)",
+  astrogator: "Astrogator (mod)",
+  principia: "Principia N-Body Physics (mod)",
+  landing: "Landing Prediction",
+  thermal: "Thermal",
+  science: "Science",
+  career: "Career",
+  comms: "Communications",
 };
 
 // --- Map C# types to JSON Schema ---
@@ -161,6 +168,8 @@ function inferCategory(key: string): string {
     mj: "mechjeb",
     far: "far",
     rc: "realchute",
+    astg: "astrogator",
+    principia: "principia",
     a: "system",
     p: "system",
   };

@@ -46,8 +46,14 @@ servers:
 tags:
   - name: alarm
     description: Alarm Clock
+  - name: astrogator
+    description: Astrogator (mod)
   - name: body
     description: Celestial Bodies
+  - name: career
+    description: Career
+  - name: comms
+    description: Communications
   - name: deltav
     description: Delta-V
   - name: docking
@@ -59,6 +65,8 @@ tags:
     description: Fly-by-Wire
   - name: flight
     description: Flight Controls
+  - name: landing
+    description: Landing Prediction
   - name: maneuver
     description: Maneuver Nodes
   - name: map
@@ -70,19 +78,24 @@ tags:
     description: Navigation (Attitude)
   - name: orbit
     description: Orbital Mechanics
-  - name: other
-    description: other
+  - name: principia
+    description: Principia N-Body Physics (mod)
+    x-requires-mod: principia
   - name: realchute
     description: RealChute (mod)
     x-requires-mod: realchute
   - name: resource
     description: Resources
+  - name: science
+    description: Science
   - name: sensor
     description: Sensors
   - name: system
     description: System / Meta
   - name: target
     description: Target
+  - name: thermal
+    description: Thermal
   - name: timewarp
     description: Time Warp
   - name: vessel
@@ -180,6 +193,24 @@ paths:
                 properties:
                   a.mods:
                     type: object
+  "/api/a.physicsMode":
+    get:
+      summary: Physics Mode (patched_conics or n_body)
+      operationId: a.physicsMode
+      tags:
+        - system
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  a.physicsMode:
+                    type: string
+      x-units: STRING
+      x-plotable: true
   "/api/a.schema":
     get:
       summary: Full API Schema (JSON)
@@ -285,7 +316,7 @@ paths:
       summary: Astrogator Instance Active
       operationId: astg.active
       tags:
-        - other
+        - astrogator
       responses:
         200:
           description: Successful response
@@ -302,7 +333,7 @@ paths:
       summary: Transfer With Active Maneuver Node
       operationId: astg.activeTransfer
       tags:
-        - other
+        - astrogator
       responses:
         200:
           description: Successful response
@@ -318,7 +349,7 @@ paths:
       summary: Astrogator Is Installed
       operationId: astg.available
       tags:
-        - other
+        - astrogator
       responses:
         200:
           description: Successful response
@@ -335,7 +366,7 @@ paths:
       summary: "Create Maneuver for Transfer [int index]"
       operationId: astg.createManeuver
       tags:
-        - other
+        - astrogator
       responses:
         200:
           description: Successful response
@@ -352,7 +383,7 @@ paths:
       summary: Transfer Calculation Error
       operationId: astg.errorCondition
       tags:
-        - other
+        - astrogator
       responses:
         200:
           description: Successful response
@@ -369,7 +400,7 @@ paths:
       summary: Hyperbolic Orbit
       operationId: astg.hyperbolicOrbit
       tags:
-        - other
+        - astrogator
       responses:
         200:
           description: Successful response
@@ -386,7 +417,7 @@ paths:
       summary: Seconds Until Next Transfer Burn
       operationId: astg.nextBurnCountdown
       tags:
-        - other
+        - astrogator
       responses:
         200:
           description: Successful response
@@ -404,7 +435,7 @@ paths:
       summary: Next Transfer Burn Time (UT)
       operationId: astg.nextBurnTime
       tags:
-        - other
+        - astrogator
       responses:
         200:
           description: Successful response
@@ -422,7 +453,7 @@ paths:
       summary: Next Transfer Total Delta-V
       operationId: astg.nextDeltaV
       tags:
-        - other
+        - astrogator
       responses:
         200:
           description: Successful response
@@ -440,7 +471,7 @@ paths:
       summary: Next Transfer Destination
       operationId: astg.nextDestination
       tags:
-        - other
+        - astrogator
       responses:
         200:
           description: Successful response
@@ -458,7 +489,7 @@ paths:
       summary: Retrograde Orbit
       operationId: astg.retrogradeOrbit
       tags:
-        - other
+        - astrogator
       responses:
         200:
           description: Successful response
@@ -475,7 +506,7 @@ paths:
       summary: "Transfer by Index [int index]"
       operationId: astg.transfer
       tags:
-        - other
+        - astrogator
       responses:
         200:
           description: Successful response
@@ -491,7 +522,7 @@ paths:
       summary: Number of Available Transfers
       operationId: astg.transferCount
       tags:
-        - other
+        - astrogator
       responses:
         200:
           description: Successful response
@@ -508,7 +539,7 @@ paths:
       summary: All Transfer Opportunities
       operationId: astg.transfers
       tags:
-        - other
+        - astrogator
       responses:
         200:
           description: Successful response
@@ -524,7 +555,7 @@ paths:
       summary: "Warp to Transfer Burn [int index]"
       operationId: astg.warpToBurn
       tags:
-        - other
+        - astrogator
       responses:
         200:
           description: Successful response
@@ -1547,6 +1578,162 @@ paths:
                 properties:
                   b.timeWarpAltitudeLimits:
                     type: object
+  "/api/career.funds":
+    get:
+      summary: Available Funds
+      operationId: career.funds
+      tags:
+        - career
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  career.funds:
+                    type: number
+      x-plotable: true
+  "/api/career.mode":
+    get:
+      summary: Game Mode (CAREER/SCIENCE/SANDBOX)
+      operationId: career.mode
+      tags:
+        - career
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  career.mode:
+                    type: string
+      x-units: STRING
+      x-plotable: true
+  "/api/career.reputation":
+    get:
+      summary: Current Reputation
+      operationId: career.reputation
+      tags:
+        - career
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  career.reputation:
+                    type: number
+      x-plotable: true
+  "/api/career.science":
+    get:
+      summary: Available Science Points
+      operationId: career.science
+      tags:
+        - career
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  career.science:
+                    type: number
+      x-plotable: true
+  "/api/comm.connected":
+    get:
+      summary: CommNet Is Connected
+      operationId: comm.connected
+      tags:
+        - comms
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  comm.connected:
+                    type: boolean
+      x-plotable: true
+  "/api/comm.controlState":
+    get:
+      summary: CommNet Control State (0=none, 1=partial, 2=full)
+      operationId: comm.controlState
+      tags:
+        - comms
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  comm.controlState:
+                    type: integer
+      x-plotable: true
+  "/api/comm.controlStateName":
+    get:
+      summary: CommNet Control State Name
+      operationId: comm.controlStateName
+      tags:
+        - comms
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  comm.controlStateName:
+                    type: string
+      x-units: STRING
+      x-plotable: true
+  "/api/comm.signalDelay":
+    get:
+      summary: CommNet Signal Delay (seconds)
+      operationId: comm.signalDelay
+      tags:
+        - comms
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  comm.signalDelay:
+                    type: number
+      x-units: TIME
+      x-plotable: true
+  "/api/comm.signalStrength":
+    get:
+      summary: CommNet Signal Strength (0-1)
+      operationId: comm.signalStrength
+      tags:
+        - comms
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  comm.signalStrength:
+                    type: number
+      x-plotable: true
   "/api/dock.ax":
     get:
       summary: Docking x Angle
@@ -3364,6 +3551,150 @@ paths:
                     type: boolean
       x-requires-mod: far
       x-plotable: true
+  "/api/land.bestSpeedAtImpact":
+    get:
+      summary: Predicted Speed at Impact (max thrust)
+      operationId: land.bestSpeedAtImpact
+      tags:
+        - landing
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  land.bestSpeedAtImpact:
+                    type: number
+      x-units: VELOCITY
+      x-plotable: true
+  "/api/land.predictedAlt":
+    get:
+      summary: Predicted Landing Terrain Altitude
+      operationId: land.predictedAlt
+      tags:
+        - landing
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  land.predictedAlt:
+                    type: number
+      x-units: DISTANCE
+      x-plotable: true
+  "/api/land.predictedLat":
+    get:
+      summary: Predicted Landing Latitude
+      operationId: land.predictedLat
+      tags:
+        - landing
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  land.predictedLat:
+                    type: number
+      x-units: LATLON
+      x-plotable: true
+  "/api/land.predictedLon":
+    get:
+      summary: Predicted Landing Longitude
+      operationId: land.predictedLon
+      tags:
+        - landing
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  land.predictedLon:
+                    type: number
+      x-units: LATLON
+      x-plotable: true
+  "/api/land.slopeAngle":
+    get:
+      summary: Terrain Slope Angle Under Vessel
+      operationId: land.slopeAngle
+      tags:
+        - landing
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  land.slopeAngle:
+                    type: number
+      x-units: DEG
+      x-plotable: true
+  "/api/land.speedAtImpact":
+    get:
+      summary: Predicted Speed at Impact (current thrust)
+      operationId: land.speedAtImpact
+      tags:
+        - landing
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  land.speedAtImpact:
+                    type: number
+      x-units: VELOCITY
+      x-plotable: true
+  "/api/land.suicideBurnCountdown":
+    get:
+      summary: Seconds Until Suicide Burn Start
+      operationId: land.suicideBurnCountdown
+      tags:
+        - landing
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  land.suicideBurnCountdown:
+                    type: number
+      x-units: TIME
+      x-plotable: true
+  "/api/land.timeToImpact":
+    get:
+      summary: Estimated Seconds to Impact
+      operationId: land.timeToImpact
+      tags:
+        - landing
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  land.timeToImpact:
+                    type: number
+      x-units: TIME
+      x-plotable: true
   "/api/m.enterMapView":
     post:
       summary: " Enter Map View"
@@ -4190,6 +4521,59 @@ paths:
                     type: array
                     items:
                       type: number
+  "/api/o.encounterBody":
+    get:
+      summary: Encounter/Escape Body Name
+      operationId: o.encounterBody
+      tags:
+        - orbit
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  o.encounterBody:
+                    type: string
+      x-units: STRING
+      x-plotable: true
+  "/api/o.encounterExists":
+    get:
+      summary: SOI Encounter Exists (-1=escape, 0=none, 1=encounter)
+      operationId: o.encounterExists
+      tags:
+        - orbit
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  o.encounterExists:
+                    type: integer
+      x-plotable: true
+  "/api/o.encounterTime":
+    get:
+      summary: Time Until SOI Encounter/Escape
+      operationId: o.encounterTime
+      tags:
+        - orbit
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  o.encounterTime:
+                    type: number
+      x-units: TIME
+      x-plotable: true
   "/api/o.EndUT":
     get:
       summary: Orbit Patch End UT
@@ -4645,6 +5029,315 @@ paths:
                     type: number
       x-units: DATE
       x-plotable: true
+  "/api/o.mean.anomalisticPeriod":
+    get:
+      summary: Anomalistic Period (Principia)
+      operationId: o.mean.anomalisticPeriod
+      tags:
+        - orbit
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  o.mean.anomalisticPeriod:
+                    type: number
+      x-requires-mod: principia
+      x-units: TIME
+      x-plotable: true
+  "/api/o.mean.ApA":
+    get:
+      summary: Mean Apoapsis Altitude (Principia)
+      operationId: o.mean.ApA
+      tags:
+        - orbit
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  o.mean.ApA:
+                    type: number
+      x-requires-mod: principia
+      x-units: DISTANCE
+      x-plotable: true
+  "/api/o.mean.ApARange":
+    get:
+      summary: Mean Apoapsis Altitude Range (Principia)
+      operationId: o.mean.ApARange
+      tags:
+        - orbit
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  o.mean.ApARange:
+                    type: object
+      x-requires-mod: principia
+  "/api/o.mean.argumentOfPeriapsis":
+    get:
+      summary: Mean Argument of Periapsis (Principia)
+      operationId: o.mean.argumentOfPeriapsis
+      tags:
+        - orbit
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  o.mean.argumentOfPeriapsis:
+                    type: number
+      x-requires-mod: principia
+      x-units: DEG
+      x-plotable: true
+  "/api/o.mean.eccentricity":
+    get:
+      summary: Mean Eccentricity (Principia)
+      operationId: o.mean.eccentricity
+      tags:
+        - orbit
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  o.mean.eccentricity:
+                    type: number
+      x-requires-mod: principia
+      x-plotable: true
+  "/api/o.mean.eccentricityRange":
+    get:
+      summary: Mean Eccentricity Range (Principia)
+      operationId: o.mean.eccentricityRange
+      tags:
+        - orbit
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  o.mean.eccentricityRange:
+                    type: object
+      x-requires-mod: principia
+  "/api/o.mean.inclination":
+    get:
+      summary: Mean Inclination (Principia)
+      operationId: o.mean.inclination
+      tags:
+        - orbit
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  o.mean.inclination:
+                    type: number
+      x-requires-mod: principia
+      x-units: DEG
+      x-plotable: true
+  "/api/o.mean.inclinationRange":
+    get:
+      summary: Mean Inclination Range (Principia)
+      operationId: o.mean.inclinationRange
+      tags:
+        - orbit
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  o.mean.inclinationRange:
+                    type: object
+      x-requires-mod: principia
+  "/api/o.mean.lan":
+    get:
+      summary: Mean Longitude of Ascending Node (Principia)
+      operationId: o.mean.lan
+      tags:
+        - orbit
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  o.mean.lan:
+                    type: number
+      x-requires-mod: principia
+      x-units: DEG
+      x-plotable: true
+  "/api/o.mean.nodalPeriod":
+    get:
+      summary: Nodal Period (Principia)
+      operationId: o.mean.nodalPeriod
+      tags:
+        - orbit
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  o.mean.nodalPeriod:
+                    type: number
+      x-requires-mod: principia
+      x-units: TIME
+      x-plotable: true
+  "/api/o.mean.nodalPrecession":
+    get:
+      summary: Nodal Precession Rate (rad/s, Principia)
+      operationId: o.mean.nodalPrecession
+      tags:
+        - orbit
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  o.mean.nodalPrecession:
+                    type: number
+      x-requires-mod: principia
+      x-plotable: true
+  "/api/o.mean.PeA":
+    get:
+      summary: Mean Periapsis Altitude (Principia)
+      operationId: o.mean.PeA
+      tags:
+        - orbit
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  o.mean.PeA:
+                    type: number
+      x-requires-mod: principia
+      x-units: DISTANCE
+      x-plotable: true
+  "/api/o.mean.PeARange":
+    get:
+      summary: Mean Periapsis Altitude Range (Principia)
+      operationId: o.mean.PeARange
+      tags:
+        - orbit
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  o.mean.PeARange:
+                    type: object
+      x-requires-mod: principia
+  "/api/o.mean.recurrence":
+    get:
+      summary: Orbit Recurrence Info (Principia)
+      operationId: o.mean.recurrence
+      tags:
+        - orbit
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  o.mean.recurrence:
+                    type: object
+      x-requires-mod: principia
+  "/api/o.mean.siderealPeriod":
+    get:
+      summary: Sidereal Period (Principia)
+      operationId: o.mean.siderealPeriod
+      tags:
+        - orbit
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  o.mean.siderealPeriod:
+                    type: number
+      x-requires-mod: principia
+      x-units: TIME
+      x-plotable: true
+  "/api/o.mean.sma":
+    get:
+      summary: Mean Semimajor Axis (Principia)
+      operationId: o.mean.sma
+      tags:
+        - orbit
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  o.mean.sma:
+                    type: number
+      x-requires-mod: principia
+      x-units: DISTANCE
+      x-plotable: true
+  "/api/o.mean.smaRange":
+    get:
+      summary: "Mean SMA Range {min,max} (Principia)"
+      operationId: o.mean.smaRange
+      tags:
+        - orbit
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  o.mean.smaRange:
+                    type: object
+      x-requires-mod: principia
   "/api/o.meanAnomaly":
     get:
       summary: Mean Anomaly
@@ -4662,6 +5355,23 @@ paths:
                   o.meanAnomaly:
                     type: number
       x-units: DEG
+      x-plotable: true
+  "/api/o.nextApsisType":
+    get:
+      summary: Next Apsis Type (-1=Pe, 1=Ap, 0=N/A)
+      operationId: o.nextApsisType
+      tags:
+        - orbit
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  o.nextApsisType:
+                    type: number
       x-plotable: true
   "/api/o.orbitalEnergy":
     get:
@@ -5182,6 +5892,24 @@ paths:
                     type: number
       x-units: TIME
       x-plotable: true
+  "/api/o.timeToNextApsis":
+    get:
+      summary: Time to Next Apsis
+      operationId: o.timeToNextApsis
+      tags:
+        - orbit
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  o.timeToNextApsis:
+                    type: number
+      x-units: TIME
+      x-plotable: true
   "/api/o.timeToPe":
     get:
       summary: Time to Periapsis
@@ -5441,6 +6169,192 @@ paths:
                 properties:
                   p.paused:
                     type: integer
+      x-plotable: true
+  "/api/principia.active":
+    get:
+      summary: Principia Plugin Running
+      operationId: principia.active
+      tags:
+        - principia
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  principia.active:
+                    type: boolean
+      x-requires-mod: principia
+      x-plotable: true
+  "/api/principia.analysis":
+    get:
+      summary: Complete Orbit Analysis (Principia)
+      operationId: principia.analysis
+      tags:
+        - principia
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  principia.analysis:
+                    type: object
+      x-requires-mod: principia
+  "/api/principia.analysisProgress":
+    get:
+      summary: Orbit Analysis Progress (0-1)
+      operationId: principia.analysisProgress
+      tags:
+        - principia
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  principia.analysisProgress:
+                    type: number
+      x-requires-mod: principia
+      x-plotable: true
+  "/api/principia.available":
+    get:
+      summary: Principia Is Installed
+      operationId: principia.available
+      tags:
+        - principia
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  principia.available:
+                    type: boolean
+      x-requires-mod: principia
+      x-plotable: true
+  "/api/principia.missionDuration":
+    get:
+      summary: Analysis Mission Duration (s)
+      operationId: principia.missionDuration
+      tags:
+        - principia
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  principia.missionDuration:
+                    type: number
+      x-requires-mod: principia
+      x-units: TIME
+      x-plotable: true
+  "/api/principia.plan.burn":
+    get:
+      summary: Planned Burn by Index
+      operationId: principia.plan.burn
+      tags:
+        - principia
+      parameters:
+        - name: index
+          in: query
+          required: true
+          description: int parameter (passed via bracket notation)
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  principia.plan.burn:
+                    type: object
+      x-requires-mod: principia
+  "/api/principia.plan.burns":
+    get:
+      summary: All Planned Burns
+      operationId: principia.plan.burns
+      tags:
+        - principia
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  principia.plan.burns:
+                    type: object
+      x-requires-mod: principia
+  "/api/principia.plan.count":
+    get:
+      summary: Number of Planned Burns
+      operationId: principia.plan.count
+      tags:
+        - principia
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  principia.plan.count:
+                    type: integer
+      x-requires-mod: principia
+      x-plotable: true
+  "/api/principia.plan.guidance":
+    get:
+      summary: Navball Guidance Active
+      operationId: principia.plan.guidance
+      tags:
+        - principia
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  principia.plan.guidance:
+                    type: boolean
+      x-requires-mod: principia
+      x-plotable: true
+  "/api/principia.version":
+    get:
+      summary: Principia Assembly Version
+      operationId: principia.version
+      tags:
+        - principia
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  principia.version:
+                    type: string
+      x-requires-mod: principia
+      x-units: STRING
       x-plotable: true
   "/api/r.resource":
     get:
@@ -5810,6 +6724,56 @@ paths:
                     type: object
       x-units: TEMP
       x-plotable: true
+  "/api/sci.count":
+    get:
+      summary: Number of Science Experiments Aboard
+      operationId: sci.count
+      tags:
+        - science
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  sci.count:
+                    type: integer
+      x-plotable: true
+  "/api/sci.dataAmount":
+    get:
+      summary: Total Science Data Aboard
+      operationId: sci.dataAmount
+      tags:
+        - science
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  sci.dataAmount:
+                    type: number
+      x-plotable: true
+  "/api/sci.experiments":
+    get:
+      summary: Experiments With Data
+      operationId: sci.experiments
+      tags:
+        - science
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  sci.experiments:
+                    type: object
   "/api/t.currentRate":
     get:
       summary: Current Warp Rate
@@ -5963,6 +6927,24 @@ paths:
                 type: object
                 properties:
                   tar.distance:
+                    type: number
+      x-units: DISTANCE
+      x-plotable: true
+  "/api/tar.groundDistance":
+    get:
+      summary: Surface Distance to Target
+      operationId: tar.groundDistance
+      tags:
+        - target
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  tar.groundDistance:
                     type: number
       x-units: DISTANCE
       x-plotable: true
@@ -6159,6 +7141,24 @@ paths:
                   tar.o.period:
                     type: number
       x-units: TIME
+      x-plotable: true
+  "/api/tar.o.relativeInclination":
+    get:
+      summary: Relative Inclination to Target
+      operationId: tar.o.relativeInclination
+      tags:
+        - target
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  tar.o.relativeInclination:
+                    type: number
+      x-units: DEG
       x-plotable: true
   "/api/tar.o.relativePositionAtTrueAnomalyForOrbitPatch":
     get:
@@ -6509,6 +7509,217 @@ paths:
                   tar.type:
                     type: string
       x-units: STRING
+      x-plotable: true
+  "/api/therm.anyEnginesOverheating":
+    get:
+      summary: Any Engine Near Overheat (>90%)
+      operationId: therm.anyEnginesOverheating
+      tags:
+        - thermal
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  therm.anyEnginesOverheating:
+                    type: boolean
+      x-plotable: true
+  "/api/therm.heatShieldFlux":
+    get:
+      summary: Heat Shield Thermal Flux (kW)
+      operationId: therm.heatShieldFlux
+      tags:
+        - thermal
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  therm.heatShieldFlux:
+                    type: number
+      x-plotable: true
+  "/api/therm.heatShieldTemp":
+    get:
+      summary: Heat Shield Temperature (K)
+      operationId: therm.heatShieldTemp
+      tags:
+        - thermal
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  therm.heatShieldTemp:
+                    type: number
+      x-units: TEMP
+      x-plotable: true
+  "/api/therm.heatShieldTempCelsius":
+    get:
+      summary: Heat Shield Temperature (C)
+      operationId: therm.heatShieldTempCelsius
+      tags:
+        - thermal
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  therm.heatShieldTempCelsius:
+                    type: number
+      x-units: TEMP
+      x-plotable: true
+  "/api/therm.hottestEngineMaxTemp":
+    get:
+      summary: Hottest Engine Max Temperature (K)
+      operationId: therm.hottestEngineMaxTemp
+      tags:
+        - thermal
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  therm.hottestEngineMaxTemp:
+                    type: number
+      x-units: TEMP
+      x-plotable: true
+  "/api/therm.hottestEngineTemp":
+    get:
+      summary: Hottest Engine Temperature (K)
+      operationId: therm.hottestEngineTemp
+      tags:
+        - thermal
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  therm.hottestEngineTemp:
+                    type: number
+      x-units: TEMP
+      x-plotable: true
+  "/api/therm.hottestEngineTempRatio":
+    get:
+      summary: Hottest Engine Temperature Ratio (0-1)
+      operationId: therm.hottestEngineTempRatio
+      tags:
+        - thermal
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  therm.hottestEngineTempRatio:
+                    type: number
+      x-plotable: true
+  "/api/therm.hottestPartMaxTemp":
+    get:
+      summary: Hottest Part Max Temperature (K)
+      operationId: therm.hottestPartMaxTemp
+      tags:
+        - thermal
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  therm.hottestPartMaxTemp:
+                    type: number
+      x-units: TEMP
+      x-plotable: true
+  "/api/therm.hottestPartName":
+    get:
+      summary: Hottest Part Name
+      operationId: therm.hottestPartName
+      tags:
+        - thermal
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  therm.hottestPartName:
+                    type: string
+      x-units: STRING
+  "/api/therm.hottestPartTemp":
+    get:
+      summary: Hottest Part Temperature (C)
+      operationId: therm.hottestPartTemp
+      tags:
+        - thermal
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  therm.hottestPartTemp:
+                    type: number
+      x-units: TEMP
+      x-plotable: true
+  "/api/therm.hottestPartTempKelvin":
+    get:
+      summary: Hottest Part Temperature (K)
+      operationId: therm.hottestPartTempKelvin
+      tags:
+        - thermal
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  therm.hottestPartTempKelvin:
+                    type: number
+      x-units: TEMP
+      x-plotable: true
+  "/api/therm.hottestPartTempRatio":
+    get:
+      summary: Hottest Part Temperature Ratio (0-1)
+      operationId: therm.hottestPartTempRatio
+      tags:
+        - thermal
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  therm.hottestPartTempRatio:
+                    type: number
       x-plotable: true
   "/api/v.abortValue":
     get:
@@ -7016,6 +8227,42 @@ paths:
                   v.atmosphericTemperature:
                     type: number
       x-units: TEMP
+      x-plotable: true
+  "/api/v.biome":
+    get:
+      summary: Current Biome Name
+      operationId: v.biome
+      tags:
+        - vessel
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  v.biome:
+                    type: string
+      x-units: STRING
+      x-plotable: true
+  "/api/v.biomeLocalized":
+    get:
+      summary: Current Biome Name (Localized)
+      operationId: v.biomeLocalized
+      tags:
+        - vessel
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  v.biomeLocalized:
+                    type: string
+      x-units: STRING
       x-plotable: true
   "/api/v.body":
     get:

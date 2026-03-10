@@ -71,6 +71,11 @@ namespace Telemachus
         [TelemetryAPI("a.mods", "Detected Mod Integrations", Plotable = false, AlwaysEvaluable = true, Category = "system", ReturnType = "object")]
         object Mods(DataSources ds) => ModDetector.Detect();
 
+        [TelemetryAPI("a.physicsMode", "Physics Mode (patched_conics or n_body)",
+            Units = APIEntry.UnitType.STRING, AlwaysEvaluable = true,
+            Category = "system", ReturnType = "string")]
+        object PhysicsMode(DataSources ds) => PrincipiaDataLinkHandler.IsPrincipiaActive() ? "n_body" : "patched_conics";
+
         [TelemetryAPI("a.schema", "Full API Schema (JSON)", Plotable = false, AlwaysEvaluable = true,
             Category = "system", ReturnType = "object")]
         object Schema(DataSources ds) => Telemachus.Generated.TelemetrySchema.Json;
@@ -94,6 +99,7 @@ namespace Telemachus
             ("kos",       "kOS.Core"),
             ("vesselview", "VesselView.VesselViewer"),
             ("astrogator", "Astrogator.Astrogator"),
+            ("principia",  "principia.ksp_plugin_adapter.PrincipiaPluginAdapter"),
         };
 
         public static Dictionary<string, object> Detect()
