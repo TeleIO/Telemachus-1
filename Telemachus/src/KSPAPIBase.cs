@@ -20,6 +20,7 @@ namespace Telemachus
             APIHandlers.Add(new RealChuteDataLinkHandler(formatters));
             APIHandlers.Add(new AstrogatorDataLinkHandler(formatters));
             APIHandlers.Add(new PrincipiaDataLinkHandler(formatters));
+            APIHandlers.Add(new KerbalismDataLinkHandler(formatters));
             APIHandlers.Add(new LandingDataLinkHandler(formatters));
             APIHandlers.Add(new ThermalDataLinkHandler(formatters));
             APIHandlers.Add(new ScienceCareerDataLinkHandler(formatters));

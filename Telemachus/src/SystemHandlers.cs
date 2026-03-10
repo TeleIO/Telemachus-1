@@ -100,6 +100,7 @@ namespace Telemachus
             ("vesselview", "VesselView.VesselViewer"),
             ("astrogator", "Astrogator.Astrogator"),
             ("principia",  "principia.ksp_plugin_adapter.PrincipiaPluginAdapter"),
+            ("kerbalism",  "KERBALISM.API"),
         };
 
         public static Dictionary<string, object> Detect()
