@@ -9,27 +9,31 @@ namespace Telemachus.CameraSnapshots
     class CameraCaptureManager : MonoBehaviour
     {
         #region Singleton management
-        public static GameObject instance;
+        private static CameraCaptureManager _instance;
 
         private CameraCaptureManager() { }
-
-        public static GameObject Instance
-        {
-            get
-            {
-                instance ??= GameObject.Find("CameraCaptureManager")
-                    ?? new GameObject("CameraCaptureManager", typeof(CameraCaptureManager));
-                return instance;
-            }
-        }
 
         public static CameraCaptureManager classedInstance
         {
             get
             {
-                return (CameraCaptureManager)Instance.GetComponent(typeof(CameraCaptureManager));
+                // Unity overloads == so destroyed objects compare as null
+                if (_instance == null)
+                {
+                    _instance = FindObjectOfType<CameraCaptureManager>();
+                    if (_instance == null)
+                    {
+                        var go = new GameObject("CameraCaptureManager");
+                        _instance = go.AddComponent<CameraCaptureManager>();
+                        DontDestroyOnLoad(go);
+                    }
+                }
+                return _instance;
             }
         }
+
+        // Keep backward compat for anything referencing Instance
+        public static GameObject Instance => classedInstance.gameObject;
         #endregion
 
         private CurrentFlightCameraCapture cameraCaptureTest = null;
@@ -56,6 +60,12 @@ namespace Telemachus.CameraSnapshots
         {
             GameEvents.onFlightReady.Add(addFlightCamera);
             GameEvents.onGameSceneLoadRequested.Add(removeFlightCameraIfNotFlight);
+        }
+
+        protected void OnDisable()
+        {
+            GameEvents.onFlightReady.Remove(addFlightCamera);
+            GameEvents.onGameSceneLoadRequested.Remove(removeFlightCameraIfNotFlight);
         }
 
         /// <summary>
