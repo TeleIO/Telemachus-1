@@ -181,8 +181,10 @@ namespace Telemachus
 
         /// <summary>
         /// Fakes the "window open" state and triggers a background calculation.
-        /// Astrogator gates calculations behind numOpenDisplays > 0; we increment
-        /// it, call TryStartLoad, then decrement so we don't leak state.
+        /// Astrogator gates calculations behind numOpenDisplays > 0; we bump it
+        /// once and leave it — the async coroutine needs it to stay positive for
+        /// the entire multi-frame calculation.  Keeping it at 1 also lets
+        /// Astrogator auto-recalculate on orbit changes, which is what we want.
         /// </summary>
         static void TriggerLoad()
         {
@@ -194,12 +196,13 @@ namespace Telemachus
             var loader = _loaderProp.GetValue(instance);
             if (loader == null) return;
 
-            // Bump numOpenDisplays so AllowStart() passes
-            int prev = 0;
+            // Permanently bump numOpenDisplays so AllowStart() passes and stays passing
+            // through the async calculation.  Astrogator's UI increments/decrements on
+            // top of this — opening the window goes to 2, closing back to 1, still fine.
             if (_numOpenDisplaysProp != null)
             {
-                prev = (int)(_numOpenDisplaysProp.GetValue(loader) ?? 0);
-                if (prev < 1)
+                int cur = (int)(_numOpenDisplaysProp.GetValue(loader) ?? 0);
+                if (cur < 1)
                     _numOpenDisplaysProp.SetValue(loader, 1);
             }
 
@@ -207,19 +210,12 @@ namespace Telemachus
             {
                 var origin = FlightGlobals.ActiveVessel as ITargetable
                     ?? (ITargetable)FlightGlobals.getMainBody();
-                // TryStartLoad(ITargetable, LoadDoneCallback, LoadDoneCallback, LoadDoneCallback, bool)
                 _tryStartLoadMethod.Invoke(loader, new object[]
                     { origin, _noopCallback, _noopCallback, _noopCallback, true });
             }
             catch (Exception ex)
             {
                 PluginLogger.debug("Astrogator TriggerLoad failed: " + ex.Message);
-            }
-            finally
-            {
-                // Restore original count so we don't interfere with Astrogator's UI
-                if (_numOpenDisplaysProp != null && prev < 1)
-                    _numOpenDisplaysProp.SetValue(loader, prev);
             }
         }
 
