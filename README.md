@@ -32,9 +32,10 @@ A KSP plugin that exposes live telemetry data over HTTP and WebSocket, letting y
 | Mod | Prefix | Description | Status |
 |-----|--------|-------------|--------|
 | [MechJeb](https://github.com/MuMech/MechJeb2) | `mj.*` | SmartASS autopilot orientation commands | Released |
-| [FAR](https://github.com/dkavolis/Ferram-Aerospace-Research-Continued) | `far.*` | Aerodynamic coefficients, flaps, spoilers, stall detection | In testing |
-| [RealChute](https://github.com/StupidChris/RealChute) | `rc.*` | Parachute deployment status, safety, arm/deploy/cut | In testing |
-| [Astrogator](https://github.com/HebaruSan/Astrogator) | `astg.*` | Transfer window planning — delta-V, burn times, maneuver creation | In testing |
+| [FAR](https://github.com/dkavolis/Ferram-Aerospace-Research) | `far.*` | Aerodynamic coefficients, flaps, spoilers, stall detection | Released |
+| [RealChute](https://github.com/StupidChris/RealChute) | `rc.*` | Parachute deployment status, safety, arm/deploy/cut | Released |
+| [Astrogator](https://github.com/HebaruSan/Astrogator) | `astg.*` | Transfer window planning — delta-V, burn times, maneuver creation | Released |
+| [Kerbalism](https://github.com/Kerbalism/Kerbalism) | `kerbalism.*` | Life support, radiation, habitat, crew health, space weather | Released |
 | [Principia](https://github.com/mockingbirdnest/Principia) | `principia.*`, `o.mean.*` | N-body orbit analysis — mean elements, flight plan burns, recurrence | In testing |
 
 All mod integrations are soft dependencies via reflection — no mod DLLs are required at build time. Query `a.mods` at runtime to check which mods are detected, or `a.physicsMode` to check if Principia's N-body integrator is active (`"n_body"` vs `"patched_conics"`).
@@ -708,7 +709,7 @@ GET /telemachus/cameras/FlightCamera
 
 Returns `image/jpeg`. Returns 503 if the camera hasn't rendered yet, 404 if the camera name is unknown.
 
-### `far.*` — FAR aerodynamics (requires FAR) *(WIP — in testing)*
+### `far.*` — FAR aerodynamics (requires FAR)
 
 <details><summary>Aerodynamic data & controls</summary>
 
@@ -734,7 +735,7 @@ Returns `image/jpeg`. Returns 503 if the camera hasn't rendered yet, 404 if the 
 
 </details>
 
-### `rc.*` — RealChute (requires RealChute) *(WIP — in testing)*
+### `rc.*` — RealChute (requires RealChute)
 
 | Key | Description |
 |-----|-------------|
@@ -748,7 +749,7 @@ Returns `image/jpeg`. Returns 503 if the camera hasn't rendered yet, 404 if the 
 | `rc.arm` | **Action:** arm all chutes |
 | `rc.disarm` | **Action:** disarm all chutes |
 
-### `astg.*` — Astrogator (requires Astrogator) *(WIP — in testing)*
+### `astg.*` — Astrogator (requires Astrogator)
 
 <details><summary>Transfer planning</summary>
 
@@ -769,6 +770,87 @@ Returns `image/jpeg`. Returns 503 if the camera hasn't rendered yet, 404 if the 
 | `astg.nextBurnCountdown` | Seconds until next transfer burn |
 | `astg.createManeuver[index]` | **Action:** create maneuver for transfer |
 | `astg.warpToBurn[index]` | **Action:** warp to transfer burn |
+
+</details>
+
+### `kerbalism.*` — Kerbalism life support & radiation (requires Kerbalism)
+
+<details><summary>Availability & features</summary>
+
+| Key | Description | Type |
+|-----|-------------|------|
+| `kerbalism.available` | Kerbalism is installed | bool |
+| `kerbalism.features` | Enabled feature flags (radiation, habitat, etc.) | object |
+
+</details>
+
+<details><summary>Radiation</summary>
+
+| Key | Description | Type |
+|-----|-------------|------|
+| `kerbalism.radiationEnabled` | Radiation system enabled | bool |
+| `kerbalism.radiation` | Environment radiation | rad/h |
+| `kerbalism.habitatRadiation` | Habitat radiation | rad/h |
+| `kerbalism.magnetosphere` | Inside magnetosphere | bool |
+| `kerbalism.innerBelt` | Inside inner radiation belt | bool |
+| `kerbalism.outerBelt` | Inside outer radiation belt | bool |
+| `kerbalism.stellarActivity` | Stellar activity level (0–1) | double |
+
+</details>
+
+<details><summary>Habitat & life support</summary>
+
+| Key | Description | Type |
+|-----|-------------|------|
+| `kerbalism.habitatVolume` | Habitat volume | m³ |
+| `kerbalism.habitatSurface` | Habitat surface area | m² |
+| `kerbalism.habitatPressure` | Habitat pressure (0–1) | double |
+| `kerbalism.co2Level` | CO₂ poisoning level | double |
+| `kerbalism.radiationShielding` | Radiation shielding (0–1) | double |
+| `kerbalism.habitatLivingSpace` | Living space comfort factor | double |
+| `kerbalism.habitatComfort` | Overall habitat comfort | double |
+
+</details>
+
+<details><summary>Environment</summary>
+
+| Key | Description | Type |
+|-----|-------------|------|
+| `kerbalism.envTemperature` | Environment temperature | K |
+| `kerbalism.envTempDiff` | Temp difference from survival | double |
+| `kerbalism.envStormRadiation` | Storm radiation dose | double |
+| `kerbalism.breathable` | Atmosphere breathable | bool |
+| `kerbalism.inAtmosphere` | Inside atmosphere | bool |
+| `kerbalism.solarExposure` | Solar panel average exposure (0–1) | double |
+
+</details>
+
+<details><summary>Comms & data</summary>
+
+| Key | Description | Type |
+|-----|-------------|------|
+| `kerbalism.connectionLinked` | Signal connected | bool |
+| `kerbalism.connectionRate` | Data rate | MB/s |
+| `kerbalism.connectionTransmitting` | Files transmitting | int |
+| `kerbalism.connection` | Full connection info | object |
+| `kerbalism.drivesFreeSpace` | Drive free space | MB |
+| `kerbalism.drivesCapacity` | Drive total capacity | MB |
+
+</details>
+
+<details><summary>Space weather & crew</summary>
+
+| Key | Description | Type |
+|-----|-------------|------|
+| `kerbalism.stellarStormState` | Storm state (0=none, 1=incoming, 2=active) | int |
+| `kerbalism.stellarStormIncoming` | Storm incoming | bool |
+| `kerbalism.stellarStormInProgress` | Storm in progress | bool |
+| `kerbalism.stellarStormDuration` | Storm duration | s |
+| `kerbalism.stellarStormStartTime` | Storm start time (UT) | s |
+| `kerbalism.malfunction` | Part malfunction active | bool |
+| `kerbalism.critical` | Critical failure active | bool |
+| `kerbalism.crew` | Crew health summary (per-kerbal) | object |
+| `kerbalism.experimentRunning[id]` | Experiment is running | bool |
 
 </details>
 
