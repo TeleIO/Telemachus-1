@@ -103,6 +103,11 @@ namespace Telemachus
         object TargetArgumentOfPeriapsis(DataSources ds) =>
             FlightGlobals.fetch.VesselTarget != null ? FlightGlobals.fetch.VesselTarget.GetOrbit().argumentOfPeriapsis : 0;
 
+        [TelemetryAPI("tar.o.relativeInclination", "Relative Inclination to Target", Units = APIEntry.UnitType.DEG, Category = "target", ReturnType = "double")]
+        object TargetRelativeInclination(DataSources ds) =>
+            FlightGlobals.fetch.VesselTarget != null
+                ? Orbit.RelativeInclination(ds.vessel.orbit, FlightGlobals.fetch.VesselTarget.GetOrbit()) : 0;
+
         [TelemetryAPI("tar.o.timeToTransition1", "Target Time to Transition 1", Units = APIEntry.UnitType.TIME, Category = "target", ReturnType = "double")]
         object TargetTimeToTransition1(DataSources ds) =>
             FlightGlobals.fetch.VesselTarget != null ? FlightGlobals.fetch.VesselTarget.GetOrbit().timeToTransition1 : 0;

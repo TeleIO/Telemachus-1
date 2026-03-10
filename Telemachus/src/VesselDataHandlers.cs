@@ -434,6 +434,31 @@ namespace Telemachus
         [TelemetryAPI("o.referenceBody", "Reference Body Name", Units = APIEntry.UnitType.STRING, Category = "orbit", ReturnType = "string")]
         object ReferenceBody(DataSources ds) => ds.vessel.orbit.referenceBody.name;
 
+        // --- Next Apsis ---
+
+        [TelemetryAPI("o.nextApsisType", "Next Apsis Type (-1=Pe, 1=Ap, 0=N/A)",
+            Category = "orbit", ReturnType = "double")]
+        object NextApsisType(DataSources ds)
+        {
+            var orbit = ds.vessel.orbit;
+            if (orbit.eccentricity < 1.0)
+                return orbit.timeToPe < orbit.timeToAp ? -1.0 : 1.0;
+            // Hyperbolic: check if Pe is still ahead
+            return (-orbit.meanAnomaly / (2 * Math.PI / orbit.period) > 0.0) ? -1.0 : 0.0;
+        }
+
+        [TelemetryAPI("o.timeToNextApsis", "Time to Next Apsis",
+            Units = APIEntry.UnitType.TIME, Category = "orbit", ReturnType = "double")]
+        object TimeToNextApsis(DataSources ds)
+        {
+            var orbit = ds.vessel.orbit;
+            if (orbit.eccentricity < 1.0)
+                return Math.Min(orbit.timeToPe, orbit.timeToAp);
+            // Hyperbolic: only Pe exists
+            double timeToPe = -orbit.meanAnomaly / (2 * Math.PI / orbit.period);
+            return timeToPe > 0 ? timeToPe : double.NaN;
+        }
+
         // --- Transitions ---
 
         [TelemetryAPI("o.timeToTransition1", "Time to Transition 1", Units = APIEntry.UnitType.TIME, Category = "orbit", ReturnType = "double")]
