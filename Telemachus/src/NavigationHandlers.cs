@@ -62,6 +62,45 @@ namespace Telemachus
             FlightGlobals.fetch.VesselTarget != null
                 ? Vector3.Distance(FlightGlobals.fetch.VesselTarget.GetTransform().position, ds.vessel.GetTransform().position) : 0;
 
+        [TelemetryAPI("tar.groundDistance", "Surface Distance to Target", Units = APIEntry.UnitType.DISTANCE, Category = "target", ReturnType = "double")]
+        object TargetGroundDistance(DataSources ds)
+        {
+            if (FlightGlobals.fetch.VesselTarget == null) return 0d;
+            var target = FlightGlobals.fetch.VesselTarget;
+
+            double lat1, lon1, lat2, lon2;
+            lat1 = ds.vessel.latitude * Math.PI / 180;
+            lon1 = ds.vessel.longitude * Math.PI / 180;
+
+            if (target is CelestialBody body)
+            {
+                // Distance to body center projected onto vessel's body surface
+                return 0d;
+            }
+            else if (target is Vessel targetVessel)
+            {
+                lat2 = targetVessel.latitude * Math.PI / 180;
+                lon2 = targetVessel.longitude * Math.PI / 180;
+            }
+            else
+            {
+                // For docking ports etc, get position from orbit
+                var orbit = target.GetOrbit();
+                if (orbit == null || orbit.referenceBody != ds.vessel.mainBody) return 0d;
+                orbit.referenceBody.GetLatLonAlt(orbit.pos + orbit.referenceBody.position, out lat2, out lon2, out _);
+                lat2 *= Math.PI / 180;
+                lon2 *= Math.PI / 180;
+            }
+
+            // Haversine formula
+            double dlat = lat2 - lat1;
+            double dlon = lon2 - lon1;
+            double a = Math.Sin(dlat / 2) * Math.Sin(dlat / 2) +
+                       Math.Cos(lat1) * Math.Cos(lat2) * Math.Sin(dlon / 2) * Math.Sin(dlon / 2);
+            double c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
+            return ds.vessel.mainBody.Radius * c;
+        }
+
         [TelemetryAPI("tar.o.relativeVelocity", "Target Relative Velocity", Units = APIEntry.UnitType.VELOCITY, Category = "target", ReturnType = "double")]
         object TargetRelativeVelocity(DataSources ds) =>
             FlightGlobals.fetch.VesselTarget != null

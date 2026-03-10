@@ -21,6 +21,7 @@ namespace Telemachus
             APIHandlers.Add(new AstrogatorDataLinkHandler(formatters));
             APIHandlers.Add(new LandingDataLinkHandler(formatters));
             APIHandlers.Add(new ThermalDataLinkHandler(formatters));
+            APIHandlers.Add(new ScienceCareerDataLinkHandler(formatters));
             APIHandlers.Add(new TimeWarpDataLinkHandler(formatters));
             APIHandlers.Add(new TargetDataLinkHandler(formatters));
 

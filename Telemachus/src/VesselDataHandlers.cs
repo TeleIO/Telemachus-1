@@ -226,6 +226,12 @@ namespace Telemachus
         [TelemetryAPI("v.landedAt", "Landed At (biome/location)", Units = APIEntry.UnitType.STRING, Category = "vessel", ReturnType = "string")]
         object LandedAt(DataSources ds) => ds.vessel.landedAt;
 
+        [TelemetryAPI("v.biome", "Current Biome Name", Units = APIEntry.UnitType.STRING, Category = "vessel", ReturnType = "string")]
+        object Biome(DataSources ds) => ScienceUtil.GetExperimentBiome(ds.vessel.mainBody, ds.vessel.latitude, ds.vessel.longitude);
+
+        [TelemetryAPI("v.biomeLocalized", "Current Biome Name (Localized)", Units = APIEntry.UnitType.STRING, Category = "vessel", ReturnType = "string")]
+        object BiomeLocalized(DataSources ds) => ScienceUtil.GetExperimentBiomeLocalized(ds.vessel.mainBody, ds.vessel.latitude, ds.vessel.longitude);
+
         [TelemetryAPI("v.isEVA", "Is EVA", Category = "vessel", ReturnType = "bool")]
         object IsEVA(DataSources ds) => ds.vessel.isEVA;
 
@@ -490,6 +496,39 @@ namespace Telemachus
 
         [TelemetryAPI("o.closestTgtApprUT", "Closest Target Approach UT", Units = APIEntry.UnitType.DATE, Category = "orbit", ReturnType = "double")]
         object ClosestTgtApprUT(DataSources ds) => ds.vessel.orbit.closestTgtApprUT;
+
+        // --- Encounter Detection ---
+
+        [TelemetryAPI("o.encounterExists", "SOI Encounter Exists (-1=escape, 0=none, 1=encounter)", Category = "orbit", ReturnType = "int")]
+        object EncounterExists(DataSources ds)
+        {
+            return ds.vessel.orbit.patchEndTransition switch
+            {
+                Orbit.PatchTransitionType.ENCOUNTER => 1,
+                Orbit.PatchTransitionType.ESCAPE => -1,
+                _ => 0
+            };
+        }
+
+        [TelemetryAPI("o.encounterBody", "Encounter/Escape Body Name", Units = APIEntry.UnitType.STRING, Category = "orbit", ReturnType = "string")]
+        object EncounterBody(DataSources ds)
+        {
+            return ds.vessel.orbit.patchEndTransition switch
+            {
+                Orbit.PatchTransitionType.ENCOUNTER => ds.vessel.orbit.nextPatch.referenceBody.bodyName,
+                Orbit.PatchTransitionType.ESCAPE => ds.vessel.orbit.referenceBody.referenceBody?.bodyName ?? "",
+                _ => ""
+            };
+        }
+
+        [TelemetryAPI("o.encounterTime", "Time Until SOI Encounter/Escape", Units = APIEntry.UnitType.TIME, Category = "orbit", ReturnType = "double")]
+        object EncounterTime(DataSources ds)
+        {
+            if (ds.vessel.orbit.patchEndTransition == Orbit.PatchTransitionType.ENCOUNTER ||
+                ds.vessel.orbit.patchEndTransition == Orbit.PatchTransitionType.ESCAPE)
+                return ds.vessel.orbit.UTsoi - Planetarium.GetUniversalTime();
+            return -1d;
+        }
 
         // --- Speed At ---
 
