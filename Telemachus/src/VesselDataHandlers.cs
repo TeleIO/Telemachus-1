@@ -879,20 +879,21 @@ namespace Telemachus
         static float ut = 0, x = 0, y = 0, z = 0;
 
         public MapViewDataLinkHandler(FormatterProvider formatters)
-            : base(formatters) { }
-
-        [TelemetryAPI("m.toggleMapView", " Toggle Map View", IsAction = true, Category = "map", ReturnType = "double")]
-        object ToggleMapView(DataSources ds)
+            : base(formatters)
         {
-            if (MapView.MapIsEnabled) MapView.ExitMapView(); else MapView.EnterMapView();
-            return 0d;
+            // Map view transitions must run on the main Unity thread
+            registerAPI(new ActionAPIEntry(
+                queueDelayed(x => { if (MapView.MapIsEnabled) MapView.ExitMapView(); else MapView.EnterMapView(); return 0d; }),
+                "m.toggleMapView", "Toggle Map View", formatters.Default));
+
+            registerAPI(new ActionAPIEntry(
+                queueDelayed(x => { MapView.EnterMapView(); return 0d; }),
+                "m.enterMapView", "Enter Map View", formatters.Default));
+
+            registerAPI(new ActionAPIEntry(
+                queueDelayed(x => { MapView.ExitMapView(); return 0d; }),
+                "m.exitMapView", "Exit Map View", formatters.Default));
         }
-
-        [TelemetryAPI("m.enterMapView", " Enter Map View", IsAction = true, Category = "map", ReturnType = "double")]
-        object EnterMapView(DataSources ds) { MapView.EnterMapView(); return 0d; }
-
-        [TelemetryAPI("m.exitMapView", " Exit Map View", IsAction = true, Category = "map", ReturnType = "double")]
-        object ExitMapView(DataSources ds) { MapView.ExitMapView(); return 0d; }
 
         [TelemetryAPI("m.mapIsEnabled", "Map View Is Enabled", Category = "map", ReturnType = "bool")]
         object MapIsEnabled(DataSources ds) => MapView.MapIsEnabled;
