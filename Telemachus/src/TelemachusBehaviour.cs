@@ -154,7 +154,28 @@ namespace Telemachus
             {
                 // Build a list of addresses we will be able to recieve at
                 serverConfig.ValidIpAddresses.Add(IPAddress.Loopback);
-                serverConfig.ValidIpAddresses.AddRange(Dns.GetHostAddresses(Dns.GetHostName()));
+                try
+                {
+                    foreach (var iface in System.Net.NetworkInformation.NetworkInterface.GetAllNetworkInterfaces())
+                    {
+                        if (iface.OperationalStatus != System.Net.NetworkInformation.OperationalStatus.Up)
+                            continue;
+                        foreach (var addr in iface.GetIPProperties().UnicastAddresses)
+                        {
+                            if (addr.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork
+                                && !IPAddress.IsLoopback(addr.Address))
+                            {
+                                PluginLogger.print("Found LAN address: " + addr.Address + " on " + iface.Name);
+                                serverConfig.ValidIpAddresses.Add(addr.Address);
+                            }
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    PluginLogger.print("Could not enumerate network interfaces: " + e.Message
+                        + "; server will listen on loopback only");
+                }
             }
             else
             {
