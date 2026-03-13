@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Globalization;
 using System.Text;
 using WebSocketSharp;
 using WebSocketSharp.Net;
@@ -53,7 +52,7 @@ namespace Telemachus
                 // Apply input scaling: map integer range to 0.0–1.0
                 var scale = queryParams.Get("scale");
                 if (scale != null)
-                    args = ScaleInput(args, scale);
+                    args = ApiScaling.ScaleInput(args, scale);
 
                 apiString += "[" + args + "]";
             }
@@ -68,7 +67,12 @@ namespace Telemachus
                 var result = kspAPI.ProcessAPIString(apiString);
 
                 // Apply output precision/integer scaling
-                result = ApplyOutputScaling(result, queryParams);
+                var precisionStr = queryParams.Get("precision");
+                if (precisionStr != null && int.TryParse(precisionStr, out int precision))
+                {
+                    bool asInt = string.Equals(queryParams.Get("int"), "true", StringComparison.OrdinalIgnoreCase);
+                    result = ApiScaling.ApplyOutputScaling(result, precision, asInt);
+                }
 
                 results[apiString.Split('[')[0]] = result;
             }
@@ -89,60 +93,6 @@ namespace Telemachus
             response.WriteContent(returnData);
             dataRates.SendDataToClient(returnData.Length);
             return true;
-        }
-
-        /// <summary>
-        /// Scale a comma-separated input value from an integer range to 0.0–1.0.
-        /// scale format: "min,max" e.g. "0,1024"
-        /// Only the first arg is scaled; remaining args pass through.
-        /// </summary>
-        private static string ScaleInput(string args, string scale)
-        {
-            var scaleParts = scale.Split(',');
-            if (scaleParts.Length != 2) return args;
-
-            if (!double.TryParse(scaleParts[0], NumberStyles.Any, CultureInfo.InvariantCulture, out double scaleMin) ||
-                !double.TryParse(scaleParts[1], NumberStyles.Any, CultureInfo.InvariantCulture, out double scaleMax))
-                return args;
-
-            if (Math.Abs(scaleMax - scaleMin) < double.Epsilon) return args;
-
-            var argParts = args.Split(',');
-            if (!double.TryParse(argParts[0], NumberStyles.Any, CultureInfo.InvariantCulture, out double inputVal))
-                return args;
-
-            double scaled = (inputVal - scaleMin) / (scaleMax - scaleMin);
-            argParts[0] = scaled.ToString(CultureInfo.InvariantCulture);
-            return string.Join(",", argParts);
-        }
-
-        /// <summary>
-        /// Apply precision rounding and optional integer conversion to output.
-        /// </summary>
-        private static object ApplyOutputScaling(object result, NameValueCollection queryParams)
-        {
-            var precisionStr = queryParams.Get("precision");
-            if (precisionStr == null || result == null) return result;
-
-            if (!int.TryParse(precisionStr, out int precision) || precision < 0 || precision > 15)
-                return result;
-
-            double value;
-            if (result is double d) value = d;
-            else if (result is float f) value = f;
-            else if (result is int i) value = i;
-            else if (result is long l) value = l;
-            else if (double.TryParse(result.ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out double parsed))
-                value = parsed;
-            else return result;
-
-            value = Math.Round(value, precision, MidpointRounding.AwayFromZero);
-
-            // ?int=true returns value * 10^precision as a long (no decimal point)
-            if (string.Equals(queryParams.Get("int"), "true", StringComparison.OrdinalIgnoreCase))
-                return (long)(value * Math.Pow(10, precision));
-
-            return value;
         }
 
         private static NameValueCollection ParseQuery(string query)

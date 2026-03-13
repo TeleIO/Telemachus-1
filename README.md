@@ -152,6 +152,45 @@ mj.surface[90,45]                 — MechJeb heading + pitch
 v.setPitchYawRollXYZ[0,0,0,1,0,0] — FBW attitude + translation
 ```
 
+### Scaling for embedded controllers
+
+For integer-only boards (Raspberry Pi Pico, MicroBlocks, etc.) that can't handle floating-point JSON, both `/api/` and `/telemachus/datalink` support scaling query parameters.
+
+**Input scaling** — map an integer range to 0.0–1.0 before the API processes it:
+
+```
+GET /api/f.setThrottle?args=512&scale=0,1023     → throttle set to ~0.5
+```
+
+**Output scaling** — round to N decimals, optionally shift to integer:
+
+```
+GET /api/v.altitude?precision=2                   → 18345.67
+GET /api/v.altitude?precision=2&int=true          → 1834567   (divide by 100 on board)
+```
+
+On the **batch endpoint** (`/telemachus/datalink`), use `_scale`, `_precision`, and `_int` as global defaults:
+
+```
+GET /telemachus/datalink?alt=v.altitude&pe=o.PeA&_precision=1&_int=true
+→ { "alt": 183457, "pe": 750001 }
+```
+
+Or override per-key with **pipe syntax** in the value string:
+
+```
+GET /telemachus/datalink?alt=v.altitude|precision:2|int&t=f.setThrottle[512]|scale:0,1023
+→ { "alt": 1834567, "t": 1 }
+```
+
+Per-key pipe modifiers take precedence over global `_` parameters.
+
+| Modifier | Where | Effect |
+|----------|-------|--------|
+| `scale=min,max` / `|scale:min,max` | Input | Map [min,max] → [0.0, 1.0] |
+| `precision=N` / `|precision:N` | Output | Round to N decimal places |
+| `int=true` / `|int` | Output | Return value × 10^N as integer |
+
 ---
 
 ### OpenAPI spec

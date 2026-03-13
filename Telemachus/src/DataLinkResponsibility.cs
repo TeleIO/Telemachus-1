@@ -29,8 +29,13 @@ namespace Telemachus
 
         #endregion
 
-        private static Dictionary<string, object> splitArguments(string argstring)
+        private static Dictionary<string, object> splitArguments(string argstring,
+            out string globalScale, out int globalPrecision, out bool globalInt)
         {
+            globalScale = null;
+            globalPrecision = -1;
+            globalInt = false;
+
             var ret = new Dictionary<string, object>();
             if (argstring.StartsWith("?")) argstring = argstring[1..];
 
@@ -40,6 +45,19 @@ namespace Telemachus
                 if (subParts.Length != 2) continue;
                 var keyName = Uri.UnescapeDataString(subParts[0]);
                 var apiName = Uri.UnescapeDataString(subParts[1]);
+
+                // Reserved global params
+                switch (keyName)
+                {
+                    case "_scale": globalScale = apiName; continue;
+                    case "_precision":
+                        int.TryParse(apiName, out globalPrecision);
+                        continue;
+                    case "_int":
+                        globalInt = string.Equals(apiName, "true", StringComparison.OrdinalIgnoreCase);
+                        continue;
+                }
+
                 ret[keyName] = apiName;
             }
             return ret;
@@ -59,6 +77,10 @@ namespace Telemachus
             // Don't count headers + request.Headers.AllKeys.Sum(x => x.Length + request.Headers[x].Length + 1);
             dataRates.RecieveDataFromClient(Convert.ToInt32(byteCount));
 
+            string globalScale = null;
+            int globalPrecision = -1;
+            bool globalInt = false;
+
             IDictionary<string, object> apiRequests;
             if (request.HttpMethod.ToUpper() == "POST" && request.HasEntityBody)
             {
@@ -67,7 +89,8 @@ namespace Telemachus
             }
             else
             {
-                apiRequests = splitArguments(request.Url.Query);
+                apiRequests = splitArguments(request.Url.Query,
+                    out globalScale, out globalPrecision, out globalInt);
             }
 
             var results = new Dictionary<string, object>();
@@ -78,7 +101,23 @@ namespace Telemachus
             {
                 try
                 {
-                    results[name] = kspAPI.ProcessAPIString(apiRequests[name].ToString());
+                    var raw = apiRequests[name].ToString();
+
+                    // Parse per-key pipe modifiers, falling back to global defaults
+                    var apiString = ApiScaling.ParseModifiers(raw,
+                        out string scale, out int precision, out bool asInt,
+                        globalScale, globalPrecision, globalInt);
+
+                    // Apply input scaling to bracket args
+                    apiString = ApiScaling.ApplyInputScaling(apiString, scale);
+
+                    var result = kspAPI.ProcessAPIString(apiString);
+
+                    // Apply output precision/integer scaling
+                    if (precision >= 0)
+                        result = ApiScaling.ApplyOutputScaling(result, precision, asInt);
+
+                    results[name] = result;
                 }
                 catch (KSPAPIBase.UnknownAPIException)
                 {

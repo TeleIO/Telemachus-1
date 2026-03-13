@@ -213,6 +213,13 @@ for (const entry of all) {
     }
   }
 
+  // Add scaling parameters to all /api/ endpoints
+  parameters.push(
+    { $ref: "#/components/parameters/ScaleParam" },
+    { $ref: "#/components/parameters/PrecisionParam" },
+    { $ref: "#/components/parameters/IntParam" },
+  );
+
   const responseSchema = toJsonSchema(entry.returnType);
 
   const operation: Record<string, unknown> = {
@@ -294,6 +301,32 @@ const spec = {
       '{ "+": ["v.altitude", "o.PeA"], "rate": 500 }',
       '```',
       "",
+      "## Scaling for Embedded Controllers",
+      "",
+      "Both `/api/` and `/telemachus/datalink` support optional scaling parameters",
+      "for integer-only embedded boards (Raspberry Pi Pico, MicroBlocks, etc.):",
+      "",
+      "### REST API (`/api/`)",
+      "",
+      "| Parameter | Description | Example |",
+      "|-----------|-------------|---------|",
+      "| `scale=min,max` | Map input arg from [min,max] to [0,1] | `?args=512&scale=0,1023` |",
+      "| `precision=N` | Round output to N decimal places | `?precision=2` → `12345.68` |",
+      "| `int=true` | Return output × 10^N as integer | `?precision=2&int=true` → `1234568` (divide by 100 on board) |",
+      "",
+      "### Batch API (`/telemachus/datalink`)",
+      "",
+      "**Global defaults** via reserved query parameters:",
+      "- `_scale=0,1023` — default input scale for all action args",
+      "- `_precision=2` — round all numeric outputs to 2 decimal places",
+      "- `_int=true` — return all outputs as integers",
+      "",
+      "**Per-key overrides** via pipe syntax in the value string:",
+      "- `alt=v.altitude|precision:2|int` → 18.19 becomes `1819`; divide by 100 on the board",
+      "- `t=f.setThrottle[512]|scale:0,1023` → scale 10-bit ADC value to 0.0–1.0 throttle",
+      "",
+      "Per-key pipe modifiers override global `_` parameters.",
+      "",
       "## Mod Integrations",
       "",
       "Endpoints tagged with `x-requires-mod` are only available when the corresponding mod is installed.",
@@ -313,6 +346,56 @@ const spec = {
   ],
   tags,
   paths,
+  components: {
+    parameters: {
+      ScaleParam: {
+        name: "scale",
+        in: "query",
+        required: false,
+        description:
+          "Input scaling range for embedded controllers. Format: `min,max`. " +
+          "Maps the first bracket argument from the integer range [min, max] to [0.0, 1.0]. " +
+          "Example: `scale=0,1023` with arg `512` → `0.5`.",
+        schema: { type: "string", pattern: "^-?\\d+(\\.\\d+)?,-?\\d+(\\.\\d+)?$", example: "0,1023" },
+      },
+      PrecisionParam: {
+        name: "precision",
+        in: "query",
+        required: false,
+        description:
+          "Round numeric output to N decimal places (0–15).",
+        schema: { type: "integer", minimum: 0, maximum: 15, example: 2 },
+      },
+      IntParam: {
+        name: "int",
+        in: "query",
+        required: false,
+        description:
+          "When `true`, return output as integer: value × 10^precision. " +
+          "Requires `precision` to be set. Useful for integer-only embedded boards.",
+        schema: { type: "boolean", default: false },
+      },
+    },
+    schemas: {
+      ScalingModifiers: {
+        type: "object",
+        description: [
+          "Scaling modifiers can be applied globally via reserved query parameters or per-key via pipe syntax.",
+          "",
+          "**Global (query params on `/telemachus/datalink`):**",
+          "- `_scale=0,1023` — default input scale for all action args",
+          "- `_precision=2` — default output precision for all numeric values",
+          "- `_int=true` — default integer output mode",
+          "",
+          "**Per-key (pipe syntax in API value string):**",
+          "- `v.altitude|precision:2|int` — per-key output modifiers",
+          "- `f.setThrottle[512]|scale:0,1023` — per-key input scaling",
+          "",
+          "Per-key modifiers override global defaults.",
+        ].join("\n"),
+      },
+    },
+  },
 };
 
 // --- Write YAML output ---
