@@ -202,7 +202,7 @@ namespace Telemachus
         {
             delayedAPIRunner.execute();
 
-            if (FlightGlobals.fetch != null)
+            if (FlightGlobals.fetch != null && webServer != null)
             {
                 vesselChangeDetector.update(FlightGlobals.ActiveVessel);
 
