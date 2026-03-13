@@ -20,6 +20,28 @@ namespace Telemachus
             registerAPI(new ActionAPIEntry(
                 queueDelayed(x => { FlightDriver.SetPause(false); return 0d; }),
                 "t.unpause", "Unpause game", formatters.Default));
+
+            registerAPI(new ActionAPIEntry(
+                queueDelayed(x => { QuickSaveLoad.QuickSave(); return 0d; }),
+                "t.quickSave", "Quick Save", formatters.Default));
+
+            registerAPI(new ActionAPIEntry(
+                queueDelayed(x =>
+                {
+                    var game = GamePersistence.LoadGame("quicksave", HighLogic.SaveFolder, true, false);
+                    if (game != null && game.flightState != null)
+                        FlightDriver.StartAndFocusVessel(game, game.flightState.activeVesselIdx);
+                    return game != null ? 0d : -1d;
+                }),
+                "t.quickLoad", "Quick Load", formatters.Default));
+
+            registerAPI(new ActionAPIEntry(
+                queueDelayed(x => { FlightDriver.RevertToLaunch(); return 0d; }),
+                "t.revertToLaunch", "Revert to Launch", formatters.Default));
+
+            registerAPI(new ActionAPIEntry(
+                queueDelayed(x => { FlightDriver.RevertToPrelaunch(EditorFacility.VAB); return 0d; }),
+                "t.revertToEditor", "Revert to Editor", formatters.Default));
         }
 
         [TelemetryAPI("t.universalTime", "Universal Time", Units = APIEntry.UnitType.DATE, AlwaysEvaluable = true, Category = "timewarp", ReturnType = "double")]
