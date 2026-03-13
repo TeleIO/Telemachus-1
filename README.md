@@ -1,9 +1,19 @@
-# Telemachus Reborn
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/public/logo.svg">
+    <source media="(prefers-color-scheme: light)" srcset="docs/public/logo.svg">
+    <img alt="Telemachus Reborn" src="docs/public/logo.svg" width="480">
+  </picture>
+</p>
+
+<p align="center">
 
 [![Build](https://github.com/TeleIO/Telemachus-1/actions/workflows/build.yml/badge.svg)](https://github.com/TeleIO/Telemachus-1/actions/workflows/build.yml)
 [![GitHub Downloads](https://img.shields.io/github/downloads/TeleIO/Telemachus-1/total.svg)](https://github.com/TeleIO/Telemachus-1/releases)
 [![Stars](https://img.shields.io/github/stars/TeleIO/Telemachus-1)](https://github.com/TeleIO/Telemachus-1/stargazers)
 [![Discord](https://img.shields.io/discord/695052938095231016.svg?label=discord)](https://discord.gg/nkbauw7)
+
+</p>
 
 A KSP plugin that exposes live telemetry data over HTTP and WebSocket, letting you build external dashboards, flight instruments, and ground control applications for your vessels.
 
