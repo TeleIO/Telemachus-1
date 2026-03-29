@@ -19,6 +19,8 @@ namespace Telemachus
         /// Iterate over all responders to find one that works
         public void DispatchRequest(object sender, HttpRequestEventArgs request)
         {
+            ApplyConnectionPolicy(request.Request, request.Response);
+
             foreach (var responder in responderChain.Reverse<IHTTPRequestResponder>())
             {
                 try
@@ -40,6 +42,17 @@ namespace Telemachus
         public void AddResponder(IHTTPRequestResponder responder)
         {
             responderChain.Add(responder);
+        }
+
+        private static void ApplyConnectionPolicy(HttpListenerRequest request, HttpListenerResponse response)
+        {
+            var connectionHeader = request.Headers["Connection"];
+            if (connectionHeader == null) return;
+
+            if (connectionHeader.IndexOf("close", StringComparison.OrdinalIgnoreCase) >= 0)
+            {
+                response.KeepAlive = false;
+            }
         }
     }
 }
