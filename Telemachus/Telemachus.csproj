@@ -5,8 +5,8 @@
     <LangVersion>12</LangVersion>
     <AssemblyName>Telemachus</AssemblyName>
     <RootNamespace>Telemachus</RootNamespace>
-    <AssemblyVersion>1.10.0</AssemblyVersion>
-    <FileVersion>1.10.0</FileVersion>
+    <AssemblyVersion>1.10.1</AssemblyVersion>
+    <FileVersion>1.10.1</FileVersion>
 
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
