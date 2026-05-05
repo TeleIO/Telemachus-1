@@ -76,7 +76,8 @@ namespace Telemachus
 
                 APIEntry entry;
                 if (attr.IsAction)
-                    entry = new ActionAPIEntry(fn, attr.Key, attr.Description, formatter);
+                    // Action handlers must run on the main Unity thread
+                    entry = new ActionAPIEntry(queueDelayed(fn), attr.Key, attr.Description, formatter);
                 else if (attr.Plotable)
                     entry = new PlotableAPIEntry(fn, attr.Key, attr.Description,
                         formatter, attr.Units, attr.AlwaysEvaluable);
