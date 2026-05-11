@@ -61,6 +61,20 @@ All mod integrations are soft dependencies via reflection — no mod DLLs are re
 
 > The default port is **8085** and binds to `0.0.0.0` (all interfaces). Both can be changed in the plugin configuration file.
 
+### Cross-origin access (CORS)
+
+By default Telemachus sends no CORS headers, so browsers will block any JavaScript on a different origin (a different host, port, or scheme) from reading the responses. That covers the bundled web UI fine — it's served from the same origin as the API — but a dashboard hosted elsewhere (another machine on the LAN, a deployed static site, a dev server on a different port) needs an explicit opt-in.
+
+List the origins permitted to read cross-origin in `ALLOWED_ORIGINS` in `PluginData/Telemachus/config.xml`:
+
+```xml
+<string name="ALLOWED_ORIGINS">http://&lt;client-host&gt;:&lt;port&gt;,https://&lt;deployed-dashboard&gt;</string>
+```
+
+Comma-separated `scheme://host[:port]` entries — match exactly what the browser sends in the `Origin` header. Trailing slashes and empty entries are stripped. Empty list (the default) preserves the historical behaviour of never sending CORS headers, so existing setups are untouched.
+
+When a matching `Origin` arrives, Telemachus echoes it back in `Access-Control-Allow-Origin` (with `Vary: Origin`) rather than wildcarding, and responds 204 to the standard OPTIONS preflight. Non-allowlisted origins get no CORS header and the browser blocks the response by default.
+
 ---
 
 ## API overview

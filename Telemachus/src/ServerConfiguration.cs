@@ -17,6 +17,9 @@ namespace Telemachus
         public IPAddress ipAddress { get; set; } = IPAddress.Any;
         /// <summary>A list of IP Addresses that the server should be accessible at</summary>
         public List<IPAddress> ValidIpAddresses { get; set; } = new();
+        /// <summary>Browser origins permitted to read responses cross-origin. Empty = no CORS headers sent.
+        /// Case-insensitive — RFC 6454 §6.1 says scheme and host are case-insensitive.</summary>
+        public HashSet<string> AllowedOrigins { get; set; } = new(StringComparer.OrdinalIgnoreCase);
     }
 
     internal static class ServerConfigExtensions

@@ -19,12 +19,16 @@ namespace Telemachus
 
         private UpLinkDownLinkRate dataRates = null;
 
+        /// Optional; CORS headers aren't emitted when null
+        private readonly ServerConfiguration serverConfig;
+
         #region Initialisation
 
-        public DataLinkResponsibility(KSPAPIBase kspAPI, UpLinkDownLinkRate rateTracker)
+        public DataLinkResponsibility(KSPAPIBase kspAPI, UpLinkDownLinkRate rateTracker, ServerConfiguration serverConfig = null)
         {
             this.kspAPI = kspAPI;
             dataRates = rateTracker;
+            this.serverConfig = serverConfig;
         }
 
         #endregion
@@ -68,9 +72,48 @@ namespace Telemachus
             return Json.DecodeObject(jsonBody);
         }
 
+        private bool corsConfigured =>
+            serverConfig != null && serverConfig.AllowedOrigins != null && serverConfig.AllowedOrigins.Count > 0;
+
+        // Whenever CORS is configured the response depends on Origin — emit Vary even on non-matches
+        // so shared caches don't serve a no-CORS response to a request that would have matched.
+        private void applyCorsHeader(HttpListenerRequest request, HttpListenerResponse response)
+        {
+            if (!corsConfigured) return;
+            response.Headers["Vary"] = "Origin";
+
+            string origin = request.Headers["Origin"];
+            if (string.IsNullOrEmpty(origin)) return;
+            // Defence in depth: reject any Origin containing CR/LF before echoing it into a header.
+            if (origin.IndexOfAny(new[] { '\r', '\n' }) >= 0) return;
+            string normalised = origin.TrimEnd('/');
+            if (!serverConfig.AllowedOrigins.Contains(normalised)) return;
+            response.Headers["Access-Control-Allow-Origin"] = normalised;
+        }
+
         public bool process(HttpListenerRequest request, HttpListenerResponse response)
         {
             if (!request.RawUrl.StartsWith(PAGE_PREFIX)) return false;
+
+            // CORS preflight: when CORS is configured, OPTIONS never goes through the data pipeline.
+            // 204 with preflight headers if the Origin is allowlisted; 204 without headers otherwise,
+            // rather than serialising an empty JSON body. When CORS is not configured we leave OPTIONS
+            // behaviour unchanged from before this PR (falls through to the data pipeline below).
+            if (corsConfigured
+                && string.Equals(request.HttpMethod, "OPTIONS", StringComparison.OrdinalIgnoreCase))
+            {
+                applyCorsHeader(request, response);
+                if (response.Headers["Access-Control-Allow-Origin"] != null)
+                {
+                    response.Headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS";
+                    response.Headers["Access-Control-Allow-Headers"] = "Content-Type";
+                    response.Headers["Access-Control-Max-Age"] = "86400";
+                }
+                response.StatusCode = 204;
+                return true;
+            }
+
+            applyCorsHeader(request, response);
 
             // Work out how big this request was
             long byteCount = request.RawUrl.Length + request.ContentLength64;
