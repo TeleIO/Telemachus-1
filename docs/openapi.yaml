@@ -80,6 +80,8 @@ tags:
     description: Career
   - name: comms
     description: Communications
+  - name: crash
+    description: crash
   - name: deltav
     description: Delta-V
   - name: docking
@@ -113,6 +115,8 @@ tags:
   - name: realchute
     description: RealChute (mod)
     x-requires-mod: realchute
+  - name: recovery
+    description: recovery
   - name: resource
     description: Resources
   - name: science
@@ -2026,6 +2030,47 @@ paths:
                   comm.signalStrength:
                     type: number
       x-plotable: true
+  "/api/crash.hasRecent":
+    get:
+      summary: Whether a crash snapshot has been captured this session.
+      operationId: crash.hasRecent
+      tags:
+        - crash
+      parameters:
+        -           $ref: "#/components/parameters/ScaleParam"
+        -           $ref: "#/components/parameters/PrecisionParam"
+        -           $ref: "#/components/parameters/IntParam"
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  crash.hasRecent:
+                    type: boolean
+      x-plotable: true
+  "/api/crash.lastCrash":
+    get:
+      summary: "Most recent crash snapshot. Fields: vesselName, vesselId, body, situation, latitude, longitude, altitude, ut, what (what was hit), msg, eventKind (Crash/CrashSplashdown), partsLost (list of {partName, partTitle, partId, msg}), crewAboard (names), kerbalsKilled (names). Per-vessel events within 5 seconds coalesce into one snapshot; later vessels or later windows start fresh. Persists across scene changes; cleared on KSP restart."
+      operationId: crash.lastCrash
+      tags:
+        - crash
+      parameters:
+        -           $ref: "#/components/parameters/ScaleParam"
+        -           $ref: "#/components/parameters/PrecisionParam"
+        -           $ref: "#/components/parameters/IntParam"
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  crash.lastCrash:
+                    type: object
   "/api/dock.ax":
     get:
       summary: Docking x Angle
@@ -4157,6 +4202,46 @@ paths:
                     type: boolean
       x-requires-mod: far
       x-plotable: true
+  "/api/flight.achievements":
+    get:
+      summary: "Running mission stats from KSP's FlightLogger — same data the Flight Results dialog renders in the Flight Achievements panel. Fields: missionTime, liftOff, highestAltitude, highestSpeed, highestSpeedOverLand, groundDistance, totalDistance, highestGee, partsLost (count), kerbalsKilled (count), missionEnd, flightEndMode. Returns null outside flight."
+      operationId: flight.achievements
+      tags:
+        - flight
+      parameters:
+        -           $ref: "#/components/parameters/ScaleParam"
+        -           $ref: "#/components/parameters/PrecisionParam"
+        -           $ref: "#/components/parameters/IntParam"
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  flight.achievements:
+                    type: object
+  "/api/flight.events":
+    get:
+      summary: "Pre-formatted event timeline from KSP's FlightLogger — the same strings the in-game Flight Results dialog renders in the Flight Events panel. Empty list outside flight."
+      operationId: flight.events
+      tags:
+        - flight
+      parameters:
+        -           $ref: "#/components/parameters/ScaleParam"
+        -           $ref: "#/components/parameters/PrecisionParam"
+        -           $ref: "#/components/parameters/IntParam"
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  flight.events:
+                    type: object
   "/api/kerbalism.available":
     get:
       summary: Kerbalism Is Installed
@@ -8574,6 +8659,47 @@ paths:
       x-requires-mod: realchute
       x-units: STRING
       x-plotable: true
+  "/api/recovery.hasRecent":
+    get:
+      summary: Whether a mission-summary snapshot has been captured this session (true after the first vessel is recovered).
+      operationId: recovery.hasRecent
+      tags:
+        - recovery
+      parameters:
+        -           $ref: "#/components/parameters/ScaleParam"
+        -           $ref: "#/components/parameters/PrecisionParam"
+        -           $ref: "#/components/parameters/IntParam"
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  recovery.hasRecent:
+                    type: boolean
+      x-plotable: true
+  "/api/recovery.lastSummary":
+    get:
+      summary: Most recent mission-summary snapshot. Includes vessel name, recovery location and factor, science/funds/reputation totals + earned + modifiers, and per-experiment, per-part, per-resource, per-crew breakdowns. Captures automatically when KSP completes recovery processing (no dialog dismissal needed). Persists across scene changes; cleared on KSP restart.
+      operationId: recovery.lastSummary
+      tags:
+        - recovery
+      parameters:
+        -           $ref: "#/components/parameters/ScaleParam"
+        -           $ref: "#/components/parameters/PrecisionParam"
+        -           $ref: "#/components/parameters/IntParam"
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  recovery.lastSummary:
+                    type: object
   "/api/s.sensor":
     get:
       summary: Sensor Information
