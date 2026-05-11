@@ -17,6 +17,8 @@ namespace Telemachus
         public IPAddress ipAddress { get; set; } = IPAddress.Any;
         /// <summary>A list of IP Addresses that the server should be accessible at</summary>
         public List<IPAddress> ValidIpAddresses { get; set; } = new();
+        /// <summary>Browser origins permitted to read responses cross-origin. Empty = no CORS headers sent.</summary>
+        public List<string> AllowedOrigins { get; set; } = new();
     }
 
     internal static class ServerConfigExtensions

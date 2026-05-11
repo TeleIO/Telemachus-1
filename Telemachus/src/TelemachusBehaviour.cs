@@ -69,7 +69,7 @@ namespace Telemachus
                     webDispatcher.AddResponder(new IOPageResponsibility());
                     var cameraLink = new CameraResponsibility(apiInstance, rateTracker);
                     webDispatcher.AddResponder(cameraLink);
-                    var dataLink = new DataLinkResponsibility(apiInstance, rateTracker);
+                    var dataLink = new DataLinkResponsibility(apiInstance, rateTracker, serverConfig);
                     webDispatcher.AddResponder(dataLink);
                     var apiRoute = new APIRouteResponsibility(apiInstance, rateTracker);
                     webDispatcher.AddResponder(apiRoute);
@@ -187,6 +187,18 @@ namespace Telemachus
 
             isPartless = config.GetValue<int>("PARTLESS") != 0;
             PluginLogger.print("Partless:" + isPartless);
+
+            // Comma-separated browser origins permitted to read responses cross-origin.
+            string originsRaw = config.GetValue<string>("ALLOWED_ORIGINS");
+            if (!string.IsNullOrEmpty(originsRaw))
+            {
+                foreach (var part in originsRaw.Split(','))
+                {
+                    var trimmed = part.Trim().TrimEnd('/');
+                    if (trimmed.Length > 0) serverConfig.AllowedOrigins.Add(trimmed);
+                }
+                PluginLogger.print("Allowed CORS origins: " + string.Join(", ", serverConfig.AllowedOrigins));
+            }
         }
 
         static private void stopDataLink()
