@@ -750,6 +750,74 @@ Example: `r.resource[ElectricCharge]`, `r.resource[LiquidFuel]`, `r.resource[Oxi
 | `a.physicsMode` | `"patched_conics"` or `"n_body"` (Principia) |
 | `a.schema` | Full API schema as JSON |
 
+### `tech.*` — Tech tree
+
+All `AlwaysEvaluable` — queryable from any scene.
+
+| Key | Description |
+|-----|-------------|
+| `tech.unlockedIds` | All currently unlocked node IDs |
+| `tech.unlockedPartCount` | Count of unlocked parts |
+| `tech.affordable` | Unpurchased nodes affordable right now (with cost / scienceRequired) |
+| `tech.unlock[nodeId]` | **Action:** purchase a node by ID; returns `0` on success or an error string |
+
+### `kc.*` — KSC / Space Center
+
+| Key | Description |
+|-----|-------------|
+| `kc.scene` | Current scene name (`SPACECENTER`, `FLIGHT`, `EDITOR`, `TRACKSTATION`, …) |
+| `kc.facilityLevels` | All ScenarioUpgradeableFacilities with current + max upgrade levels |
+| `kc.launchSite` | Active launch site (`LaunchPad` / `Runway`) |
+| `kc.padOccupied` / `kc.padVesselTitle` | Pad state |
+| `kc.partsAvailable` | All purchasable parts with their availability + cost |
+| `kc.savedShips` | Saved craft listing per facility |
+| `kc.crewRoster` | Full kerbal roster with courage / stupidity / badass / veteran / gender / type / experience / careerFlights / careerEntries / currentVesselId / currentVesselName |
+| `kc.upgradeFacility[facilityName]` | **Action:** start a facility upgrade; deducts funds |
+
+### `sci.*` — Science
+
+| Key | Description |
+|-----|-------------|
+| `sci.count` / `sci.dataAmount` | Science container summary |
+| `sci.canRecoverTotal` / `sci.canTransmitTotal` | Aggregate recoverable / transmittable |
+| `sci.instruments` | All ModuleScienceExperiment instances on the active vessel |
+| `sci.experiments` | Stored experiment data |
+| `sci.experimentBreakdown` | Per-experiment breakdown (subject / amount / dataScale) |
+| `sci.deploy[partFlightId, experimentId]` | **Action:** deploy an experiment |
+| `sci.dump[partFlightId]` | **Action:** dump stored science from a container |
+| `sci.reset[partFlightId]` | **Action:** reset an experiment |
+| `sci.transmit[partFlightId]` | **Action:** transmit stored science |
+
+### `contracts.*` — Contracts
+
+Contract IDs are emitted as **strings** (KSP-generated long values frequently exceed JS `Number.MAX_SAFE_INTEGER`). Action handlers accept both string and number forms.
+
+| Key | Description |
+|-----|-------------|
+| `contracts.active` | Active contracts; rows include id, title, agent, parameters (with `parameterType` + typed fields per parameter) |
+| `contracts.offered` | Offered (un-accepted) contracts |
+| `contracts.completedRecent` | Recently-completed contracts |
+| `contracts.accept[id]` | **Action:** accept an offered contract |
+| `contracts.decline[id]` | **Action:** decline an offered contract |
+| `contracts.cancel[id]` | **Action:** cancel an active contract |
+
+### `ksp.*` — Scene & vessel verbs
+
+All `AlwaysEvaluable` action keys for launch / recovery / revert / scene transitions. Each refuses internally when the underlying state isn't ready.
+
+| Key | Description |
+|-----|-------------|
+| `ksp.launch[shipName, facility, site, crewSemicolons]` | **Action:** load a saved craft to the chosen pad. Refuses outside SC/Editor or if an active vessel exists. Crew names delimited by `;` (since `,` is already an arg separator). |
+| `ksp.recover` | **Action:** recover active vessel (PRELAUNCH / LANDED / SPLASHED only) |
+| `ksp.revertToLaunch` | **Action:** revert to the post-init launch snapshot (Flight only) |
+| `ksp.revertToEditor[vab\|sph]` | **Action:** revert to the editor scene (Flight only) |
+| `ksp.toSpaceCenter` / `ksp.toTrackingStation` | **Action:** switch scenes |
+| `ksp.canRevert` / `ksp.canRevertToLaunch` / `ksp.canRevertToEditor` | Whether the corresponding revert path is available (mirrors `FlightDriver.CanRevert*`) |
+
+### Action group bindings
+
+`f.ag.bindings` — flat per-action list of action-group bindings on the active vessel: `{ actionGroup, partId, partName, partTitle, moduleName, actionName, actionGuiName }`. One row per (action, group) pair (an action bound to two groups emits two rows; actions with no group are omitted).
+
 ### Camera API
 
 ```
