@@ -80,6 +80,8 @@ tags:
     description: Career
   - name: comms
     description: Communications
+  - name: control
+    description: control
   - name: deltav
     description: Delta-V
   - name: docking
@@ -94,8 +96,12 @@ tags:
   - name: kerbalism
     description: kerbalism
     x-requires-mod: kerbalism
+  - name: ksc
+    description: ksc
   - name: landing
     description: Landing Prediction
+  - name: launch
+    description: launch
   - name: maneuver
     description: Maneuver Nodes
   - name: map
@@ -2026,6 +2032,147 @@ paths:
                   comm.signalStrength:
                     type: number
       x-plotable: true
+  "/api/contracts.accept":
+    post:
+      summary: Accept an Offered contract (moves to Active)
+      operationId: contracts.accept
+      tags:
+        - career
+      parameters:
+        - name: contractId
+          in: query
+          required: true
+          description: long parameter (passed via bracket notation)
+          schema:
+            type: string
+        -           $ref: "#/components/parameters/ScaleParam"
+        -           $ref: "#/components/parameters/PrecisionParam"
+        -           $ref: "#/components/parameters/IntParam"
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  contracts.accept:
+                    type: object
+      x-plotable: true
+  "/api/contracts.active":
+    get:
+      summary: All Active contracts with parameters + reward shape
+      operationId: contracts.active
+      tags:
+        - career
+      parameters:
+        -           $ref: "#/components/parameters/ScaleParam"
+        -           $ref: "#/components/parameters/PrecisionParam"
+        -           $ref: "#/components/parameters/IntParam"
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  contracts.active:
+                    type: object
+  "/api/contracts.cancel":
+    post:
+      summary: Cancel an Active contract — forfeits work in progress; only valid for Active
+      operationId: contracts.cancel
+      tags:
+        - career
+      parameters:
+        - name: contractId
+          in: query
+          required: true
+          description: long parameter (passed via bracket notation)
+          schema:
+            type: string
+        -           $ref: "#/components/parameters/ScaleParam"
+        -           $ref: "#/components/parameters/PrecisionParam"
+        -           $ref: "#/components/parameters/IntParam"
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  contracts.cancel:
+                    type: object
+      x-plotable: true
+  "/api/contracts.completedRecent":
+    get:
+      summary: Last N completed-or-failed contracts, newest-first
+      operationId: contracts.completedRecent
+      tags:
+        - career
+      parameters:
+        -           $ref: "#/components/parameters/ScaleParam"
+        -           $ref: "#/components/parameters/PrecisionParam"
+        -           $ref: "#/components/parameters/IntParam"
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  contracts.completedRecent:
+                    type: object
+  "/api/contracts.decline":
+    post:
+      summary: Decline an Offered contract — different verb from cancel; only valid for Offered
+      operationId: contracts.decline
+      tags:
+        - career
+      parameters:
+        - name: contractId
+          in: query
+          required: true
+          description: long parameter (passed via bracket notation)
+          schema:
+            type: string
+        -           $ref: "#/components/parameters/ScaleParam"
+        -           $ref: "#/components/parameters/PrecisionParam"
+        -           $ref: "#/components/parameters/IntParam"
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  contracts.decline:
+                    type: object
+      x-plotable: true
+  "/api/contracts.offered":
+    get:
+      summary: Contracts in Mission Control awaiting accept
+      operationId: contracts.offered
+      tags:
+        - career
+      parameters:
+        -           $ref: "#/components/parameters/ScaleParam"
+        -           $ref: "#/components/parameters/PrecisionParam"
+        -           $ref: "#/components/parameters/IntParam"
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  contracts.offered:
+                    type: object
   "/api/dock.ax":
     get:
       summary: Docking x Angle
@@ -2828,6 +2975,26 @@ paths:
                 properties:
                   f.abort:
                     type: integer
+  "/api/f.ag.bindings":
+    get:
+      summary: "Per-action flat list of action-group bindings on the active vessel: { actionGroup, partId, partName, partTitle, moduleName, actionName, actionGuiName }. One row per (action, group) pair — an action bound to two groups emits two rows. Actions with no group (None) are omitted."
+      operationId: f.ag.bindings
+      tags:
+        - control
+      parameters:
+        -           $ref: "#/components/parameters/ScaleParam"
+        -           $ref: "#/components/parameters/PrecisionParam"
+        -           $ref: "#/components/parameters/IntParam"
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  f.ag.bindings:
+                    type: object
   "/api/f.ag1":
     post:
       summary: Action Group 1
@@ -4157,6 +4324,201 @@ paths:
                     type: boolean
       x-requires-mod: far
       x-plotable: true
+  "/api/kc.crewRoster":
+    get:
+      summary: Whole-program kerbal roster — name, trait, type, gender, experience, experienceLevel, courage, stupidity, isBadass, veteran, careerFlights, careerEntries, currentVesselId, currentVesselName, available, unavailableReason
+      operationId: kc.crewRoster
+      tags:
+        - ksc
+      parameters:
+        -           $ref: "#/components/parameters/ScaleParam"
+        -           $ref: "#/components/parameters/PrecisionParam"
+        -           $ref: "#/components/parameters/IntParam"
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  kc.crewRoster:
+                    type: object
+  "/api/kc.facilityLevels":
+    get:
+      summary: "Per-facility { level, max, upgradeFunds } for the 9 stock SC buildings"
+      operationId: kc.facilityLevels
+      tags:
+        - ksc
+      parameters:
+        -           $ref: "#/components/parameters/ScaleParam"
+        -           $ref: "#/components/parameters/PrecisionParam"
+        -           $ref: "#/components/parameters/IntParam"
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  kc.facilityLevels:
+                    type: object
+  "/api/kc.launchSite":
+    get:
+      summary: "Active flight's launch site name"
+      operationId: kc.launchSite
+      tags:
+        - ksc
+      parameters:
+        -           $ref: "#/components/parameters/ScaleParam"
+        -           $ref: "#/components/parameters/PrecisionParam"
+        -           $ref: "#/components/parameters/IntParam"
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  kc.launchSite:
+                    type: string
+      x-units: STRING
+      x-plotable: true
+  "/api/kc.padOccupied":
+    get:
+      summary: True iff the active vessel is in PRELAUNCH situation
+      operationId: kc.padOccupied
+      tags:
+        - ksc
+      parameters:
+        -           $ref: "#/components/parameters/ScaleParam"
+        -           $ref: "#/components/parameters/PrecisionParam"
+        -           $ref: "#/components/parameters/IntParam"
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  kc.padOccupied:
+                    type: boolean
+      x-plotable: true
+  "/api/kc.padVesselTitle":
+    get:
+      summary: Vessel name when on the pad; empty otherwise
+      operationId: kc.padVesselTitle
+      tags:
+        - ksc
+      parameters:
+        -           $ref: "#/components/parameters/ScaleParam"
+        -           $ref: "#/components/parameters/PrecisionParam"
+        -           $ref: "#/components/parameters/IntParam"
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  kc.padVesselTitle:
+                    type: string
+      x-units: STRING
+      x-plotable: true
+  "/api/kc.partsAvailable":
+    get:
+      summary: Number of parts purchasable under current tech
+      operationId: kc.partsAvailable
+      tags:
+        - ksc
+      parameters:
+        -           $ref: "#/components/parameters/ScaleParam"
+        -           $ref: "#/components/parameters/PrecisionParam"
+        -           $ref: "#/components/parameters/IntParam"
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  kc.partsAvailable:
+                    type: integer
+      x-plotable: true
+  "/api/kc.savedShips":
+    get:
+      summary: Saved craft files in VAB+SPH — name, partCount, totalMass, facility, requiresFunds, missingParts
+      operationId: kc.savedShips
+      tags:
+        - ksc
+      parameters:
+        -           $ref: "#/components/parameters/ScaleParam"
+        -           $ref: "#/components/parameters/PrecisionParam"
+        -           $ref: "#/components/parameters/IntParam"
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  kc.savedShips:
+                    type: object
+  "/api/kc.scene":
+    get:
+      summary: Current KSP scene (Flight, SpaceCenter, Editor, TrackingStation, MainMenu, Other)
+      operationId: kc.scene
+      tags:
+        - ksc
+      parameters:
+        -           $ref: "#/components/parameters/ScaleParam"
+        -           $ref: "#/components/parameters/PrecisionParam"
+        -           $ref: "#/components/parameters/IntParam"
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  kc.scene:
+                    type: string
+      x-units: STRING
+      x-plotable: true
+  "/api/kc.upgradeFacility":
+    post:
+      summary: Upgrade a SC facility by short name (launchPad, vab, sph, …)
+      operationId: kc.upgradeFacility
+      tags:
+        - ksc
+      parameters:
+        - name: facilityShortName
+          in: query
+          required: true
+          description: string parameter (passed via bracket notation)
+          schema:
+            type: string
+        -           $ref: "#/components/parameters/ScaleParam"
+        -           $ref: "#/components/parameters/PrecisionParam"
+        -           $ref: "#/components/parameters/IntParam"
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  kc.upgradeFacility:
+                    type: object
+      x-plotable: true
   "/api/kerbalism.available":
     get:
       summary: Kerbalism Is Installed
@@ -4967,6 +5329,225 @@ paths:
                   kerbalism.stellarStormState:
                     type: integer
       x-requires-mod: kerbalism
+      x-plotable: true
+  "/api/ksp.canRevert":
+    get:
+      summary: Whether any revert path is available right now (post-init snapshot OR prelaunch snapshot). Mirrors FlightDriver.CanRevert.
+      operationId: ksp.canRevert
+      tags:
+        - launch
+      parameters:
+        -           $ref: "#/components/parameters/ScaleParam"
+        -           $ref: "#/components/parameters/PrecisionParam"
+        -           $ref: "#/components/parameters/IntParam"
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  ksp.canRevert:
+                    type: boolean
+      x-plotable: true
+  "/api/ksp.canRevertToEditor":
+    get:
+      summary: "Whether ksp.revertToEditor would currently succeed (FlightDriver.CanRevertToPrelaunch). Useful for graying out the revert-to-editor UI when the snapshot isn't available."
+      operationId: ksp.canRevertToEditor
+      tags:
+        - launch
+      parameters:
+        -           $ref: "#/components/parameters/ScaleParam"
+        -           $ref: "#/components/parameters/PrecisionParam"
+        -           $ref: "#/components/parameters/IntParam"
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  ksp.canRevertToEditor:
+                    type: boolean
+      x-plotable: true
+  "/api/ksp.canRevertToLaunch":
+    get:
+      summary: "Whether ksp.revertToLaunch would currently succeed (FlightDriver.CanRevertToPostInit). Useful for graying out the revert-to-launch UI when the snapshot isn't available."
+      operationId: ksp.canRevertToLaunch
+      tags:
+        - launch
+      parameters:
+        -           $ref: "#/components/parameters/ScaleParam"
+        -           $ref: "#/components/parameters/PrecisionParam"
+        -           $ref: "#/components/parameters/IntParam"
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  ksp.canRevertToLaunch:
+                    type: boolean
+      x-plotable: true
+  "/api/ksp.launch":
+    post:
+      summary: Load a saved craft to the chosen pad (shipName, facility, site, crewSemicolons). Refuses outside SC/Editor, refuses if an active vessel exists.
+      operationId: ksp.launch
+      tags:
+        - launch
+      parameters:
+        - name: shipName
+          in: query
+          required: true
+          description: string parameter (passed via bracket notation)
+          schema:
+            type: string
+        - name: facility
+          in: query
+          required: true
+          description: string parameter (passed via bracket notation)
+          schema:
+            type: string
+        - name: site
+          in: query
+          required: true
+          description: string parameter (passed via bracket notation)
+          schema:
+            type: string
+        - name: crewSemicolons
+          in: query
+          required: true
+          description: string parameter (passed via bracket notation)
+          schema:
+            type: string
+        -           $ref: "#/components/parameters/ScaleParam"
+        -           $ref: "#/components/parameters/PrecisionParam"
+        -           $ref: "#/components/parameters/IntParam"
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  ksp.launch:
+                    type: object
+      x-plotable: true
+  "/api/ksp.recover":
+    post:
+      summary: Recover the active vessel — only valid in PRELAUNCH / LANDED / SPLASHED
+      operationId: ksp.recover
+      tags:
+        - launch
+      parameters:
+        -           $ref: "#/components/parameters/ScaleParam"
+        -           $ref: "#/components/parameters/PrecisionParam"
+        -           $ref: "#/components/parameters/IntParam"
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  ksp.recover:
+                    type: object
+      x-plotable: true
+  "/api/ksp.revertToEditor":
+    post:
+      summary: Revert flight back to the named editor scene (vab|sph)
+      operationId: ksp.revertToEditor
+      tags:
+        - launch
+      parameters:
+        - name: editor
+          in: query
+          required: true
+          description: string parameter (passed via bracket notation)
+          schema:
+            type: string
+        -           $ref: "#/components/parameters/ScaleParam"
+        -           $ref: "#/components/parameters/PrecisionParam"
+        -           $ref: "#/components/parameters/IntParam"
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  ksp.revertToEditor:
+                    type: object
+      x-plotable: true
+  "/api/ksp.revertToLaunch":
+    post:
+      summary: "Revert flight to the just-launched state (vessel back on pad, PRELAUNCH situation). Same as the Flight Results dialog's 'Revert to Launch' button. Refuses outside Flight scene or when the post-init snapshot isn't available."
+      operationId: ksp.revertToLaunch
+      tags:
+        - launch
+      parameters:
+        -           $ref: "#/components/parameters/ScaleParam"
+        -           $ref: "#/components/parameters/PrecisionParam"
+        -           $ref: "#/components/parameters/IntParam"
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  ksp.revertToLaunch:
+                    type: object
+      x-plotable: true
+  "/api/ksp.toSpaceCenter":
+    post:
+      summary: "Switch to the Space Center scene. Mirrors the Flight Results dialog's 'Space Center' button."
+      operationId: ksp.toSpaceCenter
+      tags:
+        - launch
+      parameters:
+        -           $ref: "#/components/parameters/ScaleParam"
+        -           $ref: "#/components/parameters/PrecisionParam"
+        -           $ref: "#/components/parameters/IntParam"
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  ksp.toSpaceCenter:
+                    type: object
+      x-plotable: true
+  "/api/ksp.toTrackingStation":
+    post:
+      summary: "Switch to the Tracking Station scene. Mirrors the Flight Results dialog's 'Tracking Station' button."
+      operationId: ksp.toTrackingStation
+      tags:
+        - launch
+      parameters:
+        -           $ref: "#/components/parameters/ScaleParam"
+        -           $ref: "#/components/parameters/PrecisionParam"
+        -           $ref: "#/components/parameters/IntParam"
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  ksp.toTrackingStation:
+                    type: object
       x-plotable: true
   "/api/land.bestSpeedAtImpact":
     get:
@@ -8689,6 +9270,48 @@ paths:
                     type: object
       x-units: TEMP
       x-plotable: true
+  "/api/sci.canRecoverTotal":
+    get:
+      summary: Total dataAmount across all stored ScienceData on the active vessel (alias of canTransmitTotal — separate key in case Phase 4 formulas diverge)
+      operationId: sci.canRecoverTotal
+      tags:
+        - science
+      parameters:
+        -           $ref: "#/components/parameters/ScaleParam"
+        -           $ref: "#/components/parameters/PrecisionParam"
+        -           $ref: "#/components/parameters/IntParam"
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  sci.canRecoverTotal:
+                    type: number
+      x-plotable: true
+  "/api/sci.canTransmitTotal":
+    get:
+      summary: Total dataAmount across all stored ScienceData on the active vessel
+      operationId: sci.canTransmitTotal
+      tags:
+        - science
+      parameters:
+        -           $ref: "#/components/parameters/ScaleParam"
+        -           $ref: "#/components/parameters/PrecisionParam"
+        -           $ref: "#/components/parameters/IntParam"
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  sci.canTransmitTotal:
+                    type: number
+      x-plotable: true
   "/api/sci.count":
     get:
       summary: Number of Science Experiments Aboard
@@ -8731,6 +9354,80 @@ paths:
                   sci.dataAmount:
                     type: number
       x-plotable: true
+  "/api/sci.deploy":
+    post:
+      summary: Run an experiment by part flightID (no result dialog — direct data capture)
+      operationId: sci.deploy
+      tags:
+        - science
+      parameters:
+        - name: partId
+          in: query
+          required: true
+          description: uint parameter (passed via bracket notation)
+          schema:
+            type: string
+        -           $ref: "#/components/parameters/ScaleParam"
+        -           $ref: "#/components/parameters/PrecisionParam"
+        -           $ref: "#/components/parameters/IntParam"
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  sci.deploy:
+                    type: object
+      x-plotable: true
+  "/api/sci.dump":
+    post:
+      summary: Discard all stored data on the part without transmitting
+      operationId: sci.dump
+      tags:
+        - science
+      parameters:
+        - name: partId
+          in: query
+          required: true
+          description: uint parameter (passed via bracket notation)
+          schema:
+            type: string
+        -           $ref: "#/components/parameters/ScaleParam"
+        -           $ref: "#/components/parameters/PrecisionParam"
+        -           $ref: "#/components/parameters/IntParam"
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  sci.dump:
+                    type: object
+      x-plotable: true
+  "/api/sci.experimentBreakdown":
+    get:
+      summary: Per-stored-data detail on the active vessel — subjectId / biome / situation / mits / transmit values / remaining potential
+      operationId: sci.experimentBreakdown
+      tags:
+        - science
+      parameters:
+        -           $ref: "#/components/parameters/ScaleParam"
+        -           $ref: "#/components/parameters/PrecisionParam"
+        -           $ref: "#/components/parameters/IntParam"
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  sci.experimentBreakdown:
+                    type: object
   "/api/sci.experiments":
     get:
       summary: Experiments With Data
@@ -8751,6 +9448,80 @@ paths:
                 properties:
                   sci.experiments:
                     type: object
+  "/api/sci.instruments":
+    get:
+      summary: Per-instrument state on the active vessel (partId, partTitle, expId, deployed, hasData, rerunnable, inoperable)
+      operationId: sci.instruments
+      tags:
+        - science
+      parameters:
+        -           $ref: "#/components/parameters/ScaleParam"
+        -           $ref: "#/components/parameters/PrecisionParam"
+        -           $ref: "#/components/parameters/IntParam"
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  sci.instruments:
+                    type: object
+  "/api/sci.reset":
+    post:
+      summary: Reset experiment — clears Deployed + drops data, makes rerunnable instruments ready to run again
+      operationId: sci.reset
+      tags:
+        - science
+      parameters:
+        - name: partId
+          in: query
+          required: true
+          description: uint parameter (passed via bracket notation)
+          schema:
+            type: string
+        -           $ref: "#/components/parameters/ScaleParam"
+        -           $ref: "#/components/parameters/PrecisionParam"
+        -           $ref: "#/components/parameters/IntParam"
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  sci.reset:
+                    type: object
+      x-plotable: true
+  "/api/sci.transmit":
+    post:
+      summary: "Transmit stored data on the part via the active vessel's best transmitter"
+      operationId: sci.transmit
+      tags:
+        - science
+      parameters:
+        - name: partId
+          in: query
+          required: true
+          description: uint parameter (passed via bracket notation)
+          schema:
+            type: string
+        -           $ref: "#/components/parameters/ScaleParam"
+        -           $ref: "#/components/parameters/PrecisionParam"
+        -           $ref: "#/components/parameters/IntParam"
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  sci.transmit:
+                    type: object
+      x-plotable: true
   "/api/t.currentRate":
     get:
       summary: Current Warp Rate
@@ -9632,6 +10403,94 @@ paths:
                   tar.type:
                     type: string
       x-units: STRING
+      x-plotable: true
+  "/api/tech.affordable":
+    get:
+      summary: Tech-tree nodes affordable right now (not yet unlocked, scienceCost <= current science)
+      operationId: tech.affordable
+      tags:
+        - career
+      parameters:
+        -           $ref: "#/components/parameters/ScaleParam"
+        -           $ref: "#/components/parameters/PrecisionParam"
+        -           $ref: "#/components/parameters/IntParam"
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  tech.affordable:
+                    type: object
+  "/api/tech.unlock":
+    post:
+      summary: Unlock a tech-tree node — deducts science, marks node Available
+      operationId: tech.unlock
+      tags:
+        - career
+      parameters:
+        - name: techId
+          in: query
+          required: true
+          description: string parameter (passed via bracket notation)
+          schema:
+            type: string
+        -           $ref: "#/components/parameters/ScaleParam"
+        -           $ref: "#/components/parameters/PrecisionParam"
+        -           $ref: "#/components/parameters/IntParam"
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  tech.unlock:
+                    type: object
+      x-plotable: true
+  "/api/tech.unlockedIds":
+    get:
+      summary: Tech-tree node ids the player has researched
+      operationId: tech.unlockedIds
+      tags:
+        - career
+      parameters:
+        -           $ref: "#/components/parameters/ScaleParam"
+        -           $ref: "#/components/parameters/PrecisionParam"
+        -           $ref: "#/components/parameters/IntParam"
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  tech.unlockedIds:
+                    type: object
+  "/api/tech.unlockedPartCount":
+    get:
+      summary: Number of parts purchasable under current tech
+      operationId: tech.unlockedPartCount
+      tags:
+        - career
+      parameters:
+        -           $ref: "#/components/parameters/ScaleParam"
+        -           $ref: "#/components/parameters/PrecisionParam"
+        -           $ref: "#/components/parameters/IntParam"
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  tech.unlockedPartCount:
+                    type: integer
       x-plotable: true
   "/api/therm.anyEnginesOverheating":
     get:
