@@ -485,6 +485,7 @@ namespace Telemachus
             {
                 if (input is not AlarmTypeBase alarm) return null;
                 var d = new Dictionary<string, object>();
+                d["id"] = alarm.Id;
                 d["title"] = alarm.title;
                 d["description"] = alarm.description;
                 d["ut"] = alarm.ut;
