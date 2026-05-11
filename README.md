@@ -702,6 +702,21 @@ Example: `r.resource[ElectricCharge]`, `r.resource[LiquidFuel]`, `r.resource[Oxi
 | `alarm.nextAlarm` | Next alarm to trigger |
 | `alarm.timeToNext` | Time until next alarm (s) |
 
+### `recovery.*` / `crash.*` / `flight.*` — Mission outcomes
+
+Snapshot keys captured from `GameEvents` — readable from any scene (including Space Center / Tracking Station after the flight) so a dashboard can surface a "last outcome" panel.
+
+| Key | Description |
+|-----|-------------|
+| `recovery.lastSummary` | Last `MissionRecoveryDialog` content (vesselName, recoveryFactor, scienceEarned, fundsEarned, parts[], resources[], crew[]) + FlightLogger stats |
+| `recovery.hasRecent` | Whether a recovery snapshot is available |
+| `crash.lastCrash` | Vessel destruction event: crewAboard[], kerbalsKilled[], flightEndMode, + FlightLogger stats |
+| `crash.hasRecent` | Whether a crash snapshot is available |
+| `flight.events` | Current flight's `FlightLogger.eventLog` (live) |
+| `flight.achievements` | Highest altitude / speed / G / partsLost / etc. |
+
+> `PRELAUNCH` recovery (the cheap launchpad refund path) doesn't fire `onVesselRecoveryProcessingComplete` so it produces no snapshot. Flight-scene recoveries and the post-landing summary dialog both work.
+
 ### `m.*` — Map view
 
 | Key | Description |
