@@ -698,9 +698,13 @@ Example: `r.resource[ElectricCharge]`, `r.resource[LiquidFuel]`, `r.resource[Oxi
 | Key | Description |
 |-----|-------------|
 | `alarm.count` | Number of active alarms |
-| `alarm.list` | All alarms (complex object) |
+| `alarm.list` | All alarms (rows include `id`) |
 | `alarm.nextAlarm` | Next alarm to trigger |
 | `alarm.timeToNext` | Time until next alarm (s) |
+| `alarm.add[title, ut, warpAction?, message?]` | **Action:** create a stock-clock alarm; returns the new uint `id` |
+| `alarm.delete[id]` | **Action:** remove an alarm by id; returns `true` if it existed |
+
+`warpAction` ∈ `DoNothing | KillWarp | PauseGame` (default `KillWarp`). `message` ∈ `No | Yes | YesIfOtherVessel` (default `Yes`).
 
 ### `m.*` — Map view
 
