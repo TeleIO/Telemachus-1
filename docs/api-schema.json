@@ -1935,7 +1935,7 @@
   },
   {
     "key": "kc.facilityLevels",
-    "description": "Per-facility { level, max, upgradeFunds } for the 9 stock SC buildings",
+    "description": "Per-facility { level, max, upgradeFunds, currentLevelText, nextLevelText } for the 9 stock SC buildings",
     "units": "UNITLESS",
     "plotable": false,
     "isAction": false,
@@ -4925,6 +4925,17 @@
   {
     "key": "tech.affordable",
     "description": "Tech-tree nodes affordable right now (not yet unlocked, scienceCost <= current science)",
+    "units": "UNITLESS",
+    "plotable": false,
+    "isAction": false,
+    "alwaysEvaluable": true,
+    "category": "career",
+    "returnType": "object",
+    "declaringClass": "TechTreeDataLinkHandler"
+  },
+  {
+    "key": "tech.nodes",
+    "description": "Full tech tree — every node with id, title, description, scienceCost, state, parents, parts",
     "units": "UNITLESS",
     "plotable": false,
     "isAction": false,

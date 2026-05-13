@@ -10404,6 +10404,26 @@ paths:
                     type: string
       x-units: STRING
       x-plotable: true
+  "/api/tech.nodes":
+    get:
+      summary: Full tech tree — every node with id, title, description, scienceCost, state, parents, parts
+      operationId: tech.nodes
+      tags:
+        - career
+      parameters:
+        -           $ref: "#/components/parameters/ScaleParam"
+        -           $ref: "#/components/parameters/PrecisionParam"
+        -           $ref: "#/components/parameters/IntParam"
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  tech.nodes:
+                    type: object
   "/api/tech.affordable":
     get:
       summary: Tech-tree nodes affordable right now (not yet unlocked, scienceCost <= current science)

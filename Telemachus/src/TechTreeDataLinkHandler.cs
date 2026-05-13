@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using KSP.Localization;
+using KSP.UI.Screens;
 
 namespace Telemachus
 {
@@ -9,6 +11,10 @@ namespace Telemachus
         // Sticky-cache covers the one-frame mid-load window where every node briefly reports Unavailable.
         private static List<string> _cachedUnlockedIds;
         private static List<Dictionary<string, object>> _cachedAffordable;
+        // Built once per game-load: parsed from the TechTree.cfg ConfigNode
+        // and PartLoader respectively. Both are invariant within a session.
+        private static Dictionary<string, string> _descriptionsByTech;
+        private static Dictionary<string, List<AvailablePart>> _partsByTech;
 
         public TechTreeDataLinkHandler(FormatterProvider formatters)
             : base(formatters) { }
@@ -101,6 +107,150 @@ namespace Telemachus
                 });
             }
             _cachedAffordable = result;
+            return result;
+        }
+
+        // Sticky-cache covers the same mid-load window as unlockedIds /
+        // affordable: every node briefly reports Unavailable while RnD
+        // rehydrates, which would clobber the prerequisite graph for any
+        // subscriber that polls during that window.
+        private static List<Dictionary<string, object>> _cachedNodes;
+
+        // Build session-stable indexes for description (parsed from the
+        // tree's underlying ConfigNode) and parts-per-tech (from PartLoader).
+        // ResearchAndDevelopment.GetTechnologyTitle covers titles already;
+        // there's no equivalent helper for descriptions, hence the cfg parse.
+        // PartLoader's LoadedPartsList stamps AvailablePart.TechRequired
+        // on every loaded part, so the inverse index is a single pass.
+        private static void EnsureIndexes(RDTechTree tree)
+        {
+            if (_descriptionsByTech == null)
+            {
+                var dict = new Dictionary<string, string>();
+                var cfg = tree.GetTreeConfigNode();
+                if (cfg != null)
+                {
+                    foreach (var sub in cfg.GetNodes("RDNode"))
+                    {
+                        if (sub == null) continue;
+                        var id = sub.GetValue("id");
+                        if (string.IsNullOrEmpty(id)) continue;
+                        var raw = sub.GetValue("description");
+                        if (string.IsNullOrEmpty(raw))
+                        {
+                            dict[id] = string.Empty;
+                            continue;
+                        }
+                        // Resolve #autoLOC_xxx tokens. Localizer.Format passes
+                        // plain strings through unchanged, so this is safe for
+                        // non-localized custom trees too.
+                        dict[id] = Localizer.Format(raw);
+                    }
+                }
+                _descriptionsByTech = dict;
+            }
+
+            if (_partsByTech == null)
+            {
+                var byTech = new Dictionary<string, List<AvailablePart>>();
+                var list = PartLoader.LoadedPartsList;
+                if (list != null)
+                {
+                    foreach (var p in list)
+                    {
+                        if (p == null || string.IsNullOrEmpty(p.TechRequired)) continue;
+                        if (!byTech.TryGetValue(p.TechRequired, out var bucket))
+                        {
+                            bucket = new List<AvailablePart>();
+                            byTech[p.TechRequired] = bucket;
+                        }
+                        bucket.Add(p);
+                    }
+                }
+                _partsByTech = byTech;
+            }
+        }
+
+        [TelemetryAPI("tech.nodes",
+            "Full tech tree — every node with id, title, description, scienceCost, state, parents, parts",
+            AlwaysEvaluable = true,
+            Plotable = false,
+            Category = "career",
+            ReturnType = "object")]
+        object Nodes(DataSources ds)
+        {
+            if (ResearchAndDevelopment.Instance == null) return new List<Dictionary<string, object>>();
+
+            var tree = AssetBase.RnDTechTree;
+            if (tree == null) return new List<Dictionary<string, object>>();
+
+            if (IsTransientLoadingState() && _cachedNodes != null)
+                return new List<Dictionary<string, object>>(_cachedNodes);
+
+            EnsureIndexes(tree);
+
+            // GetTreeNodes() returns ProtoRDNode[] — runtime tree snapshot.
+            // Each ProtoRDNode has `tech` (ProtoTechNode) and `parents`
+            // (List<ProtoRDNode> — elements ARE the parent nodes, no
+            // wrapper). Title comes from ResearchAndDevelopment, description
+            // from the cfg-parsed index, parts from the PartLoader index.
+            var nodes = tree.GetTreeNodes();
+            if (nodes == null) return new List<Dictionary<string, object>>();
+
+            var result = new List<Dictionary<string, object>>();
+            foreach (var node in nodes)
+            {
+                if (node == null || node.tech == null) continue;
+                var techID = node.tech.techID;
+                if (string.IsNullOrEmpty(techID)) continue;
+
+                var parents = new List<string>();
+                if (node.parents != null)
+                {
+                    foreach (var p in node.parents)
+                    {
+                        if (p == null || p.tech == null) continue;
+                        var pid = p.tech.techID;
+                        if (!string.IsNullOrEmpty(pid)) parents.Add(pid);
+                    }
+                }
+
+                var title = ResearchAndDevelopment.GetTechnologyTitle(techID);
+                if (string.IsNullOrEmpty(title)) title = techID;
+                _descriptionsByTech.TryGetValue(techID, out var description);
+                _partsByTech.TryGetValue(techID, out var partsList);
+
+                var parts = new List<Dictionary<string, object>>();
+                if (partsList != null)
+                {
+                    foreach (var p in partsList)
+                    {
+                        if (p == null) continue;
+                        parts.Add(new Dictionary<string, object>
+                        {
+                            ["name"] = p.name,
+                            ["title"] = p.title ?? p.name,
+                            ["manufacturer"] = p.manufacturer ?? string.Empty,
+                            ["category"] = p.category.ToString(),
+                            ["entryCost"] = p.entryCost,
+                            ["purchased"] = ResearchAndDevelopment.PartTechAvailable(p)
+                                && ResearchAndDevelopment.PartModelPurchased(p),
+                        });
+                    }
+                }
+
+                result.Add(new Dictionary<string, object>
+                {
+                    ["id"] = techID,
+                    ["title"] = title,
+                    ["description"] = description ?? string.Empty,
+                    ["scienceCost"] = node.tech.scienceCost,
+                    ["state"] = ResearchAndDevelopment.GetTechnologyState(techID).ToString(),
+                    ["parents"] = parents,
+                    ["parts"] = parts,
+                });
+            }
+            _cachedNodes = result;
             return result;
         }
 

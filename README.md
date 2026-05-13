@@ -756,6 +756,7 @@ All `AlwaysEvaluable` — queryable from any scene.
 
 | Key | Description |
 |-----|-------------|
+| `tech.nodes` | Full tech tree — every node with `id`, `title`, `description`, `scienceCost`, `state` (`Available` / `Researchable` / `Unavailable`), `parents` (prerequisite node IDs), and `parts` (list of `{name, title, manufacturer, category, entryCost, purchased}` for every part assigned to the node) |
 | `tech.unlockedIds` | All currently unlocked node IDs |
 | `tech.unlockedPartCount` | Count of unlocked parts |
 | `tech.affordable` | Unpurchased nodes affordable right now (with cost / scienceRequired) |
@@ -766,7 +767,7 @@ All `AlwaysEvaluable` — queryable from any scene.
 | Key | Description |
 |-----|-------------|
 | `kc.scene` | Current scene name (`SPACECENTER`, `FLIGHT`, `EDITOR`, `TRACKSTATION`, …) |
-| `kc.facilityLevels` | All ScenarioUpgradeableFacilities with current + max upgrade levels |
+| `kc.facilityLevels` | All ScenarioUpgradeableFacilities with `level`, `max`, `upgradeFunds`, and the multi-line `currentLevelText` / `nextLevelText` descriptions KSP shows in the upgrade dialog |
 | `kc.launchSite` | Active launch site (`LaunchPad` / `Runway`) |
 | `kc.padOccupied` / `kc.padVesselTitle` | Pad state |
 | `kc.partsAvailable` | All purchasable parts with their availability + cost |

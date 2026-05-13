@@ -105,7 +105,7 @@ namespace Telemachus
         }
 
         [TelemetryAPI("kc.facilityLevels",
-            "Per-facility { level, max, upgradeFunds } for the 9 stock SC buildings",
+            "Per-facility { level, max, upgradeFunds, currentLevelText, nextLevelText } for the 9 stock SC buildings",
             AlwaysEvaluable = true,
             Plotable = false,
             Category = "ksc",
@@ -120,11 +120,15 @@ namespace Telemachus
                     var normalised = ScenarioUpgradeableFacilities.GetFacilityLevel(pair.Value);
                     var max = ScenarioUpgradeableFacilities.GetFacilityLevelCount(pair.Value);
                     var level = max > 0 ? (int)Math.Round(normalised * max) : 0;
+                    ReadLevelTexts(pair.Value, level, max,
+                        out var currentLevelText, out var nextLevelText);
                     result[pair.Key] = new Dictionary<string, object>
                     {
                         ["level"] = level,
                         ["max"] = max,
                         ["upgradeFunds"] = R4(ReadUpgradeFunds(pair.Value, level)),
+                        ["currentLevelText"] = currentLevelText,
+                        ["nextLevelText"] = nextLevelText,
                     };
                 }
                 catch (Exception)
@@ -134,6 +138,8 @@ namespace Telemachus
                         ["level"] = 0,
                         ["max"] = 0,
                         ["upgradeFunds"] = 0d,
+                        ["currentLevelText"] = string.Empty,
+                        ["nextLevelText"] = string.Empty,
                     };
                 }
             }
@@ -162,6 +168,40 @@ namespace Telemachus
             catch (Exception)
             {
                 return 0d;
+            }
+        }
+
+        // Pulls the human-facing description block KSP shows in the
+        // SpaceCenter upgrade dialog for the current tier and (if not yet
+        // at max) the next tier — multi-line text describing what the
+        // facility currently allows plus what the upgrade would unlock.
+        // The UpgradeableFacility instance lives in protoUpgradeables; in
+        // non-SC scenes facilityRefs may be empty, in which case we return
+        // empty strings rather than throwing.
+        private static void ReadLevelTexts(
+            string facilityId, int currentLevel, int max,
+            out string currentLevelText, out string nextLevelText)
+        {
+            currentLevelText = string.Empty;
+            nextLevelText = string.Empty;
+            try
+            {
+                var dict = ScenarioUpgradeableFacilities.protoUpgradeables;
+                if (dict == null) return;
+                if (!dict.TryGetValue(facilityId, out var proto) || proto == null) return;
+                if (proto.facilityRefs == null || proto.facilityRefs.Count == 0) return;
+                var fac = proto.facilityRefs[0];
+                if (fac == null) return;
+
+                currentLevelText = fac.GetLevelText(currentLevel) ?? string.Empty;
+                if (currentLevel < max)
+                {
+                    nextLevelText = fac.GetLevelText(currentLevel + 1) ?? string.Empty;
+                }
+            }
+            catch (Exception)
+            {
+                // Best-effort — leave both as empty strings.
             }
         }
 
