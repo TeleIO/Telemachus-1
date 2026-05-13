@@ -767,7 +767,7 @@ Callable from any game scene.
 
 | Key | Description |
 |-----|-------------|
-| `kc.scene` | Current scene name (`SPACECENTER`, `FLIGHT`, `EDITOR`, `TRACKSTATION`, …) |
+| `kc.scene` | Current scene name (`SPACECENTER`, `FLIGHT`, `EDITOR`, or `TRACKSTATION`) |
 | `kc.facilityLevels` | All Space Center facilities — current level, max level, upgrade cost (nominal and strategy-modified), and the multi-line descriptions KSP shows in its upgrade dialog |
 | `kc.launchSite` | Active launch site (`LaunchPad` / `Runway`) |
 | `kc.padOccupied` / `kc.padVesselTitle` | Pad state |
