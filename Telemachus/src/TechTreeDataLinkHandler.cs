@@ -172,7 +172,7 @@ namespace Telemachus
         }
 
         [TelemetryAPI("tech.nodes",
-            "Full tech tree — every node with id, title, description, scienceCost, state, parents, parts",
+            "Full tech tree — every node with id, title, description, scienceCost, scienceCostEffective (post strategy modifier), state, parents, parts[name,title,manufacturer,category,entryCost,entryCostEffective,purchased]",
             AlwaysEvaluable = true,
             Plotable = false,
             Category = "career",
@@ -226,25 +226,35 @@ namespace Telemachus
                     foreach (var p in partsList)
                     {
                         if (p == null) continue;
+                        var entryCost = p.entryCost;
+                        var entryCostEffective = entryCost > 0
+                            ? CurrencyModifiers.Funds(entryCost, TransactionReasons.RnDPartPurchase)
+                            : 0f;
                         parts.Add(new Dictionary<string, object>
                         {
                             ["name"] = p.name,
                             ["title"] = p.title ?? p.name,
                             ["manufacturer"] = p.manufacturer ?? string.Empty,
                             ["category"] = p.category.ToString(),
-                            ["entryCost"] = p.entryCost,
+                            ["entryCost"] = entryCost,
+                            ["entryCostEffective"] = entryCostEffective,
                             ["purchased"] = ResearchAndDevelopment.PartTechAvailable(p)
                                 && ResearchAndDevelopment.PartModelPurchased(p),
                         });
                     }
                 }
 
+                var nominalSci = (float)node.tech.scienceCost;
+                var effectiveSci = nominalSci > 0f
+                    ? CurrencyModifiers.Science(nominalSci, TransactionReasons.RnDTechResearch)
+                    : 0f;
                 result.Add(new Dictionary<string, object>
                 {
                     ["id"] = techID,
                     ["title"] = title,
                     ["description"] = description ?? string.Empty,
                     ["scienceCost"] = node.tech.scienceCost,
+                    ["scienceCostEffective"] = effectiveSci,
                     ["state"] = ResearchAndDevelopment.GetTechnologyState(techID).ToString(),
                     ["parents"] = parents,
                     ["parts"] = parts,

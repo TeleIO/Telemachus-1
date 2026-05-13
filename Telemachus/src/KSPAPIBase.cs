@@ -32,6 +32,7 @@ namespace Telemachus
             APIHandlers.Add(new ContractsDataLinkHandler(formatters));
             APIHandlers.Add(new LaunchDataLinkHandler(formatters));
             APIHandlers.Add(new ActionGroupBindingsDataLinkHandler(formatters));
+            APIHandlers.Add(new StrategiesDataLinkHandler(formatters));
 
             APIHandlers.Add(new CompoundDataLinkHandler(
                 new List<DataLinkHandler> {

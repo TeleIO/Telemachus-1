@@ -756,7 +756,7 @@ All `AlwaysEvaluable` — queryable from any scene.
 
 | Key | Description |
 |-----|-------------|
-| `tech.nodes` | Full tech tree — every node with `id`, `title`, `description`, `scienceCost`, `state` (`Available` / `Researchable` / `Unavailable`), `parents` (prerequisite node IDs), and `parts` (list of `{name, title, manufacturer, category, entryCost, purchased}` for every part assigned to the node) |
+| `tech.nodes` | Full tech tree — every node with `id`, `title`, `description`, `scienceCost` (nominal) + `scienceCostEffective` (after `CurrencyModifierQuery` against `RnDTechResearch`), `state` (`Available` / `Researchable` / `Unavailable`), `parents` (prerequisite node IDs), and `parts` (list of `{name, title, manufacturer, category, entryCost, entryCostEffective (RnDPartPurchase modifier), purchased}` for every part assigned to the node) |
 | `tech.unlockedIds` | All currently unlocked node IDs |
 | `tech.unlockedPartCount` | Count of unlocked parts |
 | `tech.affordable` | Unpurchased nodes affordable right now (with cost / scienceRequired) |
@@ -767,11 +767,11 @@ All `AlwaysEvaluable` — queryable from any scene.
 | Key | Description |
 |-----|-------------|
 | `kc.scene` | Current scene name (`SPACECENTER`, `FLIGHT`, `EDITOR`, `TRACKSTATION`, …) |
-| `kc.facilityLevels` | All ScenarioUpgradeableFacilities with `level`, `max`, `upgradeFunds`, and the multi-line `currentLevelText` / `nextLevelText` descriptions KSP shows in the upgrade dialog |
+| `kc.facilityLevels` | All ScenarioUpgradeableFacilities with `level`, `max`, `upgradeFunds` (nominal) + `upgradeFundsEffective` (after KSP's `CurrencyModifierQuery` against `StructureConstruction` — strategy effects baked in), and the multi-line `currentLevelText` / `nextLevelText` descriptions KSP shows in the upgrade dialog |
 | `kc.launchSite` | Active launch site (`LaunchPad` / `Runway`) |
 | `kc.padOccupied` / `kc.padVesselTitle` | Pad state |
 | `kc.partsAvailable` | All purchasable parts with their availability + cost |
-| `kc.savedShips` | Saved craft listing per facility |
+| `kc.savedShips` | Saved craft listing per facility, each with `name`, `partCount`, `totalMass`, `facility`, `requiresFunds` (nominal) + `requiresFundsEffective` (after `CurrencyModifierQuery` against `VesselRollout`), `missingParts` |
 | `kc.crewRoster` | Full kerbal roster with courage / stupidity / badass / veteran / gender / type / experience / careerFlights / careerEntries / currentVesselId / currentVesselName |
 | `kc.upgradeFacility[facilityName]` | **Action:** start a facility upgrade; deducts funds |
 
@@ -1106,6 +1106,9 @@ Each burn object contains `{ tangent, normal, binormal, initial_time, duration }
 | `comm.controlState` | CommNet control state (0=none, 1=partial, 2=full) |
 | `comm.controlStateName` | CommNet control state name |
 | `comm.signalDelay` | CommNet signal delay (s) |
+| `strategies.all` | All career strategies — id, title, description, departmentName, isActive, factor, dateActivated, initialCost{Funds,Science,Reputation} (nominal), effectiveCostReputation (post reputation-curve), requiredReputation, leastDuration/longestDuration, noDuration, hasFactorSlider/factorSliderDefault/factorSliderSteps, canActivate/activateBlockedReason, canDeactivate/deactivateBlockedReason, effect text. AlwaysEvaluable. |
+| `strategies.activate[id,factor]` | **Action:** activate a strategy by id, setting the commitment factor (`[0, 1]`) before activation. Returns `0` on success, error string otherwise. Works in any scene — the gate logic replicates KSP's `CanBeActivated` against `StrategySystem` / `GameVariables` / `Funding` / `Reputation` / R&D state without needing the (dialog-only-live) `Administration` singleton. |
+| `strategies.deactivate[id]` | **Action:** deactivate an active strategy by id. Returns `0` on success. Same in-any-scene reach as `strategies.activate`. |
 
 ---
 

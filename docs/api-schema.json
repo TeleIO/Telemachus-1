@@ -1935,7 +1935,7 @@
   },
   {
     "key": "kc.facilityLevels",
-    "description": "Per-facility { level, max, upgradeFunds, currentLevelText, nextLevelText } for the 9 stock SC buildings",
+    "description": "Per-facility { level, max, upgradeFunds, upgradeFundsEffective (post strategy modifier), currentLevelText, nextLevelText } for the 9 stock SC buildings",
     "units": "UNITLESS",
     "plotable": false,
     "isAction": false,
@@ -1990,7 +1990,7 @@
   },
   {
     "key": "kc.savedShips",
-    "description": "Saved craft files in VAB+SPH — name, partCount, totalMass, facility, requiresFunds, missingParts",
+    "description": "Saved craft files in VAB+SPH — name, partCount, totalMass, facility, requiresFunds, requiresFundsEffective (post strategy modifier), missingParts",
     "units": "UNITLESS",
     "plotable": false,
     "isAction": false,
@@ -4935,7 +4935,7 @@
   },
   {
     "key": "tech.nodes",
-    "description": "Full tech tree — every node with id, title, description, scienceCost, state, parents, parts",
+    "description": "Full tech tree — every node with id, title, description, scienceCost (+ scienceCostEffective post modifier), state, parents, parts (each part includes entryCost + entryCostEffective)",
     "units": "UNITLESS",
     "plotable": false,
     "isAction": false,
@@ -4977,6 +4977,41 @@
     "category": "career",
     "returnType": "int",
     "declaringClass": "TechTreeDataLinkHandler"
+  },
+  {
+    "key": "strategies.all",
+    "description": "Every career strategy with full read fields plus canActivate / canDeactivate gates that work in any scene.",
+    "units": "UNITLESS",
+    "plotable": false,
+    "isAction": false,
+    "alwaysEvaluable": true,
+    "category": "career",
+    "returnType": "object",
+    "declaringClass": "StrategiesDataLinkHandler"
+  },
+  {
+    "key": "strategies.activate",
+    "description": "Activate a strategy by id at a given factor. Works in any scene; KSP's CanBeActivated logic is replicated against public state.",
+    "units": "UNITLESS",
+    "plotable": true,
+    "isAction": true,
+    "alwaysEvaluable": true,
+    "category": "career",
+    "returnType": "object",
+    "params": "string strategyId, float factor",
+    "declaringClass": "StrategiesDataLinkHandler"
+  },
+  {
+    "key": "strategies.deactivate",
+    "description": "Deactivate an active strategy by id. Works in any scene.",
+    "units": "UNITLESS",
+    "plotable": true,
+    "isAction": true,
+    "alwaysEvaluable": true,
+    "category": "career",
+    "returnType": "object",
+    "params": "string strategyId",
+    "declaringClass": "StrategiesDataLinkHandler"
   },
   {
     "key": "therm.anyEnginesOverheating",

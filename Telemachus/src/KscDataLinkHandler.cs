@@ -105,7 +105,7 @@ namespace Telemachus
         }
 
         [TelemetryAPI("kc.facilityLevels",
-            "Per-facility { level, max, upgradeFunds, currentLevelText, nextLevelText } for the 9 stock SC buildings",
+            "Per-facility { level, max, upgradeFunds, upgradeFundsEffective (post strategy modifier), currentLevelText, nextLevelText } for the 9 stock SC buildings",
             AlwaysEvaluable = true,
             Plotable = false,
             Category = "ksc",
@@ -122,11 +122,16 @@ namespace Telemachus
                     var level = max > 0 ? (int)Math.Round(normalised * max) : 0;
                     ReadLevelTexts(pair.Value, level, max,
                         out var currentLevelText, out var nextLevelText);
+                    var upgradeFunds = (float)ReadUpgradeFunds(pair.Value, level);
+                    var upgradeFundsEffective = upgradeFunds > 0f
+                        ? CurrencyModifiers.Funds(upgradeFunds, TransactionReasons.StructureConstruction)
+                        : 0f;
                     result[pair.Key] = new Dictionary<string, object>
                     {
                         ["level"] = level,
                         ["max"] = max,
-                        ["upgradeFunds"] = R4(ReadUpgradeFunds(pair.Value, level)),
+                        ["upgradeFunds"] = R4(upgradeFunds),
+                        ["upgradeFundsEffective"] = R4(upgradeFundsEffective),
                         ["currentLevelText"] = currentLevelText,
                         ["nextLevelText"] = nextLevelText,
                     };
@@ -138,6 +143,7 @@ namespace Telemachus
                         ["level"] = 0,
                         ["max"] = 0,
                         ["upgradeFunds"] = 0d,
+                        ["upgradeFundsEffective"] = 0d,
                         ["currentLevelText"] = string.Empty,
                         ["nextLevelText"] = string.Empty,
                     };
@@ -287,7 +293,7 @@ namespace Telemachus
         }
 
         [TelemetryAPI("kc.savedShips",
-            "Saved craft files in VAB+SPH — name, partCount, totalMass, facility, requiresFunds, missingParts",
+            "Saved craft files in VAB+SPH — name, partCount, totalMass, facility, requiresFunds, requiresFundsEffective (post strategy modifier), missingParts",
             AlwaysEvaluable = true,
             Plotable = false,
             Category = "ksc",
@@ -341,6 +347,9 @@ namespace Telemachus
                 // Corrupt or in-progress .craft — surface partial parse rather than dropping the file.
             }
 
+            var requiresFundsEffective = requiresFunds > 0f
+                ? CurrencyModifiers.Funds((float)requiresFunds, TransactionReasons.VesselRollout)
+                : 0f;
             return new Dictionary<string, object>
             {
                 ["name"] = name,
@@ -348,6 +357,7 @@ namespace Telemachus
                 ["totalMass"] = R4(totalMass),
                 ["facility"] = facility,
                 ["requiresFunds"] = R4(requiresFunds),
+                ["requiresFundsEffective"] = R4(requiresFundsEffective),
                 ["missingParts"] = new List<string>(missing),
             };
         }

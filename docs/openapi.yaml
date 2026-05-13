@@ -10512,6 +10512,86 @@ paths:
                   tech.unlockedPartCount:
                     type: integer
       x-plotable: true
+  "/api/strategies.all":
+    get:
+      summary: Every strategy with read-only fields plus canActivate / canDeactivate gates
+      operationId: strategies.all
+      tags:
+        - career
+      parameters:
+        -           $ref: "#/components/parameters/ScaleParam"
+        -           $ref: "#/components/parameters/PrecisionParam"
+        -           $ref: "#/components/parameters/IntParam"
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  strategies.all:
+                    type: object
+  "/api/strategies.activate":
+    post:
+      summary: Activate a strategy by id at the given commitment factor (in any scene)
+      operationId: strategies.activate
+      tags:
+        - career
+      parameters:
+        - name: strategyId
+          in: query
+          required: true
+          description: Strategy config name (e.g. AggressiveNegotiations)
+          schema:
+            type: string
+        - name: factor
+          in: query
+          required: false
+          description: Commitment factor in [0, 1]
+          schema:
+            type: number
+        -           $ref: "#/components/parameters/ScaleParam"
+        -           $ref: "#/components/parameters/PrecisionParam"
+        -           $ref: "#/components/parameters/IntParam"
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  strategies.activate:
+                    type: object
+      x-plotable: true
+  "/api/strategies.deactivate":
+    post:
+      summary: Deactivate an active strategy by id (in any scene)
+      operationId: strategies.deactivate
+      tags:
+        - career
+      parameters:
+        - name: strategyId
+          in: query
+          required: true
+          description: Strategy config name
+          schema:
+            type: string
+        -           $ref: "#/components/parameters/ScaleParam"
+        -           $ref: "#/components/parameters/PrecisionParam"
+        -           $ref: "#/components/parameters/IntParam"
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  strategies.deactivate:
+                    type: object
+      x-plotable: true
   "/api/therm.anyEnginesOverheating":
     get:
       summary: Any Engine Near Overheat (>90%)
