@@ -24,6 +24,7 @@ namespace Telemachus
             APIHandlers.Add(new LandingDataLinkHandler(formatters));
             APIHandlers.Add(new ThermalDataLinkHandler(formatters));
             APIHandlers.Add(new PartsTopologyDataLinkHandler(formatters));
+            APIHandlers.Add(new PartStateDataLinkHandler(formatters));
             APIHandlers.Add(new ScienceCareerDataLinkHandler(formatters));
             APIHandlers.Add(new TimeWarpDataLinkHandler(formatters));
             APIHandlers.Add(new TargetDataLinkHandler(formatters));
