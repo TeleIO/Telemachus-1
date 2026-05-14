@@ -23,6 +23,7 @@ namespace Telemachus
             : base(formatters)
         {
             GameEvents.onVesselWasModified.Add(OnVesselChanged);
+            GameEvents.onVesselChange.Add(OnVesselChanged);
             GameEvents.onPartCouple.Add(OnPartCouple);
             GameEvents.onPartUndock.Add(OnPartChanged);
             GameEvents.onPartDie.Add(OnPartChanged);
