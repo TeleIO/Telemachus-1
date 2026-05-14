@@ -379,6 +379,49 @@ Each entry in `parts[]`:
 
 </details>
 
+<details><summary>Part behavioural state</summary>
+
+Live deployable / activation state for a single part, keyed by `flightID`
+(same id `v.topology` emits). Intended for UI that reflects whether a panel
+is extended, an engine is firing, a parachute is armed, etc. — not for
+high-frequency telemetry.
+
+| Key | Description | Type |
+|-----|-------------|------|
+| `v.partState[flightId]` | `{ seq, modules: [...] }` — see below | object |
+
+The response carries a vessel-level `seq` that bumps whenever the cache is
+invalidated. Consumers can dedup unchanged pushes by comparing `seq` rather
+than walking the modules array.
+
+Each entry in `modules[]` has a `type` (semantic, not the raw KSP module
+name) and a `state` from the standard vocabulary. Type-specific extras
+(e.g. `tracking` on solar panels, `flameout` on engines) are included
+inline when present.
+
+Supported semantic types and their KSP-module sources:
+
+| `type` | Source module | State vocabulary used |
+|---|---|---|
+| `solarPanel` | `ModuleDeployableSolarPanel` | extended / retracted / deploying / retracting / broken — plus `tracking: bool` |
+| `radiator` | `ModuleDeployableRadiator` | extended / retracted / deploying / retracting / broken |
+| `antenna` | `ModuleDeployableAntenna` | extended / retracted / deploying / retracting / broken |
+| `parachute` | `ModuleParachute` | stowed / armed / deploying / extended / broken |
+| `engine` | `ModuleEngines` (incl. `ModuleEnginesFX`) | active / inactive — plus `flameout: true` when out of fuel |
+| `drill` | `ModuleResourceHarvester` | active / inactive |
+| `cargoBay` | `ModuleCargoBay` (paired with `ModuleAnimateGeneric`) | extended / retracted / deploying / retracting |
+| `landingGear` | `ModuleWheels.ModuleWheelDeployment` | extended / retracted / deploying / retracting / broken |
+
+Invalidation hooks: `onStageActivate`, `onVesselWasModified`, `onPartCouple`,
+`onPartUndock`, `onPartDie`, `onPartActionUIDismiss`. A 10s backstop covers
+player interactions that don't fire a global event (right-click → Extend
+Solar Panel, the G key for landing gear, custom action groups). Worst-case
+staleness is therefore ~10 seconds for non-event-triggered transitions —
+mid-animation transitions like "deploying → extended" may also lag up to
+that bound if no other event fires in the interim.
+
+</details>
+
 ### `o.*` — Orbit
 
 <details><summary>Keplerian elements & apsides</summary>
