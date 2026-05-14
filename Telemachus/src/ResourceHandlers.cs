@@ -251,10 +251,16 @@ namespace Telemachus
                     if (!engine.EngineIgnited || engine.flameout) break;
                     if (engine.propellants != null)
                     {
+                        // Propellant.currentRequirement is units-per-physics-frame
+                        // (set by KSP each FixedUpdate). Divide by the physics
+                        // fixedDeltaTime to convert to units/sec, matching the
+                        // unit convention used by every other dispatch case.
+                        float dt = TimeWarp.fixedDeltaTime;
+                        if (dt <= 0f) break;
                         foreach (var prop in engine.propellants)
                         {
                             if (prop == null || string.IsNullOrEmpty(prop.name)) continue;
-                            AddFlow(rows, prop.name, -prop.currentRequirement, null);
+                            AddFlow(rows, prop.name, -prop.currentRequirement / dt, null);
                         }
                     }
                     break;
