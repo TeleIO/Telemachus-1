@@ -344,6 +344,41 @@ A machine-readable [OpenAPI 3.1 spec](docs/openapi.yaml) is auto-generated from 
 
 </details>
 
+<details><summary>Vessel topology</summary>
+
+Structural snapshot of the active vessel — parts, parent links, modules, and
+assembled-space positions. Cached and event-invalidated, so `v.topology` only
+recomputes when staging / docking / decoupling / part-death events fire.
+Subscribe to `v.topologySeq` and refetch `v.topology` when the seq changes
+rather than streaming the topology key directly.
+
+| Key | Description | Type |
+|-----|-------------|------|
+| `v.topologySeq` | Monotonic counter — bumps on every vessel structural change | int |
+| `v.topology` | `{ topologySeq, rootFlightId, parts: [...] }` (see below) | object |
+
+Each entry in `parts[]`:
+
+| Field | Description |
+|-------|-------------|
+| `flightId` | Stable runtime id within a flight — use for live-lookup keys (`r.resourceFor`, `therm.part`) |
+| `persistentId` | Cross-flight id (survives save/load) |
+| `parentFlightId` | `flightId` of the parent part, or `null` for the root |
+| `name` | Internal part name (e.g. `liquidEngine2`) |
+| `title` | Display name (e.g. "LV-T45 'Swivel' Liquid Fuel Engine") |
+| `manufacturer` | Display manufacturer |
+| `category` | `PartCategories` enum as string |
+| `inverseStage` | Stage at which this part separates |
+| `crewCapacity` | Max crew |
+| `maxTemp` | Internal thermal limit (K) |
+| `crashTolerance` | Impact tolerance |
+| `dryMass` | `Part.mass` |
+| `orgPos` | `[x, y, z]` — vessel-local, as-assembled |
+| `bounds.size` | `{ x, y, z }` — prefab renderer bounds in metres |
+| `modules` | Raw `PartModule.moduleName` strings (passthrough, no filtering) |
+
+</details>
+
 ### `o.*` — Orbit
 
 <details><summary>Keplerian elements & apsides</summary>
@@ -680,8 +715,9 @@ All body queries take a body index parameter: `b.name[0]` (Kerbol), `b.name[1]` 
 | `r.resourceCurrent[name]` | Resource amount in current stage |
 | `r.resourceCurrentMax[name]` | Resource max in current stage |
 | `r.resourceNameList` | List of all resource names |
+| `r.resourceFor[flightId]` | Live resources for a single part — `{ resourceName: { amount, maxAmount }, … }`; empty object if the flightId isn't found |
 
-Example: `r.resource[ElectricCharge]`, `r.resource[LiquidFuel]`, `r.resource[Oxidizer]`
+Example: `r.resource[ElectricCharge]`, `r.resource[LiquidFuel]`, `r.resource[Oxidizer]`, `r.resourceFor[12345]`
 
 ### `s.*` — Sensors
 
@@ -1020,6 +1056,7 @@ Each burn object contains `{ tangent, normal, binormal, initial_time, duration }
 | `therm.heatShieldTemp` | Heat shield temperature | K |
 | `therm.heatShieldTempCelsius` | Heat shield temperature | C |
 | `therm.heatShieldFlux` | Heat shield thermal flux | kW |
+| `therm.part[flightId]` | Per-part thermal state — `{ temperature, maxTemperature, temperatureK, maxTemperatureK }`; `null` if the flightId isn't found. Core part temperature only — skin temp not exposed | object |
 
 ### `sci.*` / `career.*` / `comm.*` — Science, career & comms *(WIP — in testing)*
 
