@@ -5512,6 +5512,18 @@
     "declaringClass": "VesselDataLinkHandler"
   },
   {
+    "key": "v.partState",
+    "description": "Live deployable / behavioural state for a single part keyed by flightID. Returns { seq, modules: [{ type, state, ...extras }] }. Cached server-side and invalidated on staging, action-group events, vessel modifications, part death / undock / couple, and PAW dismiss; plus a 10s backstop covering player right-click interactions that don't fire a global event. Consumers subscribe and dedup on the seq field rather than re-processing the modules array on every push.",
+    "units": "UNITLESS",
+    "plotable": false,
+    "isAction": false,
+    "alwaysEvaluable": false,
+    "category": "vessel",
+    "returnType": "object",
+    "params": "uint flightId",
+    "declaringClass": "PartStateDataLinkHandler"
+  },
+  {
     "key": "v.perturbation",
     "description": "Orbital Perturbation Magnitude",
     "units": "UNITLESS",

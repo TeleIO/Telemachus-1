@@ -11518,6 +11518,32 @@ paths:
                   v.packed:
                     type: boolean
       x-plotable: true
+  "/api/v.partState":
+    get:
+      summary: "Live deployable / behavioural state for a single part keyed by flightID. Returns { seq, modules: [{ type, state, ...extras }] }. Cached server-side and invalidated on staging, action-group events, vessel modifications, part death / undock / couple, and PAW dismiss; plus a 10s backstop covering player right-click interactions that don't fire a global event. Consumers subscribe and dedup on the seq field rather than re-processing the modules array on every push."
+      operationId: v.partState
+      tags:
+        - vessel
+      parameters:
+        - name: flightId
+          in: query
+          required: true
+          description: uint parameter (passed via bracket notation)
+          schema:
+            type: string
+        -           $ref: "#/components/parameters/ScaleParam"
+        -           $ref: "#/components/parameters/PrecisionParam"
+        -           $ref: "#/components/parameters/IntParam"
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  v.partState:
+                    type: object
   "/api/v.perturbation":
     get:
       summary: Orbital Perturbation Magnitude
