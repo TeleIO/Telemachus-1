@@ -78,6 +78,39 @@ namespace Telemachus
             return names;
         }
 
+        [TelemetryAPI("r.resourceFor",
+            "Live resources for a single part keyed by flightID. " +
+            "Returns { resourceName: { amount, maxAmount } }; empty object " +
+            "if the part has no resources or the flightID isn't found.",
+            Plotable = false,
+            Category = "resource",
+            ReturnType = "object",
+            Params = "uint flightId")]
+        object ResourceFor(DataSources ds)
+        {
+            var result = new Dictionary<string, object>();
+            if (ds.args == null || ds.args.Count == 0) return result;
+            if (!uint.TryParse(ds.args[0], out var flightId)) return result;
+            if (ds.vessel == null || ds.vessel.parts == null) return result;
+
+            foreach (var part in ds.vessel.parts)
+            {
+                if (part == null || part.flightID != flightId) continue;
+                if (part.Resources == null) return result;
+                foreach (var res in part.Resources)
+                {
+                    if (res == null) continue;
+                    result[res.resourceName ?? string.Empty] = new Dictionary<string, object>
+                    {
+                        ["amount"] = res.amount,
+                        ["maxAmount"] = res.maxAmount,
+                    };
+                }
+                return result;
+            }
+            return result;
+        }
+
         private List<PartResource> GetResourceValues(DataSources datasources)
         {
             resourceCache.vessel = datasources.vessel;
