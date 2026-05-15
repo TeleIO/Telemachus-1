@@ -22,7 +22,16 @@ namespace Telemachus
         public PartsTopologyDataLinkHandler(FormatterProvider formatters)
             : base(formatters)
         {
-            GameEvents.onVesselWasModified.Add(OnVesselChanged);
+            // Subscribe only to events that actually change topology output.
+            // The payload is built from prefab bounds (cached per AvailablePart),
+            // the as-assembled orgPos, parent links, and the static module
+            // name list — none of which change with deployable state, engine
+            // ignition, parachute arming, crew transfer, or any other
+            // non-structural change. onVesselWasModified fires on every such
+            // change and was previously subscribed, causing topology seq to
+            // bump dozens of times per flight without the payload changing.
+            // Limiting the subscriptions to the genuinely-structural events
+            // below keeps seq bumps load-bearing.
             GameEvents.onVesselChange.Add(OnVesselChanged);
             GameEvents.onPartCouple.Add(OnPartCouple);
             GameEvents.onPartUndock.Add(OnPartChanged);
