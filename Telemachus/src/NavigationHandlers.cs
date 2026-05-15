@@ -349,6 +349,37 @@ namespace Telemachus
             return true;
         }
 
+        [TelemetryAPI("tar.switchVessel",
+            "Switch active vessel by FlightGlobals.Vessels index — same " +
+            "operation as the Tracking Station 'Fly' button, but callable " +
+            "from a flight scene. Saves the current vessel's state first, " +
+            "then loads the target. Args: int vesselIndex (matches " +
+            "tar.availableVessels.index). Returns true on dispatch; the " +
+            "scene change happens asynchronously.",
+            IsAction = true,
+            Category = "target",
+            ReturnType = "bool",
+            Params = "int vesselIndex")]
+        object SwitchVessel(DataSources ds)
+        {
+            if (ds.args == null || ds.args.Count == 0) return false;
+            if (!int.TryParse(ds.args[0], out int vesselIdx)) return false;
+            if (vesselIdx < 0 || vesselIdx >= FlightGlobals.Vessels.Count) return false;
+
+            // Persist the current state before switching so the active
+            // vessel's mid-flight pose / fuel / heat / etc. is preserved
+            // and re-loaded when the operator switches back. Mirrors what
+            // the Tracking Station's "Fly" button does internally.
+            Game game = HighLogic.CurrentGame.Updated();
+            GamePersistence.SaveGame(
+                game,
+                "persistent",
+                HighLogic.SaveFolder,
+                SaveMode.OVERWRITE);
+            FlightDriver.StartAndFocusVessel(game, vesselIdx);
+            return true;
+        }
+
         public override bool process(String API, out APIEntry result)
         {
             if (!base.process(API, out result))
