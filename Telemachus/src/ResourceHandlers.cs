@@ -276,9 +276,32 @@ namespace Telemachus
                     // to EC (the only resource any vanilla alternator emits).
                     // nominalFlow is unavailable on this module (no public
                     // "max output" field), so the row is marked incomplete.
-                    if (alt.outputRate != 0f)
+                    //
+                    // Gate on sibling engine state: KSP keeps `outputRate`
+                    // at its last-non-zero value after a flameout, so without
+                    // this check we'd emit ghost EC long after the engine
+                    // stopped thrusting. Observed live during the 2026-05-15
+                    // staging test — a flamed-out engine on a 1-part debris
+                    // vessel reported +4.70 EC/s indefinitely.
                     {
-                        AddFlow(rows, "ElectricCharge", alt.outputRate, null);
+                        bool engineActive = false;
+                        if (alt.part != null && alt.part.Modules != null)
+                        {
+                            foreach (var sibling in alt.part.Modules)
+                            {
+                                if (sibling is ModuleEngines eng
+                                    && eng.EngineIgnited
+                                    && !eng.flameout)
+                                {
+                                    engineActive = true;
+                                    break;
+                                }
+                            }
+                        }
+                        if (engineActive && alt.outputRate != 0f)
+                        {
+                            AddFlow(rows, "ElectricCharge", alt.outputRate, null);
+                        }
                     }
                     break;
 
