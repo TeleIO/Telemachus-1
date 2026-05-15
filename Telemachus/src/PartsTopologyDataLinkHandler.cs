@@ -69,7 +69,8 @@ namespace Telemachus
             "Active vessel topology: rootFlightId + per-part flightId, " +
             "persistentId, parentFlightId, name, title, manufacturer, " +
             "category, inverseStage, crewCapacity, maxTemp, crashTolerance, " +
-            "dryMass, orgPos[x,y,z], bounds.size{x,y,z}, modules[]. " +
+            "dryMass, orgPos[x,y,z], up[x,y,z] (part-local up in vessel " +
+            "frame), bounds.size{x,y,z}, modules[]. " +
             "Cached and event-invalidated — subscribe to v.topologySeq to " +
             "detect changes rather than streaming this key.",
             AlwaysEvaluable = false,
@@ -131,6 +132,13 @@ namespace Telemachus
             var info = part.partInfo;
             var orgPos = part.orgPos;
             var size = GetPrefabSize(info);
+            // Part's "up" axis in vessel-local frame — orgRot is the
+            // as-assembled rotation relative to the vessel root, so this
+            // captures whether a part was mounted axially (up ≈ +Y),
+            // radially (up along ±X / ±Z), or inverted. Ship Map uses
+            // this to orient nose cones, decouplers, docking ports etc.
+            // without inferring orientation from neighbour geometry.
+            var up = part.orgRot * Vector3.up;
 
             var modules = new List<string>();
             if (part.Modules != null)
@@ -166,6 +174,7 @@ namespace Telemachus
                 ["dryMass"] = part.mass,
 
                 ["orgPos"] = new object[] { orgPos.x, orgPos.y, orgPos.z },
+                ["up"] = new object[] { up.x, up.y, up.z },
 
                 ["bounds"] = new Dictionary<string, object>
                 {
