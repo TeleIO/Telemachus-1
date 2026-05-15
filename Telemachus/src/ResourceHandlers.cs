@@ -264,6 +264,103 @@ namespace Telemachus
                         }
                     }
                     break;
+
+                case ModuleAlternator alt:
+                    // Engine alternators produce EC scaled by their paired
+                    // engine's throttle. `outputRate` is the live computed
+                    // value (already in units/sec at current state) — KSP
+                    // wires up engine ↔ alternator on OnStart and the
+                    // module's FixedUpdate keeps `outputRate` current.
+                    // Stock alternators output ElectricCharge; the resource
+                    // name isn't exposed as a public field, so we hardcode
+                    // to EC (the only resource any vanilla alternator emits).
+                    // nominalFlow is unavailable on this module (no public
+                    // "max output" field), so the row is marked incomplete.
+                    if (alt.outputRate != 0f)
+                    {
+                        AddFlow(rows, "ElectricCharge", alt.outputRate, null);
+                    }
+                    break;
+
+                case ModuleDataTransmitter antenna:
+                    // Stock antennas only draw EC during active transmission.
+                    // packetResourceCost is EC per packet; packetInterval is
+                    // seconds per packet; so per-sec rate during transmit is
+                    // cost / interval. When idle the antenna draws nothing,
+                    // which means no row is emitted (the storage seed handled
+                    // by the outer loop already covers the EC capacity if any).
+                    if (antenna.IsBusy() && antenna.packetInterval > 0f)
+                    {
+                        double rate = antenna.packetResourceCost / antenna.packetInterval;
+                        AddFlow(rows, "ElectricCharge", -rate, -rate);
+                    }
+                    break;
+
+                case ModuleCommand cmd:
+                    // Probe cores and crewed pods draw EC for control. The
+                    // resHandler input list captures the always-on drain.
+                    // Hibernation zeroes the draw (with a small idle draw
+                    // KSP sometimes leaves on, but exposing that requires
+                    // additional reflection — skip for v1).
+                    if (cmd.hibernation) break;
+                    if (cmd.resHandler != null && cmd.resHandler.inputResources != null)
+                    {
+                        foreach (var input in cmd.resHandler.inputResources)
+                        {
+                            if (input == null || string.IsNullOrEmpty(input.name)) continue;
+                            AddFlow(rows, input.name, -input.rate, -input.rate);
+                        }
+                    }
+                    break;
+
+                case ModuleReactionWheel wheel:
+                    // Reaction wheels draw EC scaled by control intensity.
+                    // KSP doesn't expose the live draw on a public field
+                    // (it's computed inside FixedUpdate against pilot input
+                    // + SAS hold), so v1 approximates with the catalog max
+                    // rate when the wheel is Active. This overstates the
+                    // draw when idle / lightly used; nominal is the same
+                    // so efficiency reads ≈ 100% — clients can treat it
+                    // as a worst-case ceiling rather than a true live rate.
+                    if (wheel.State != ModuleReactionWheel.WheelState.Active) break;
+                    if (wheel.resHandler != null && wheel.resHandler.inputResources != null)
+                    {
+                        foreach (var input in wheel.resHandler.inputResources)
+                        {
+                            if (input == null || string.IsNullOrEmpty(input.name)) continue;
+                            AddFlow(rows, input.name, -input.rate, -input.rate);
+                        }
+                    }
+                    break;
+
+                case ModuleLight light:
+                    if (!light.isOn) break;
+                    if (light.resourceAmount > 0f)
+                    {
+                        AddFlow(
+                            rows,
+                            "ElectricCharge",
+                            -light.resourceAmount,
+                            -light.resourceAmount);
+                    }
+                    break;
+
+                case TelemachusPowerDrain antennaDrain:
+                    // This mod's own data-link antenna. powerConsumption is
+                    // the live EC/sec rate (already in units/sec — set inside
+                    // OnUpdate based on link state). Zero when toggled off or
+                    // when the link has dropped due to insufficient power.
+                    if (antennaDrain.activeToggle
+                        && antennaDrain.isActive
+                        && antennaDrain.powerConsumption > 0f)
+                    {
+                        AddFlow(
+                            rows,
+                            "ElectricCharge",
+                            -antennaDrain.powerConsumption,
+                            null);
+                    }
+                    break;
             }
         }
 
