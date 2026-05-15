@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using CompoundParts;
 using UnityEngine;
 
 namespace Telemachus
@@ -67,10 +68,11 @@ namespace Telemachus
 
         [TelemetryAPI("v.topology",
             "Active vessel topology: rootFlightId + per-part flightId, " +
-            "persistentId, parentFlightId, name, title, manufacturer, " +
-            "category, inverseStage, crewCapacity, maxTemp, crashTolerance, " +
-            "dryMass, orgPos[x,y,z], up[x,y,z] (part-local up in vessel " +
-            "frame), bounds.size{x,y,z}, modules[]. " +
+            "persistentId, parentFlightId, fuelLineTarget (flightId of the " +
+            "receiving tank for fuel-line parts, null otherwise), name, " +
+            "title, manufacturer, category, inverseStage, crewCapacity, " +
+            "maxTemp, crashTolerance, dryMass, orgPos[x,y,z], up[x,y,z] " +
+            "(part-local up in vessel frame), bounds.size{x,y,z}, modules[]. " +
             "Cached and event-invalidated — subscribe to v.topologySeq to " +
             "detect changes rather than streaming this key.",
             AlwaysEvaluable = false,
@@ -141,12 +143,23 @@ namespace Telemachus
             var up = part.orgRot * Vector3.up;
 
             var modules = new List<string>();
+            object fuelLineTarget = null;
             if (part.Modules != null)
             {
                 foreach (var module in part.Modules)
                 {
                     if (module == null) continue;
                     modules.Add(module.moduleName ?? string.Empty);
+                    // CModuleFuelLine.target (inherited from CompoundPartModule)
+                    // points at the "to" tank — the receiving end of the line.
+                    // The "from" end is already discoverable via parentFlightId.
+                    // Resolving here keeps the wire format flat and avoids the
+                    // client walking modules to fish out the linkage.
+                    if (fuelLineTarget == null && module is CModuleFuelLine line
+                        && line.target != null)
+                    {
+                        fuelLineTarget = line.target.flightID;
+                    }
                 }
             }
 
@@ -157,6 +170,7 @@ namespace Telemachus
                 ["parentFlightId"] = part.parent != null
                     ? (object)part.parent.flightID
                     : null,
+                ["fuelLineTarget"] = fuelLineTarget,
 
                 ["name"] = info != null ? info.name ?? string.Empty : string.Empty,
                 ["title"] = info != null ? info.title ?? string.Empty : string.Empty,
