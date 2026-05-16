@@ -18,7 +18,16 @@ namespace Telemachus
         private static Dictionary<string, object> _cached;
 
         // Prefab bounds are immutable for a session — cache by AvailablePart.name.
-        private static readonly Dictionary<string, Vector3> _prefabSizeCache = new();
+        // Cached as a Vector3 pair (size, center). center is in part-local frame
+        // relative to part.transform — non-zero for parts whose mesh does not
+        // sit at the attach-node anchor (radial decouplers, surface-mounted
+        // ladders, anything whose pivot is offset from its visual centroid).
+        private struct PrefabBounds
+        {
+            public Vector3 size;
+            public Vector3 center;
+        }
+        private static readonly Dictionary<string, PrefabBounds> _prefabBoundsCache = new();
 
         public PartsTopologyDataLinkHandler(FormatterProvider formatters)
             : base(formatters)
@@ -72,7 +81,10 @@ namespace Telemachus
             "receiving tank for fuel-line parts, null otherwise), name, " +
             "title, manufacturer, category, inverseStage, crewCapacity, " +
             "maxTemp, crashTolerance, dryMass, orgPos[x,y,z], up[x,y,z] " +
-            "(part-local up in vessel frame), bounds.size{x,y,z}, modules[]. " +
+            "(part-local up in vessel frame), bounds.size{x,y,z}, " +
+            "bounds.center{x,y,z} (mesh-center offset from orgPos in " +
+            "vessel-local frame — already rotated by orgRot; add it to " +
+            "orgPos to get the mesh centre in assembly space), modules[]. " +
             "Cached and event-invalidated — subscribe to v.topologySeq to " +
             "detect changes rather than streaming this key.",
             AlwaysEvaluable = false,
@@ -133,7 +145,8 @@ namespace Telemachus
         {
             var info = part.partInfo;
             var orgPos = part.orgPos;
-            var size = GetPrefabSize(info);
+            var prefab = GetPrefabBounds(info);
+            var size = prefab.size;
             // Part's "up" axis in vessel-local frame — orgRot is the
             // as-assembled rotation relative to the vessel root, so this
             // captures whether a part was mounted axially (up ≈ +Y),
@@ -141,6 +154,15 @@ namespace Telemachus
             // this to orient nose cones, decouplers, docking ports etc.
             // without inferring orientation from neighbour geometry.
             var up = part.orgRot * Vector3.up;
+            // Mesh-center offset, rotated into vessel-local frame. orgPos
+            // is the attach-node anchor — for radial-mount parts (radial
+            // decouplers, surface ladders, brackets) the mesh sits off-
+            // anchor and a renderer that centred the body box on orgPos
+            // produced visibly-sunken parts. Emitting the rotated offset
+            // saves the client from needing the full orgRot quaternion
+            // just to position the box correctly. Add this to orgPos to
+            // get the mesh centre in vessel-local frame.
+            var boundsCenterOffset = part.orgRot * prefab.center;
 
             var modules = new List<string>();
             object fuelLineTarget = null;
@@ -198,6 +220,12 @@ namespace Telemachus
                         ["y"] = size.y,
                         ["z"] = size.z,
                     },
+                    ["center"] = new Dictionary<string, object>
+                    {
+                        ["x"] = boundsCenterOffset.x,
+                        ["y"] = boundsCenterOffset.y,
+                        ["z"] = boundsCenterOffset.z,
+                    },
                 },
 
                 ["modules"] = modules,
@@ -207,29 +235,37 @@ namespace Telemachus
         // Prefab bounds are stable across the session — cache per AvailablePart
         // by name. Live render bounds would inflate with vessel rotation and
         // jitter as joints flex; the prefab is the "as designed" silhouette.
-        private static Vector3 GetPrefabSize(AvailablePart info)
+        // We track both size *and* center: for parts whose mesh isn't centred
+        // on the attach-node anchor (radial decouplers, surface ladders,
+        // structural brackets), `center` is the offset in part-local frame
+        // and the client must apply it to position the body box correctly.
+        private static PrefabBounds GetPrefabBounds(AvailablePart info)
         {
-            if (info == null || info.partPrefab == null) return Vector3.zero;
+            if (info == null || info.partPrefab == null)
+            {
+                return new PrefabBounds { size = Vector3.zero, center = Vector3.zero };
+            }
 
             var key = info.name ?? string.Empty;
-            if (_prefabSizeCache.TryGetValue(key, out var cached)) return cached;
+            if (_prefabBoundsCache.TryGetValue(key, out var cached)) return cached;
 
-            Vector3 size;
+            var result = new PrefabBounds { size = Vector3.zero, center = Vector3.zero };
             try
             {
                 var prefab = info.partPrefab;
                 var bounds = PartGeometryUtil.MergeBounds(
                     PartGeometryUtil.GetPartRendererBounds(prefab),
                     prefab.transform);
-                size = bounds.size;
+                result.size = bounds.size;
+                result.center = bounds.center;
             }
             catch (Exception)
             {
-                size = Vector3.zero;
+                // Leave both at zero.
             }
 
-            _prefabSizeCache[key] = size;
-            return size;
+            _prefabBoundsCache[key] = result;
+            return result;
         }
     }
 }
