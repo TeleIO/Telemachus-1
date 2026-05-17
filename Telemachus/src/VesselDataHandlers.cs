@@ -689,26 +689,26 @@ namespace Telemachus
 
         // --- Identity ---
 
-        [TelemetryAPI("b.name", "Body Name", Units = APIEntry.UnitType.STRING, Category = "body", ReturnType = "string", Params = "int bodyId")]
+        [TelemetryAPI("b.name", "Body Name", Units = APIEntry.UnitType.STRING, AlwaysEvaluable = true, Category = "body", ReturnType = "string", Params = "int bodyId")]
         object BodyName(DataSources ds) => FlightGlobals.Bodies[int.Parse(ds.args[0])].name;
 
-        [TelemetryAPI("b.description", "Body Description", Units = APIEntry.UnitType.STRING, Category = "body", ReturnType = "string", Params = "int bodyId")]
+        [TelemetryAPI("b.description", "Body Description", Units = APIEntry.UnitType.STRING, AlwaysEvaluable = true, Category = "body", ReturnType = "string", Params = "int bodyId")]
         object BodyDescription(DataSources ds) => FlightGlobals.Bodies[int.Parse(ds.args[0])].bodyDescription;
 
-        [TelemetryAPI("b.number", "Number of Bodies", Category = "body", ReturnType = "int")]
+        [TelemetryAPI("b.number", "Number of Bodies", AlwaysEvaluable = true, Category = "body", ReturnType = "int")]
         object BodyCount(DataSources ds) => FlightGlobals.Bodies.Count;
 
-        [TelemetryAPI("b.index", "Flight Globals Index", Category = "body", ReturnType = "int", Params = "int bodyId")]
+        [TelemetryAPI("b.index", "Flight Globals Index", AlwaysEvaluable = true, Category = "body", ReturnType = "int", Params = "int bodyId")]
         object BodyIndex(DataSources ds) => FlightGlobals.Bodies[int.Parse(ds.args[0])].flightGlobalsIndex;
 
-        [TelemetryAPI("b.referenceBody", "Reference Body Name", Units = APIEntry.UnitType.STRING, Category = "body", ReturnType = "string", Params = "int bodyId")]
+        [TelemetryAPI("b.referenceBody", "Reference Body Name", Units = APIEntry.UnitType.STRING, AlwaysEvaluable = true, Category = "body", ReturnType = "string", Params = "int bodyId")]
         object BodyReferenceBody(DataSources ds)
         {
             var body = FlightGlobals.Bodies[int.Parse(ds.args[0])];
             return body.referenceBody != null ? body.referenceBody.name : "";
         }
 
-        [TelemetryAPI("b.orbitingBodies", "Orbiting Body Names", Plotable = false, Formatter = "StringArray", Category = "body", ReturnType = "string[]", Params = "int bodyId")]
+        [TelemetryAPI("b.orbitingBodies", "Orbiting Body Names", Plotable = false, Formatter = "StringArray", AlwaysEvaluable = true, Category = "body", ReturnType = "string[]", Params = "int bodyId")]
         object BodyOrbitingBodies(DataSources ds)
         {
             var names = new List<string>();
@@ -719,62 +719,62 @@ namespace Telemachus
 
         // --- Physical Properties ---
 
-        [TelemetryAPI("b.radius", "Body Radius", Units = APIEntry.UnitType.DISTANCE, Category = "body", ReturnType = "double", Params = "int bodyId")]
+        [TelemetryAPI("b.radius", "Body Radius", Units = APIEntry.UnitType.DISTANCE, AlwaysEvaluable = true, Category = "body", ReturnType = "double", Params = "int bodyId")]
         object Radius(DataSources ds) => FlightGlobals.Bodies[int.Parse(ds.args[0])].Radius;
 
-        [TelemetryAPI("b.mass", "Body Mass", Category = "body", ReturnType = "double", Params = "int bodyId")]
+        [TelemetryAPI("b.mass", "Body Mass", AlwaysEvaluable = true, Category = "body", ReturnType = "double", Params = "int bodyId")]
         object BodyMass(DataSources ds) => FlightGlobals.Bodies[int.Parse(ds.args[0])].Mass;
 
-        [TelemetryAPI("b.geeASL", "Surface Gravity in G", Units = APIEntry.UnitType.G, Category = "body", ReturnType = "double", Params = "int bodyId")]
+        [TelemetryAPI("b.geeASL", "Surface Gravity in G", Units = APIEntry.UnitType.G, AlwaysEvaluable = true, Category = "body", ReturnType = "double", Params = "int bodyId")]
         object BodyGeeASL(DataSources ds) => FlightGlobals.Bodies[int.Parse(ds.args[0])].GeeASL;
 
-        [TelemetryAPI("b.soi", "Body Sphere of Influence", Units = APIEntry.UnitType.DISTANCE, Category = "body", ReturnType = "double", Params = "int bodyId")]
+        [TelemetryAPI("b.soi", "Body Sphere of Influence", Units = APIEntry.UnitType.DISTANCE, AlwaysEvaluable = true, Category = "body", ReturnType = "double", Params = "int bodyId")]
         object Soi(DataSources ds) => FlightGlobals.Bodies[int.Parse(ds.args[0])].sphereOfInfluence;
 
-        [TelemetryAPI("b.hillSphere", "Hill Sphere Radius", Units = APIEntry.UnitType.DISTANCE, Category = "body", ReturnType = "double", Params = "int bodyId")]
+        [TelemetryAPI("b.hillSphere", "Hill Sphere Radius", Units = APIEntry.UnitType.DISTANCE, AlwaysEvaluable = true, Category = "body", ReturnType = "double", Params = "int bodyId")]
         object HillSphere(DataSources ds) => FlightGlobals.Bodies[int.Parse(ds.args[0])].hillSphere;
 
         // --- Rotation ---
 
-        [TelemetryAPI("b.rotationPeriod", "Rotation Period", Units = APIEntry.UnitType.TIME, Category = "body", ReturnType = "double", Params = "int bodyId")]
+        [TelemetryAPI("b.rotationPeriod", "Rotation Period", Units = APIEntry.UnitType.TIME, AlwaysEvaluable = true, Category = "body", ReturnType = "double", Params = "int bodyId")]
         object RotationPeriod(DataSources ds) => FlightGlobals.Bodies[int.Parse(ds.args[0])].rotationPeriod;
 
-        [TelemetryAPI("b.rotationAngle", "Current Rotation Angle", Units = APIEntry.UnitType.DEG, Category = "body", ReturnType = "double", Params = "int bodyId")]
+        [TelemetryAPI("b.rotationAngle", "Current Rotation Angle", Units = APIEntry.UnitType.DEG, AlwaysEvaluable = true, Category = "body", ReturnType = "double", Params = "int bodyId")]
         object BodyRotationAngle(DataSources ds) => FlightGlobals.Bodies[int.Parse(ds.args[0])].rotationAngle;
 
-        [TelemetryAPI("b.angularV", "Angular Velocity", Category = "body", ReturnType = "double", Params = "int bodyId")]
+        [TelemetryAPI("b.angularV", "Angular Velocity", AlwaysEvaluable = true, Category = "body", ReturnType = "double", Params = "int bodyId")]
         object BodyAngularV(DataSources ds) => FlightGlobals.Bodies[int.Parse(ds.args[0])].angularV;
 
-        [TelemetryAPI("b.tidallyLocked", "Tidally Locked", Category = "body", ReturnType = "bool", Params = "int bodyId")]
+        [TelemetryAPI("b.tidallyLocked", "Tidally Locked", AlwaysEvaluable = true, Category = "body", ReturnType = "bool", Params = "int bodyId")]
         object TidallyLocked(DataSources ds) => FlightGlobals.Bodies[int.Parse(ds.args[0])].tidallyLocked;
 
-        [TelemetryAPI("b.rotates", "Body Rotates", Category = "body", ReturnType = "bool", Params = "int bodyId")]
+        [TelemetryAPI("b.rotates", "Body Rotates", AlwaysEvaluable = true, Category = "body", ReturnType = "bool", Params = "int bodyId")]
         object BodyRotates(DataSources ds) => FlightGlobals.Bodies[int.Parse(ds.args[0])].rotates;
 
         // --- Atmosphere ---
 
-        [TelemetryAPI("b.atmosphere", "Has Atmosphere", Category = "body", ReturnType = "bool", Params = "int bodyId")]
+        [TelemetryAPI("b.atmosphere", "Has Atmosphere", AlwaysEvaluable = true, Category = "body", ReturnType = "bool", Params = "int bodyId")]
         object BodyHasAtmosphere(DataSources ds) => FlightGlobals.Bodies[int.Parse(ds.args[0])].atmosphere;
 
-        [TelemetryAPI("b.maxAtmosphere", "Body Atmosphere Depth", Units = APIEntry.UnitType.DISTANCE, Category = "body", ReturnType = "double", Params = "int bodyId")]
+        [TelemetryAPI("b.maxAtmosphere", "Body Atmosphere Depth", Units = APIEntry.UnitType.DISTANCE, AlwaysEvaluable = true, Category = "body", ReturnType = "double", Params = "int bodyId")]
         object MaxAtmosphere(DataSources ds) => FlightGlobals.Bodies[int.Parse(ds.args[0])].atmosphereDepth;
 
-        [TelemetryAPI("b.atmosphereContainsOxygen", "Atmosphere contains oxygen", Category = "body", ReturnType = "bool", Params = "int bodyId")]
+        [TelemetryAPI("b.atmosphereContainsOxygen", "Atmosphere contains oxygen", AlwaysEvaluable = true, Category = "body", ReturnType = "bool", Params = "int bodyId")]
         object AtmosphereContainsOxygen(DataSources ds) => FlightGlobals.Bodies[int.Parse(ds.args[0])].atmosphereContainsOxygen;
 
         // --- Surface ---
 
-        [TelemetryAPI("b.ocean", "Has Ocean", Category = "body", ReturnType = "bool", Params = "int bodyId")]
+        [TelemetryAPI("b.ocean", "Has Ocean", AlwaysEvaluable = true, Category = "body", ReturnType = "bool", Params = "int bodyId")]
         object BodyHasOcean(DataSources ds) => FlightGlobals.Bodies[int.Parse(ds.args[0])].ocean;
 
         // --- Position ---
 
-        [TelemetryAPI("b.position", "Body World Position", Plotable = false, Formatter = "Vector3d", Category = "body", ReturnType = "Vector3d", Params = "int bodyId")]
+        [TelemetryAPI("b.position", "Body World Position", Plotable = false, Formatter = "Vector3d", AlwaysEvaluable = true, Category = "body", ReturnType = "Vector3d", Params = "int bodyId")]
         object BodyPosition(DataSources ds) => FlightGlobals.Bodies[int.Parse(ds.args[0])].position;
 
         // --- Time Warp ---
 
-        [TelemetryAPI("b.timeWarpAltitudeLimits", "Time Warp Altitude Limits", Plotable = false, Category = "body", ReturnType = "object", Params = "int bodyId")]
+        [TelemetryAPI("b.timeWarpAltitudeLimits", "Time Warp Altitude Limits", Plotable = false, AlwaysEvaluable = true, Category = "body", ReturnType = "object", Params = "int bodyId")]
         object BodyTimeWarpAltitudeLimits(DataSources ds)
         {
             float[] limits = FlightGlobals.Bodies[int.Parse(ds.args[0])].timeWarpAltitudeLimits;
@@ -782,56 +782,56 @@ namespace Telemachus
             return result;
         }
 
-        [TelemetryAPI("b.o.gravParameter", "Body Gravitational Parameter", Units = APIEntry.UnitType.GRAV, Category = "body", ReturnType = "double", Params = "int bodyId")]
+        [TelemetryAPI("b.o.gravParameter", "Body Gravitational Parameter", Units = APIEntry.UnitType.GRAV, AlwaysEvaluable = true, Category = "body", ReturnType = "double", Params = "int bodyId")]
         object GravParameter(DataSources ds) => FlightGlobals.Bodies[int.Parse(ds.args[0])].gravParameter;
 
-        [TelemetryAPI("b.o.relativeVelocity", "Relative Velocity", Units = APIEntry.UnitType.VELOCITY, Category = "body", ReturnType = "double", Params = "int bodyId")]
+        [TelemetryAPI("b.o.relativeVelocity", "Relative Velocity", Units = APIEntry.UnitType.VELOCITY, AlwaysEvaluable = true, Category = "body", ReturnType = "double", Params = "int bodyId")]
         object BodyRelativeVelocity(DataSources ds) => FlightGlobals.Bodies[int.Parse(ds.args[0])].orbit.GetRelativeVel().magnitude;
 
-        [TelemetryAPI("b.o.PeA", "Periapsis", Units = APIEntry.UnitType.DISTANCE, Category = "body", ReturnType = "double", Params = "int bodyId")]
+        [TelemetryAPI("b.o.PeA", "Periapsis", Units = APIEntry.UnitType.DISTANCE, AlwaysEvaluable = true, Category = "body", ReturnType = "double", Params = "int bodyId")]
         object BodyPeA(DataSources ds) => FlightGlobals.Bodies[int.Parse(ds.args[0])].orbit.PeA;
 
-        [TelemetryAPI("b.o.ApA", "Apoapsis", Units = APIEntry.UnitType.DISTANCE, Category = "body", ReturnType = "double", Params = "int bodyId")]
+        [TelemetryAPI("b.o.ApA", "Apoapsis", Units = APIEntry.UnitType.DISTANCE, AlwaysEvaluable = true, Category = "body", ReturnType = "double", Params = "int bodyId")]
         object BodyApA(DataSources ds) => FlightGlobals.Bodies[int.Parse(ds.args[0])].orbit.ApA;
 
-        [TelemetryAPI("b.o.timeToAp", "Time to Apoapsis", Units = APIEntry.UnitType.TIME, Category = "body", ReturnType = "double", Params = "int bodyId")]
+        [TelemetryAPI("b.o.timeToAp", "Time to Apoapsis", Units = APIEntry.UnitType.TIME, AlwaysEvaluable = true, Category = "body", ReturnType = "double", Params = "int bodyId")]
         object BodyTimeToAp(DataSources ds) => FlightGlobals.Bodies[int.Parse(ds.args[0])].orbit.timeToAp;
 
-        [TelemetryAPI("b.o.timeToPe", "Time to Periapsis", Units = APIEntry.UnitType.TIME, Category = "body", ReturnType = "double", Params = "int bodyId")]
+        [TelemetryAPI("b.o.timeToPe", "Time to Periapsis", Units = APIEntry.UnitType.TIME, AlwaysEvaluable = true, Category = "body", ReturnType = "double", Params = "int bodyId")]
         object BodyTimeToPe(DataSources ds) => FlightGlobals.Bodies[int.Parse(ds.args[0])].orbit.timeToPe;
 
-        [TelemetryAPI("b.o.inclination", "Inclination", Units = APIEntry.UnitType.DEG, Category = "body", ReturnType = "double", Params = "int bodyId")]
+        [TelemetryAPI("b.o.inclination", "Inclination", Units = APIEntry.UnitType.DEG, AlwaysEvaluable = true, Category = "body", ReturnType = "double", Params = "int bodyId")]
         object BodyInclination(DataSources ds) => FlightGlobals.Bodies[int.Parse(ds.args[0])].orbit.inclination;
 
-        [TelemetryAPI("b.o.eccentricity", "Eccentricity", Category = "body", ReturnType = "double", Params = "int bodyId")]
+        [TelemetryAPI("b.o.eccentricity", "Eccentricity", AlwaysEvaluable = true, Category = "body", ReturnType = "double", Params = "int bodyId")]
         object BodyEccentricity(DataSources ds) => FlightGlobals.Bodies[int.Parse(ds.args[0])].orbit.eccentricity;
 
-        [TelemetryAPI("b.o.period", "Orbital Period", Units = APIEntry.UnitType.TIME, Category = "body", ReturnType = "double", Params = "int bodyId")]
+        [TelemetryAPI("b.o.period", "Orbital Period", Units = APIEntry.UnitType.TIME, AlwaysEvaluable = true, Category = "body", ReturnType = "double", Params = "int bodyId")]
         object BodyPeriod(DataSources ds) => FlightGlobals.Bodies[int.Parse(ds.args[0])].orbit.period;
 
-        [TelemetryAPI("b.o.argumentOfPeriapsis", "Argument of Periapsis", Units = APIEntry.UnitType.DEG, Category = "body", ReturnType = "double", Params = "int bodyId")]
+        [TelemetryAPI("b.o.argumentOfPeriapsis", "Argument of Periapsis", Units = APIEntry.UnitType.DEG, AlwaysEvaluable = true, Category = "body", ReturnType = "double", Params = "int bodyId")]
         object BodyArgumentOfPeriapsis(DataSources ds) => FlightGlobals.Bodies[int.Parse(ds.args[0])].orbit.argumentOfPeriapsis;
 
-        [TelemetryAPI("b.o.timeToTransition1", "Time to Transition 1", Units = APIEntry.UnitType.TIME, Category = "body", ReturnType = "double", Params = "int bodyId")]
+        [TelemetryAPI("b.o.timeToTransition1", "Time to Transition 1", Units = APIEntry.UnitType.TIME, AlwaysEvaluable = true, Category = "body", ReturnType = "double", Params = "int bodyId")]
         object BodyTimeToTransition1(DataSources ds) => FlightGlobals.Bodies[int.Parse(ds.args[0])].orbit.timeToTransition1;
 
-        [TelemetryAPI("b.o.timeToTransition2", "Time to Transition 2", Units = APIEntry.UnitType.TIME, Category = "body", ReturnType = "double", Params = "int bodyId")]
+        [TelemetryAPI("b.o.timeToTransition2", "Time to Transition 2", Units = APIEntry.UnitType.TIME, AlwaysEvaluable = true, Category = "body", ReturnType = "double", Params = "int bodyId")]
         object BodyTimeToTransition2(DataSources ds) => FlightGlobals.Bodies[int.Parse(ds.args[0])].orbit.timeToTransition2;
 
-        [TelemetryAPI("b.o.sma", "Semimajor Axis", Units = APIEntry.UnitType.DISTANCE, Category = "body", ReturnType = "double", Params = "int bodyId")]
+        [TelemetryAPI("b.o.sma", "Semimajor Axis", Units = APIEntry.UnitType.DISTANCE, AlwaysEvaluable = true, Category = "body", ReturnType = "double", Params = "int bodyId")]
         object BodySma(DataSources ds) => FlightGlobals.Bodies[int.Parse(ds.args[0])].orbit.semiMajorAxis;
 
-        [TelemetryAPI("b.o.lan", "Longitude of Ascending Node", Units = APIEntry.UnitType.DEG, Category = "body", ReturnType = "double", Params = "int bodyId")]
+        [TelemetryAPI("b.o.lan", "Longitude of Ascending Node", Units = APIEntry.UnitType.DEG, AlwaysEvaluable = true, Category = "body", ReturnType = "double", Params = "int bodyId")]
         object BodyLan(DataSources ds) => FlightGlobals.Bodies[int.Parse(ds.args[0])].orbit.LAN;
 
-        [TelemetryAPI("b.o.maae", "Mean Anomaly at Epoch", Category = "body", ReturnType = "double", Params = "int bodyId")]
+        [TelemetryAPI("b.o.maae", "Mean Anomaly at Epoch", AlwaysEvaluable = true, Category = "body", ReturnType = "double", Params = "int bodyId")]
         object BodyMaae(DataSources ds) => FlightGlobals.Bodies[int.Parse(ds.args[0])].orbit.meanAnomalyAtEpoch;
 
-        [TelemetryAPI("b.o.timeOfPeriapsisPassage", "Time of Periapsis Passage", Units = APIEntry.UnitType.DATE, Category = "body", ReturnType = "double", Params = "int bodyId")]
+        [TelemetryAPI("b.o.timeOfPeriapsisPassage", "Time of Periapsis Passage", Units = APIEntry.UnitType.DATE, AlwaysEvaluable = true, Category = "body", ReturnType = "double", Params = "int bodyId")]
         object BodyTimeOfPeriapsisPassage(DataSources ds) =>
             Planetarium.GetUniversalTime() - FlightGlobals.Bodies[int.Parse(ds.args[0])].orbit.ObT;
 
-        [TelemetryAPI("b.o.trueAnomaly", "True Anomaly", Units = APIEntry.UnitType.DEG, Category = "body", ReturnType = "double", Params = "int bodyId")]
+        [TelemetryAPI("b.o.trueAnomaly", "True Anomaly", Units = APIEntry.UnitType.DEG, AlwaysEvaluable = true, Category = "body", ReturnType = "double", Params = "int bodyId")]
         object BodyTrueAnomaly(DataSources ds) =>
             FlightGlobals.Bodies[int.Parse(ds.args[0])].orbit.TrueAnomalyAtUT(Planetarium.GetUniversalTime()) * (180.0 / Math.PI);
 
@@ -865,7 +865,7 @@ namespace Telemachus
         }
 
         [TelemetryAPI("b.o.truePositionAtUT", "True Position at the given UT",
-            Plotable = false, Formatter = "Vector3d", Category = "body", ReturnType = "Vector3d", Params = "int bodyId, double UT")]
+            Plotable = false, Formatter = "Vector3d", AlwaysEvaluable = true, Category = "body", ReturnType = "Vector3d", Params = "int bodyId, double UT")]
         object BodyTruePositionAtUT(DataSources ds)
         {
             int bodyId = int.Parse(ds.args[0]);
