@@ -3897,7 +3897,7 @@
   },
   {
     "key": "r.resourceFor",
-    "description": "Live resources for a single part keyed by flightID. Returns { resourceName: { amount, maxAmount } }; empty object if the part has no resources or the flightID isn't found.",
+    "description": "Live resources for a single part keyed by flightID. Returns { resourceName: { amount, maxAmount, flow?, nominalFlow? } }. amount / maxAmount cover storage; flow is signed units/sec (positive = producing, negative = consuming) summed across the part's modules; nominalFlow is the 100%-efficiency cap. Both are omitted when the part contributes none, when no module supports a nominal (e.g. engines), or when nominal equals flow. Rows are emitted for resources the part contributes flow to even when storage is zero (RTGs, solar panels). Empty object when the flightID isn't found.",
     "units": "UNITLESS",
     "plotable": false,
     "isAction": false,
@@ -5885,7 +5885,7 @@
   },
   {
     "key": "v.topology",
-    "description": "Active vessel topology: rootFlightId + per-part flightId, persistentId, parentFlightId, name, title, manufacturer, category, inverseStage, crewCapacity, maxTemp, crashTolerance, dryMass, orgPos[x,y,z], bounds.size{x,y,z}, modules[]. Cached and event-invalidated — subscribe to v.topologySeq to detect changes rather than streaming this key.",
+    "description": "Active vessel topology: rootFlightId + per-part flightId, persistentId, parentFlightId, fuelLineTarget (flightId of the receiving tank for fuel-line parts, null otherwise), name, title, manufacturer, category, inverseStage, crewCapacity, maxTemp, crashTolerance, dryMass, orgPos[x,y,z], up[x,y,z] (part-local up in vessel frame), bounds.size{x,y,z}, bounds.center{x,y,z} (mesh-center offset from orgPos in vessel-local frame — already rotated by orgRot; add it to orgPos to get the mesh centre in assembly space), modules[]. Cached and event-invalidated — subscribe to v.topologySeq to detect changes rather than streaming this key.",
     "units": "UNITLESS",
     "plotable": false,
     "isAction": false,
