@@ -375,6 +375,9 @@ Each entry in `parts[]`:
 | `dryMass` | `Part.mass` |
 | `orgPos` | `[x, y, z]` — vessel-local, as-assembled |
 | `bounds.size` | `{ x, y, z }` — prefab renderer bounds in metres |
+| `bounds.center` | `{ x, y, z }` — prefab renderer bounds centre offset in metres |
+| `up` | `[x, y, z]` — part-local up vector in assembled-space orientation |
+| `fuelLineTarget` | `flightId` of the fuel line's destination part; `null` for non-fuel-line parts |
 | `modules` | Raw `PartModule.moduleName` strings (passthrough, no filtering) |
 
 </details>
