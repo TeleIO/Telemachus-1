@@ -570,8 +570,10 @@ SAS modes: `StabilityAssist`, `Prograde`, `Retrograde`, `Normal`, `Antinormal`, 
 | `tar.o.trueAnomaly` | Target true anomaly (deg) |
 | `tar.o.orbitingBody` | Target reference body |
 | `tar.o.orbitPatches` | Target orbit patches |
+| `tar.availableVessels` | Array of targetable vessels — `[{ index, name, type, situation, body, position }, …]` |
 | `tar.setTargetBody[index]` | **Action:** set target to body |
-| `tar.setTargetVessel[index]` | **Action:** set target to vessel |
+| `tar.setTargetVessel[index]` | **Action:** set target to vessel (use `tar.availableVessels` to get `index`) |
+| `tar.switchVessel[index]` | **Action:** fly to vessel by `index` — same as Tracking Station "Fly" |
 | `tar.clearTarget` | **Action:** clear target |
 
 </details>

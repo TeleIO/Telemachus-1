@@ -8900,6 +8900,26 @@ paths:
                     type: string
       x-units: STRING
       x-plotable: true
+  "/api/tar.availableVessels":
+    get:
+      summary: Available target vessels with their setTargetVessel indices
+      operationId: tar.availableVessels
+      tags:
+        - target
+      parameters:
+        -           $ref: "#/components/parameters/ScaleParam"
+        -           $ref: "#/components/parameters/PrecisionParam"
+        -           $ref: "#/components/parameters/IntParam"
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  tar.availableVessels:
+                    type: object
   "/api/tar.clearTarget":
     post:
       summary: Clear Current Target
@@ -9610,6 +9630,33 @@ paths:
                 properties:
                   tar.setTargetVessel:
                     type: integer
+      x-plotable: true
+  "/api/tar.switchVessel":
+    post:
+      summary: "Fly to vessel by index — same as Tracking Station 'Fly'. Saves the current vessel's state first, then loads the target. Args: int vesselIndex (from tar.availableVessels.index). Returns true on dispatch; scene change is asynchronous."
+      operationId: tar.switchVessel
+      tags:
+        - target
+      parameters:
+        - name: vesselIndex
+          in: query
+          required: true
+          description: int parameter (passed via bracket notation)
+          schema:
+            type: integer
+        -           $ref: "#/components/parameters/ScaleParam"
+        -           $ref: "#/components/parameters/PrecisionParam"
+        -           $ref: "#/components/parameters/IntParam"
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  tar.switchVessel:
+                    type: boolean
       x-plotable: true
   "/api/tar.type":
     get:

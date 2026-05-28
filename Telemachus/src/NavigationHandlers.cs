@@ -350,12 +350,10 @@ namespace Telemachus
         }
 
         [TelemetryAPI("tar.switchVessel",
-            "Switch active vessel by FlightGlobals.Vessels index — same " +
-            "operation as the Tracking Station 'Fly' button, but callable " +
-            "from a flight scene. Saves the current vessel's state first, " +
-            "then loads the target. Args: int vesselIndex (matches " +
-            "tar.availableVessels.index). Returns true on dispatch; the " +
-            "scene change happens asynchronously.",
+            "Fly to vessel by index — same as Tracking Station 'Fly'. " +
+            "Saves the current vessel's state first, then loads the target. " +
+            "Args: int vesselIndex (from tar.availableVessels.index). " +
+            "Returns true on dispatch; scene change is asynchronous.",
             IsAction = true,
             Category = "target",
             ReturnType = "bool",
