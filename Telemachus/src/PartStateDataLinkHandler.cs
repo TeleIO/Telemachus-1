@@ -274,7 +274,7 @@ namespace Telemachus
             if (s.Contains("deploying")) return "deploying";
             if (s.Contains("retracting")) return "retracting";
             if (s.Contains("broken")) return "broken";
-            return s;
+            return "unknown";
         }
     }
 }
