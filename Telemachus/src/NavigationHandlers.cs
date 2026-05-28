@@ -270,7 +270,7 @@ namespace Telemachus
 
         // --- Available Targets ---
 
-        // List the vessels currently elligible for `tar.setTargetVessel`,
+        // List the vessels currently eligible for `tar.setTargetVessel`,
         // along with the integer index the action expects. Returned in
         // `FlightGlobals.Vessels` order so the indexes match the action's
         // contract one-for-one. Filters out Flag / EVA / Debris / Unknown
@@ -365,6 +365,8 @@ namespace Telemachus
             if (ds.args == null || ds.args.Count == 0) return false;
             if (!int.TryParse(ds.args[0], out int vesselIdx)) return false;
             if (vesselIdx < 0 || vesselIdx >= FlightGlobals.Vessels.Count) return false;
+
+            if (HighLogic.CurrentGame == null) return false;
 
             // Persist the current state before switching so the active
             // vessel's mid-flight pose / fuel / heat / etc. is preserved
