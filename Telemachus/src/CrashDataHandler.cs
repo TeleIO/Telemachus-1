@@ -13,6 +13,21 @@ namespace Telemachus
         private static double _lastCrashUT;
         private static string _lastCrashVesselId;
 
+        // Wall-clock (realtimeSinceStartup) of the last capture. Used ONLY to
+        // dedup the onCrash→onVesselWillDestroy pair of a single collision crash
+        // (they fire in the same frame). Game-UT can't be used for this: a
+        // revert resets it and reuses the vesselId, which made a separate later
+        // burn-up look "already captured". Wall-clock doesn't reset on revert.
+        private static float _lastCaptureRealtime = -999f;
+
+        // Suppression for the onVesselWillDestroy detector — set while a benign
+        // destruction is in progress (revert / recovery / scene change). All
+        // cleared when the next scene finishes loading, so a stuck flag can
+        // never make us miss a later real crash.
+        private static bool _reverting;
+        private static bool _recovering;
+        private static bool _sceneChanging;
+
         // onCrewKilled fires before onCrash — buffer kill names so they don't get lost when the snapshot is built.
         private static readonly List<string> _pendingKerbalsKilled = new List<string>();
 
@@ -28,6 +43,109 @@ namespace Telemachus
 
         internal static void OnCrash(EventReport report) => CaptureCrash(report, "Crash");
         internal static void OnCrashSplashdown(EventReport report) => CaptureCrash(report, "CrashSplashdown");
+
+        // ── Vessel-destroyed detector ───────────────────────────────────────
+        // Collision crashes fire onCrash/onCrashSplashdown (handled above).
+        // Non-collision deaths — re-entry burn-up, structural/aero failure —
+        // fire NEITHER, but every fatal outcome fires onVesselWillDestroy. We use
+        // it as the universal "the mission ended by mishap" signal, scoped to the
+        // active vessel and gated against benign destroys (revert / recovery /
+        // scene change). A collision crash already captured by onCrash in the
+        // same frame is deduped, so it is not double-recorded.
+        internal static void OnVesselWillDestroy(Vessel v)
+        {
+            try
+            {
+                if (!IsRecordableMishap(v)) return;
+                CaptureVesselDestroyed(v);
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning("[Telemachus] vessel-destroy capture failed: " + e.Message);
+            }
+        }
+
+        private static bool IsRecordableMishap(Vessel v)
+        {
+            if (v == null || v != FlightGlobals.ActiveVessel) return false;
+            if (_reverting || _recovering || _sceneChanging) return false;
+            if (v.situation == Vessel.Situations.PRELAUNCH) return false;
+            var vType = v.vesselType;
+            if (vType == VesselType.Debris || vType == VesselType.Flag || vType == VesselType.Unknown)
+                return false;
+            // Dedup the same collision crash onCrash just captured — those fire in
+            // the same frame, so use WALL-CLOCK, not game-UT (a revert resets game-
+            // UT while reusing the vesselId, which would falsely match a separate
+            // later crash). A burn-up minutes later won't fall in this window.
+            if (_lastCrash != null && _lastCrashVesselId == v.id.ToString()
+                && Time.realtimeSinceStartup - _lastCaptureRealtime < 2f)
+                return false;
+            return true;
+        }
+
+        private static void CaptureVesselDestroyed(Vessel v)
+        {
+            double ut = Planetarium.GetUniversalTime();
+            var partsLost = new List<Dictionary<string, object>>();
+            if (v.parts != null)
+            {
+                foreach (var p in v.parts)
+                {
+                    if (p == null) continue;
+                    partsLost.Add(new Dictionary<string, object>
+                    {
+                        ["partName"] = p.partInfo?.name ?? p.name ?? string.Empty,
+                        ["partTitle"] = p.partInfo?.title ?? string.Empty,
+                        ["partId"] = p.flightID,
+                        ["msg"] = string.Empty,
+                    });
+                }
+            }
+            var crewAboard = _lastKnownCrew != null && _lastKnownCrew.Count > 0
+                ? new List<string>(_lastKnownCrew)
+                : ListCrewAboard(v);
+            var kerbalsKilled = new List<string>(_pendingKerbalsKilled);
+            _pendingKerbalsKilled.Clear();
+            var snap = new Dictionary<string, object>
+            {
+                // "Destroyed" = non-collision loss (burn-up / structural). The
+                // banner shows VESSEL DESTROYED for any eventKind; this just
+                // distinguishes it from terrain (Crash) / water (CrashSplashdown).
+                ["eventKind"] = "Destroyed",
+                ["vesselName"] = v.vesselName ?? string.Empty,
+                ["vesselType"] = v.vesselType.ToString(),
+                ["vesselId"] = v.id.ToString(),
+                ["body"] = v.mainBody?.bodyName ?? string.Empty,
+                ["situation"] = v.situation.ToString(),
+                ["latitude"] = R4(v.latitude),
+                ["longitude"] = R4(v.longitude),
+                ["altitude"] = R4(v.altitude),
+                ["ut"] = R4(ut),
+                ["what"] = string.Empty,
+                ["msg"] = string.Empty,
+                ["partsLost"] = partsLost,
+                ["crewAboard"] = crewAboard,
+                ["kerbalsKilled"] = kerbalsKilled,
+                ["events"] = FlightLoggerSnapshot.CaptureEvents(),
+                ["flightStats"] = FlightLoggerSnapshot.Capture(),
+            };
+            _lastCrash = snap;
+            _lastCrashUT = ut;
+            _lastCrashVesselId = v.id.ToString();
+            _lastCaptureRealtime = Time.realtimeSinceStartup;
+        }
+
+        // Suppression bookkeeping — benign destroys must not register as crashes.
+        internal static void NoteRevert() => _reverting = true;
+        internal static void NoteRecoveryRequested() => _recovering = true;
+        internal static void NoteVesselRecovered() => _recovering = false;
+        internal static void NoteSceneLoad() => _sceneChanging = true;
+        internal static void NoteLevelLoaded()
+        {
+            _reverting = false;
+            _recovering = false;
+            _sceneChanging = false;
+        }
 
         internal static void OnCrewKilled(EventReport report)
         {
@@ -77,6 +195,22 @@ namespace Telemachus
                 var vesselId = vessel?.id.ToString() ?? string.Empty;
                 var ut = Planetarium.GetUniversalTime();
 
+                // crash.lastCrash is a single-slot "last notable crash" record,
+                // not a raw impact feed. Spent debris (decoupled boosters/
+                // stages), planted flags, and unclassified objects aren't a
+                // vessel the operator is flying — recording them would clobber
+                // the slot and lose the real crash. Drop them at the source so
+                // every consumer (banner, flight-history annotation, reconnect
+                // replay) sees the right value. SpaceObject/asteroids are
+                // pilotable, so they stay.
+                var vType = vessel?.vesselType;
+                if (vType == VesselType.Debris
+                    || vType == VesselType.Flag
+                    || vType == VesselType.Unknown)
+                {
+                    return;
+                }
+
                 // Same vessel within window → append to existing snapshot.
                 if (_lastCrash != null
                     && _lastCrashVesselId == vesselId
@@ -84,6 +218,7 @@ namespace Telemachus
                 {
                     AppendPart(_lastCrash, origin, report);
                     _lastCrashUT = ut;
+                    _lastCaptureRealtime = Time.realtimeSinceStartup;
                     return;
                 }
 
@@ -96,6 +231,7 @@ namespace Telemachus
                 {
                     ["eventKind"] = eventKind,
                     ["vesselName"] = vessel?.vesselName ?? report.sender ?? string.Empty,
+                    ["vesselType"] = vessel?.vesselType.ToString() ?? string.Empty,
                     ["vesselId"] = vesselId,
                     ["body"] = vessel?.mainBody?.bodyName ?? string.Empty,
                     ["situation"] = vessel?.situation.ToString() ?? string.Empty,
@@ -115,6 +251,7 @@ namespace Telemachus
                 _lastCrash = snap;
                 _lastCrashUT = ut;
                 _lastCrashVesselId = vesselId;
+                _lastCaptureRealtime = Time.realtimeSinceStartup;
             }
             catch (Exception e)
             {
@@ -164,7 +301,10 @@ namespace Telemachus
         object HasRecent(DataSources ds) => _lastCrash != null;
 
         [TelemetryAPI("crash.lastCrash",
-            "Most recent crash snapshot. Fields: vesselName, vesselId, " +
+            "Most recent notable-vessel crash snapshot. Debris, flags, and " +
+            "unclassified objects are excluded — they don't overwrite the " +
+            "last real crash. Fields: vesselName, vesselType " +
+            "(KSP VesselType e.g. Ship/Probe/SpaceObject), vesselId, " +
             "body, situation, latitude, longitude, altitude, ut, what " +
             "(what was hit), msg, eventKind (Crash/CrashSplashdown), " +
             "partsLost (list of {partName, partTitle, partId, msg}), " +
@@ -198,8 +338,20 @@ namespace Telemachus
                 GameEvents.onCrash.Add(HandleCrash);
                 GameEvents.onCrashSplashdown.Add(HandleCrashSplashdown);
                 GameEvents.onCrewKilled.Add(HandleCrewKilled);
+
+                // Universal mishap signal for non-collision deaths (burn-up,
+                // structural) that fire no onCrash. Gated against benign
+                // destroys by the revert/recovery/scene-load subscriptions.
+                GameEvents.onVesselWillDestroy.Add(HandleVesselWillDestroy);
+                GameEvents.OnRevertToLaunchFlightState.Add(HandleRevertLaunch);
+                GameEvents.OnRevertToPrelaunchFlightState.Add(HandleRevertPrelaunch);
+                GameEvents.OnVesselRecoveryRequested.Add(HandleRecoveryRequested);
+                GameEvents.onVesselRecovered.Add(HandleVesselRecovered);
+                GameEvents.onGameSceneLoadRequested.Add(HandleSceneLoadRequested);
+                GameEvents.onLevelWasLoaded.Add(HandleLevelLoaded);
+
                 _subscribed = true;
-                Debug.Log("[Telemachus] CrashDataSubscriber: subscribed to onCrash/onCrashSplashdown/onCrewKilled");
+                Debug.Log("[Telemachus] CrashDataSubscriber: subscribed to onCrash/onCrashSplashdown/onCrewKilled + onVesselWillDestroy (+ suppression)");
             }
             catch (Exception e)
             {
@@ -238,5 +390,14 @@ namespace Telemachus
         private void HandleCrash(EventReport r) => CrashDataHandler.OnCrash(r);
         private void HandleCrashSplashdown(EventReport r) => CrashDataHandler.OnCrashSplashdown(r);
         private void HandleCrewKilled(EventReport r) => CrashDataHandler.OnCrewKilled(r);
+
+        // Instance handlers (EvtDelegate needs a real Target.GetType()).
+        private void HandleVesselWillDestroy(Vessel v) => CrashDataHandler.OnVesselWillDestroy(v);
+        private void HandleRevertLaunch(FlightState s) => CrashDataHandler.NoteRevert();
+        private void HandleRevertPrelaunch(FlightState s) => CrashDataHandler.NoteRevert();
+        private void HandleRecoveryRequested(Vessel v) => CrashDataHandler.NoteRecoveryRequested();
+        private void HandleVesselRecovered(ProtoVessel pv, bool quick) => CrashDataHandler.NoteVesselRecovered();
+        private void HandleSceneLoadRequested(GameScenes s) => CrashDataHandler.NoteSceneLoad();
+        private void HandleLevelLoaded(GameScenes s) => CrashDataHandler.NoteLevelLoaded();
     }
 }
