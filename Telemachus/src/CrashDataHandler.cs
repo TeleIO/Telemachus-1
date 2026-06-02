@@ -301,17 +301,19 @@ namespace Telemachus
         object HasRecent(DataSources ds) => _lastCrash != null;
 
         [TelemetryAPI("crash.lastCrash",
-            "Most recent notable-vessel crash snapshot. Debris, flags, and " +
-            "unclassified objects are excluded — they don't overwrite the " +
-            "last real crash. Fields: vesselName, vesselType " +
-            "(KSP VesselType e.g. Ship/Probe/SpaceObject), vesselId, " +
-            "body, situation, latitude, longitude, altitude, ut, what " +
-            "(what was hit), msg, eventKind (Crash/CrashSplashdown), " +
-            "partsLost (list of {partName, partTitle, partId, msg}), " +
-            "crewAboard (names), kerbalsKilled (names). Per-vessel events " +
-            "within 5 seconds coalesce into one snapshot; later vessels " +
-            "or later windows start fresh. Persists across scene changes; " +
-            "cleared on KSP restart.",
+            "Most recent notable-vessel crash snapshot. Captures terrain " +
+            "(eventKind Crash), water (CrashSplashdown), and non-collision " +
+            "losses such as re-entry burn-up or structural break-up " +
+            "(Destroyed). Debris, flags, and unclassified vessels are " +
+            "excluded so they don't overwrite the last real crash. Fields: " +
+            "vesselName, vesselType (KSP VesselType e.g. Ship/Probe/" +
+            "SpaceObject), vesselId, body, situation, latitude, longitude, " +
+            "altitude, ut, what (what was hit; empty for Destroyed), msg, " +
+            "eventKind (Crash/CrashSplashdown/Destroyed), partsLost (list " +
+            "of {partName, partTitle, partId, msg}), crewAboard (names), " +
+            "kerbalsKilled (names), events (flight log), flightStats. " +
+            "Per-vessel collision events within 5 seconds coalesce into one " +
+            "snapshot. Persists across scene changes; cleared on KSP restart.",
             AlwaysEvaluable = true,
             Plotable = false,
             Category = "crash",
