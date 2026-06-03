@@ -67,6 +67,33 @@ export class Chart {
         .attr("dx", (_d: string, i: number) => (i > 0 ? 30 : 0));
       legend.append("svg:tspan").attr("class", "bullet").text("◼ ");
       legend.append("svg:tspan").attr("class", "title").text((d: string) => d);
+
+      // Legend interactivity (ported from console.js): hover dims the other
+      // series; click isolates one (toggle). Uses .inactive/.active, styled by
+      // console.css.
+      const svg = this.svg;
+      legend
+        .on("mouseover", function (_d: string, i: number) {
+          if (svg.select(".active").empty()) {
+            svg.selectAll(".data path").classed("inactive", (_p: string, j: number) => j !== i);
+            svg.selectAll(".legend > tspan").classed("inactive", (_p: string, j: number) => j !== i);
+          }
+        })
+        .on("mouseout", function () {
+          if (svg.select(".active").empty()) {
+            svg.selectAll(".data path, .legend > tspan").classed("inactive", false);
+          }
+        })
+        .on("click", function (this: Element, _d: string, i: number) {
+          if (d3.select(this).classed("active")) {
+            svg.selectAll(".data path, .legend > tspan").classed("inactive", false).classed("active", false);
+          } else {
+            svg.selectAll(".data path").classed("inactive", (_p: string, j: number) => j !== i);
+            svg.selectAll(".legend > tspan")
+              .classed("inactive", (_p: string, j: number) => j !== i)
+              .classed("active", (_p: string, j: number) => j === i);
+          }
+        });
     }
     this.redraw();
   }

@@ -148,6 +148,26 @@
     telemetryKeys = telemetryKeys.filter((k) => k !== key);
   }
 
+  // Drag-to-reorder (replaces the jQuery-UI sortable).
+  let dragIndex = $state(-1);
+  function dragStart(e: DragEvent, i: number) {
+    dragIndex = i;
+    if (e.dataTransfer) {
+      e.dataTransfer.effectAllowed = "move";
+      e.dataTransfer.setData("text/plain", String(i));
+    }
+  }
+  function drop(e: DragEvent, i: number) {
+    e.preventDefault();
+    if (dragIndex >= 0 && dragIndex !== i) {
+      const arr = [...telemetryKeys];
+      const [moved] = arr.splice(dragIndex, 1);
+      arr.splice(i, 0, moved);
+      telemetryKeys = arr;
+    }
+    dragIndex = -1;
+  }
+
   // ---- layouts (+ localStorage custom) ----
   function setLayout(name: string) {
     if (!(name in layouts)) return;
@@ -211,10 +231,19 @@
   <article id="telemetry">
     <header><h2>{S.telemetry}</h2></header>
     <ul>
-      {#each telemetryKeys as key (key)}
-        <li data-api={key}>
+      {#each telemetryKeys as key, i (key)}
+        <li
+          data-api={key}
+          draggable="true"
+          class:dragging={dragIndex === i}
+          ondragstart={(e) => dragStart(e, i)}
+          ondragover={(e) => e.preventDefault()}
+          ondrop={(e) => drop(e, i)}
+          ondragend={() => (dragIndex = -1)}
+        >
           <h3>{api[key]?.name ?? key}</h3>
           <button class="remove" aria-label="Remove" onclick={() => removeTelemetry(key)}></button>
+          <img class="handle" src="img/draghandle.png" alt="Drag to reorder" />
           <div class="telemetry-data">{formatValue($telemetry[key], api[key]?.units ?? "UNITLESS")}</div>
         </li>
       {/each}
