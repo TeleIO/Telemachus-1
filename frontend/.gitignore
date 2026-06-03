@@ -1,0 +1,4 @@
+node_modules/
+dist/
+# Regenerated from the build's api-schema.json by `deno task gen`.
+src/lib/schema.gen.ts

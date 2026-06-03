@@ -1,0 +1,404 @@
+body {
+  font-family: Helvetica, Arial, sans-serif;
+  margin: 10px 20px;
+  width: auto;
+  height: auto;
+  background-color: rgb(240, 240, 240);
+  background-image: radial-gradient(rgba(0,0,0,0),rgba(0,0,0,0) 67%,rgba(0,0,0,0.1));
+}
+
+body > header {
+  position: relative;
+  text-align: center;
+  margin: 1.33em 0;
+}
+
+body > footer {
+  clear: both;
+  margin: 20px 0;
+  text-align: center;
+}
+
+body > footer button {
+  font-size: 1em;
+}
+
+h1 {
+  display: inline;
+  font-size: 2em;
+}
+
+body > header nav {
+  display: inline;
+}
+
+body > header .dropdown button {
+  font-size: 2em;
+}
+
+.dropdown button {
+  font-size: 1em;
+  background: transparent;
+  border: none;
+  margin: 5px 0 5px 0.5ex;
+  padding: 0;
+  cursor: pointer;
+}
+
+.dropdown button:focus {
+  outline: none;
+  border: none;
+}
+
+.dropdown button svg {
+  font-size: 1em;
+  width: 0.9em;
+  height: 0.75em;
+}
+
+.dropdown button path {
+  stroke: black;
+  stroke-width: 30px;
+}
+
+.dropdown button:hover path {
+  stroke: rgb(0,128,192)
+}
+
+.dropdown > ul {
+  display: none;
+  position: absolute;
+  background-color: white;
+  border: thin solid rgb(192, 192, 192);
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  min-width: 150px;
+  border-radius: 5px;
+  box-shadow: 0px 1px 3px 0.5px rgba(0, 0, 0, 0.25);
+  z-index: 2001;
+}
+
+.dropdown li:hover {
+  background-color: rgb(0,128,192);
+  color: white;
+}
+
+.dropdown li a {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  padding: 0.5ex 1em;
+}
+
+#met {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 0;
+  padding: 10px;
+  background-color: black;
+  border-radius: 4px;
+  border: thin solid white;
+  color: rgb(192,128,0);
+  font-family: "Lucida Console", Monaco, monospace;
+  background: black linear-gradient(to bottom, rgba(255,255,255,0.3) 0%,rgba(255,255,255,0.2) 50%,rgba(255,255,255,0.1) 51%,rgba(255,255,255,0.0) 100%);
+  box-shadow: 0px 1px 3px 0.5px rgba(0,0,0,1) inset;	
+}
+
+#ut {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 0;
+  padding: 10px;
+  background-color: black;
+  border-radius: 4px;
+  border: thin solid white;
+  color: rgb(192,128,0);
+  font-family: "Lucida Console", Monaco, monospace;
+  background: black linear-gradient(to bottom, rgba(255,255,255,0.3) 0%,rgba(255,255,255,0.2) 50%,rgba(255,255,255,0.1) 51%,rgba(255,255,255,0.0) 100%);
+  box-shadow: 0px 1px 3px 0.5px rgba(0,0,0,1) inset;	
+}
+
+#telemetry {
+  position: relative;
+  float: right;
+  width: 25%;
+  height: 100%;
+  background-color: white;
+  border-radius: 5px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 10px;
+  box-shadow: 0px 1px 3px 1px rgba(0,0,0,0.5) inset;	
+}
+
+#telemetry h2 {
+  text-align: center;
+  margin-top: 0;
+}
+
+#telemetry ul {
+  overflow: auto;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+#telemetry li {
+  display: block;
+  border-top: thin solid rgb(192,192,192);
+  border-bottom: thin solid rgb(192,192,192);
+  margin-bottom: -1px;
+  padding: 1ex 0;
+  position: relative;
+}
+
+#telemetry li:last-child {
+  border-bottom: thin solid rgb(192,192,192);
+}
+
+#telemetry h3 {
+  margin: 0;
+  font-weight: bold;
+  font-size: 1em;
+  margin-bottom: 0.5ex;
+  margin-right: 1em;
+}
+
+#telemetry button.remove {
+  border: none;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  position: absolute;
+  right: 0;
+  top: 0.5ex;
+  font-family: inherit;
+  font-size: 1em;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+#telemetry button.remove:hover {
+  color: #c00000;
+}
+
+#telemetry button.remove:after {
+  font-weight: bold;
+  content: '\00d7';
+}
+
+#telemetry .handle {
+  position: absolute;
+  right: 0;
+  bottom: 1ex;
+  cursor: -moz-grab;
+  cursor: -webkit-grab;
+}
+
+#telemetry .telemetry-data {
+  color: rgb(0, 128, 0);
+  font-family: "Lucida Console", Monaco, monospace;
+  margin-right: 1em;
+}
+
+#telemetry .ui-sortable-helper {
+  background: white;
+  cursor: -moz-grabbing;
+  cursor: -webkit-grabbing;
+}
+
+#telemetry .ui-sortable-helper .handle {
+  cursor: -moz-grabbing;
+  cursor: -webkit-grabbing;
+}
+
+#telemetry form {
+  position: absolute;
+  bottom: 0;
+}
+
+#apiCategory {
+  width: 100%;
+}
+
+#charts {
+  width: 75%;
+}
+
+.chart {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  padding-right: 30px;
+  position: relative;
+}
+
+.chart header {
+  margin: 0 0 0.5ex 0;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.chart header h2 {
+  display: inline;
+}
+
+.chart header nav {
+  display: inline;
+}
+
+.chart header .dropdown button {
+  font-size: 1.5em;
+}
+
+.chart.large {
+  height: 65%;
+  padding-bottom: 30px;
+}
+
+.chart.small {
+  float: left;
+  height: 35%;
+  width: 50%;
+}
+
+.chart .display {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  width: 100%;
+  height: 80%;
+  background-color: rgb(196,202,196);
+  background-image: linear-gradient(to bottom,rgb(188,196,188),rgb(200,208,200),rgb(188,196,188));
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0px 1px 2px 0.5px rgba(0, 0, 0, 0.5);
+}
+
+.chart .display svg {
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  border-radius: 20px;
+  background-image: radial-gradient(100% 75% at 50% -30%, rgba(255,255,255,0.25),rgba(255,255,255,0.1) 99.9%, rgba(0,0,0,0));
+  box-shadow: 0px 5px 80px 0px rgba(0, 0, 0, 0.75) inset;
+}
+
+.chart .display .leaflet-container {
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+  background-image: radial-gradient(100% 75% at 50% -30%, rgba(255,255,255,0.5),rgba(255,255,255,0.2) 99.9%, rgba(0,0,0,0));
+  box-shadow: 0px 5px 80px 0px rgba(0, 0, 0, 0.5) inset;
+  
+  /* Fix rounded corner bug per http://stackoverflow.com/q/5736503 */
+  -webkit-mask-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA5JREFUeNpiYGBgAAgwAAAEAAGbA+oJAAAAAElFTkSuQmCC);
+}
+
+.chart .alert {
+  position: relative;
+  margin: 0 20px;
+  text-align: center;
+  color: rgb(192,0,0);
+  font-family: "Lucida Console", Monaco, monospace;
+  z-index: 2000;
+  text-shadow: 0 0 2px black;
+  -webkit-user-select: none; /* Chrome/Safari */        
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+ */
+  user-select: none;
+}
+
+.chart svg {
+  font-size: 10pt;
+  width: 100%;
+  height: 100%;
+}
+
+.chart .axis path,
+.chart .axis line,
+.chart .grid line {
+  fill: none;
+  stroke: rgb(192,192,192);
+  shape-rendering: crispEdges;
+  stroke-width: 1px;
+}
+
+.chart .axis text,
+.chart text.legend {
+  fill: rgb(192,192,192);
+  text-rendering: optimizeLegibility;
+}
+
+.chart .x.axis .tick line,
+.chart .y.grid line {
+  stroke: rgb(96,96,96);
+}
+
+.chart .x.axis .tick line {
+  shape-rendering: auto;
+  stroke-width: 1.5px;
+}
+
+.chart .x.axis .tick text {
+  fill: rgb(96,96,96);
+}
+
+.chart .y.grid line.zero {
+  stroke: rgb(192,192,192);
+}
+
+.chart .data path {
+  fill: none;
+  stroke-width: 3px;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  transition: opacity 0.5s;
+}
+
+.chart .legend tspan {
+  transition: opacity 0.5s;
+  cursor: pointer;
+}
+
+.chart .data path.inactive,
+.chart .legend tspan.inactive {
+  opacity: 0.33
+}
+
+.chart .data path:nth-child(1) {
+  stroke: rgb(192,128,0);
+}
+
+.chart .legend tspan:nth-child(1) tspan.bullet {
+  fill: rgb(192,128,0);
+}
+  
+.chart .data path:nth-child(2) {
+  stroke: rgb(0,128,0);
+}
+
+.chart .legend tspan:nth-child(2) tspan.bullet {
+  fill: rgb(0,128,0);
+}
+
+.chart .data path:nth-child(3) {
+  stroke: rgb(0,128,192);
+}
+
+.chart .legend tspan:nth-child(3) tspan.bullet {
+  fill: rgb(0,128,192);
+}
+
+.chart .data path:nth-child(3) {
+  stroke: rgb(192,192,192);
+}
+
+.chart .legend tspan:nth-child(4) tspan.bullet {
+  fill: rgb(192,192,192);
+}
