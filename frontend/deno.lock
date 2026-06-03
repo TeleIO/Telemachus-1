@@ -3,6 +3,7 @@
   "specifiers": {
     "npm:@sveltejs/vite-plugin-svelte@^5.0.3": "5.1.1_svelte@5.56.1__acorn@8.16.0_vite@6.4.3__picomatch@4.0.4",
     "npm:@types/leaflet@^1.9.12": "1.9.21",
+    "npm:d3@^3.5.17": "3.5.17",
     "npm:leaflet@^1.9.4": "1.9.4",
     "npm:svelte@^5.19.0": "5.56.1_acorn@8.16.0",
     "npm:vite@*": "6.4.3_picomatch@4.0.4",
@@ -347,6 +348,9 @@
     "clsx@2.1.1": {
       "integrity": "sha512-eYm0QWBtUrBWZWG0d386OGAw16Z995PiOVo2B7bjWSbHedGl5e0ZWaq65kOGgUSNesEIDkB9ISbTg/JK9dhCZA=="
     },
+    "d3@3.5.17": {
+      "integrity": "sha512-yFk/2idb8OHPKkbAL8QaOaqENNoMhIaSHZerk3oQsECwkObkCpJyjYwCe+OHiq6UEdhe1m8ZGARRRO3ljFjlKg=="
+    },
     "debug@4.4.3": {
       "integrity": "sha512-RGwwWnwQvkVfavKVt22FGLw+xYSdzARwm0ru6DhTVA3umU5hZc28V3kO4stgYryrTlLpuvgI9GiijltAjNbcqA==",
       "dependencies": [
@@ -556,6 +560,7 @@
       "dependencies": [
         "npm:@sveltejs/vite-plugin-svelte@^5.0.3",
         "npm:@types/leaflet@^1.9.12",
+        "npm:d3@^3.5.17",
         "npm:leaflet@^1.9.4",
         "npm:svelte@^5.19.0",
         "npm:vite@^6.0.7"

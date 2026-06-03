@@ -16,6 +16,9 @@ const PAGES = [
   "speech",
   "d-pad",
   "map",
+  "console",
+  "ru_console",
+  "touchball-pyr",
 ];
 
 const here = import.meta.dirname;
