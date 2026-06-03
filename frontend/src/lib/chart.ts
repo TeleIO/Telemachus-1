@@ -1,10 +1,10 @@
 // Scrolling time-series chart, ported from console.js's d3 `Chart` class.
-// Keeps the d3 (v3) engine and the same SVG structure / CSS class names so
-// console.css styles it exactly as before; jQuery sizing is replaced with the
-// DOM, and the per-frame scroll redraw is kept (the easing transition dropped).
+// Uses d3 v7 (ESM-native; d3 v3 crashes under ESM because its IIFE relies on
+// `this === window`). Same SVG structure / CSS class names so console.css styles
+// it exactly as before; jQuery sizing replaced with the DOM.
 //
 // deno-lint-ignore-file no-explicit-any
-import d3 from "d3";
+import * as d3 from "d3";
 import type { YAxis } from "./charts.ts";
 
 const WINDOW = 300; // seconds of history shown
@@ -43,8 +43,8 @@ export class Chart {
     this.height = this.el.clientHeight || 150;
     const { w, h } = this.dataDims();
 
-    this.x = d3.scale.linear().range([0, w]).domain([0, WINDOW]);
-    this.y = d3.scale.linear().range([h, 0]).domain([this.yaxis.min ?? 0, this.yaxis.max ?? 1]);
+    this.x = d3.scaleLinear().range([0, w]).domain([0, WINDOW]);
+    this.y = d3.scaleLinear().range([h, 0]).domain([this.yaxis.min ?? 0, this.yaxis.max ?? 1]);
 
     this.svg = d3.select(this.el).append("svg:svg").attr("width", this.width).attr("height", this.height);
     this.root = this.svg.append("svg:g").attr("transform", `translate(${this.padding.left}, ${this.padding.top})`);
@@ -70,28 +70,32 @@ export class Chart {
 
       // Legend interactivity (ported from console.js): hover dims the other
       // series; click isolates one (toggle). Uses .inactive/.active, styled by
-      // console.css.
+      // console.css. (d3 v7 event handlers receive (event, datum); the series
+      // index comes from the datum.)
       const svg = this.svg;
+      const indexOf = (d: string) => this.series.indexOf(d);
       legend
-        .on("mouseover", function (_d: string, i: number) {
+        .on("mouseover", (_event: Event, d: string) => {
           if (svg.select(".active").empty()) {
-            svg.selectAll(".data path").classed("inactive", (_p: string, j: number) => j !== i);
-            svg.selectAll(".legend > tspan").classed("inactive", (_p: string, j: number) => j !== i);
+            const i = indexOf(d);
+            svg.selectAll(".data path").classed("inactive", (_p: any, j: number) => j !== i);
+            svg.selectAll(".legend > tspan").classed("inactive", (_p: any, j: number) => j !== i);
           }
         })
-        .on("mouseout", function () {
+        .on("mouseout", () => {
           if (svg.select(".active").empty()) {
             svg.selectAll(".data path, .legend > tspan").classed("inactive", false);
           }
         })
-        .on("click", function (this: Element, _d: string, i: number) {
+        .on("click", function (this: Element, _event: Event, d: string) {
           if (d3.select(this).classed("active")) {
             svg.selectAll(".data path, .legend > tspan").classed("inactive", false).classed("active", false);
           } else {
-            svg.selectAll(".data path").classed("inactive", (_p: string, j: number) => j !== i);
+            const i = indexOf(d);
+            svg.selectAll(".data path").classed("inactive", (_p: any, j: number) => j !== i);
             svg.selectAll(".legend > tspan")
-              .classed("inactive", (_p: string, j: number) => j !== i)
-              .classed("active", (_p: string, j: number) => j === i);
+              .classed("inactive", (_p: any, j: number) => j !== i)
+              .classed("active", (_p: any, j: number) => j === i);
           }
         });
     }
@@ -100,7 +104,6 @@ export class Chart {
 
   addSample(t: number, sample: (number | null)[]) {
     this.data.push([t, ...sample.map((v) => (v == null ? NaN : v))]);
-    // keep a little more than the window so lines reach the left edge
     const cutoff = t - WINDOW - 5;
     this.data = this.data.filter((row) => row[0] >= cutoff);
     this.x.domain([t - WINDOW, t]);
@@ -124,21 +127,25 @@ export class Chart {
   }
 
   private redraw() {
-    const { h } = this.dataDims();
-    // y grid + axis
-    const ticks = this.y.ticks(Math.max((h / 39) | 0, 2));
+    const { h, w } = this.dataDims();
+    const tickCount = Math.max((h / 39) | 0, 2);
+
+    // y grid
+    const ticks = this.y.ticks(tickCount);
     const grid = this.svg.select("g.y.grid").selectAll("line").data(ticks);
     grid.enter().append("svg:line");
     grid.exit().remove();
-    this.svg.selectAll("g.y.grid line").attr("x1", 0).attr("x2", this.dataDims().w)
+    this.svg.selectAll("g.y.grid line").attr("x1", 0).attr("x2", w)
       .attr("y1", (d: number) => this.y(d)).attr("y2", (d: number) => this.y(d))
       .classed("zero", (d: number) => d === 0);
-    this.svg.select("g.y.axis").call(d3.svg.axis().scale(this.y).orient("left").ticks(Math.max((h / 39) | 0, 2)));
 
-    // x axis MET ticks
-    const xAxis = d3.svg.axis().scale(this.x).orient("bottom").tickSize(h, 0).tickFormat((d: number) => {
+    // y axis
+    this.svg.select("g.y.axis").call(d3.axisLeft(this.y).ticks(tickCount));
+
+    // x axis (MET ticks)
+    const xAxis = d3.axisBottom(this.x).tickSizeInner(h).tickSizeOuter(0).tickFormat((d: any) => {
       if (this.missionTimeOffset == null) return "";
-      let t = (d - this.missionTimeOffset) / 60;
+      let t = (Number(d) - this.missionTimeOffset) / 60;
       const sign = t < 0 ? "T-" : "T+";
       t = Math.abs(t);
       const hh = (t / 60) | 0;
