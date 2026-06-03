@@ -120,3 +120,99 @@ export class TelemachusClient {
 
 /** Shared default client (same-origin), used by every page. */
 export const telemachus = new TelemachusClient();
+
+// ---------------------------------------------------------------------------
+// WebSocket transport (the push channel Houston uses, now available to the
+// bundled UI too). Protocol (KSPWebSocketService): connect to ws://host/datalink
+// and send `{"+":[keys]}` / `{"-":[keys]}` / `{"run":[keys]}` / `{"rate":ms}`.
+// Frames arrive as JSON keyed by the api string (plus optional `unknown`/`errors`).
+// ---------------------------------------------------------------------------
+
+export interface SocketHandlers {
+  onFrame: (data: Datalink) => void;
+  onState: (open: boolean) => void;
+}
+
+function resolveSocketUrl(): string {
+  // The WS service is mounted at root (/datalink), not under /telemachus/.
+  const loc = globalThis.location;
+  const proto = loc?.protocol === "https:" ? "wss:" : "ws:";
+  const host = loc?.host ?? "localhost:8085";
+  return `${proto}//${host}/datalink`;
+}
+
+export class TelemachusSocket {
+  private ws: WebSocket | null = null;
+  private readonly url: string;
+  private keys = new Set<string>();
+  private rate: number;
+  private closed = false;
+  private retry: ReturnType<typeof setTimeout> | undefined;
+
+  constructor(private handlers: SocketHandlers, opts: { url?: string; rate?: number } = {}) {
+    this.url = opts.url ?? resolveSocketUrl();
+    this.rate = opts.rate ?? 500;
+  }
+
+  open() {
+    this.closed = false;
+    try {
+      this.ws = new WebSocket(this.url);
+    } catch {
+      this.scheduleReconnect();
+      return;
+    }
+    this.ws.onopen = () => {
+      this.handlers.onState(true);
+      this.send({ rate: this.rate });
+      if (this.keys.size) this.send({ "+": [...this.keys] });
+    };
+    this.ws.onclose = () => {
+      this.handlers.onState(false);
+      this.scheduleReconnect();
+    };
+    this.ws.onerror = () => this.ws?.close();
+    this.ws.onmessage = (ev) => {
+      if (typeof ev.data !== "string") return; // ignore binary frames here
+      try {
+        this.handlers.onFrame(JSON.parse(ev.data.replace(/\bnan\b/gi, "0")) as Datalink);
+      } catch {
+        /* malformed frame */
+      }
+    };
+  }
+
+  private scheduleReconnect() {
+    if (this.closed || this.retry) return;
+    this.retry = setTimeout(() => {
+      this.retry = undefined;
+      if (!this.closed) this.open();
+    }, 2000);
+  }
+
+  private send(msg: unknown) {
+    if (this.ws?.readyState === WebSocket.OPEN) this.ws.send(JSON.stringify(msg));
+  }
+
+  /** Replace the subscription set, emitting only the +/- diff. */
+  setKeys(next: string[]) {
+    const nextSet = new Set(next);
+    const added = next.filter((k) => !this.keys.has(k));
+    const removed = [...this.keys].filter((k) => !nextSet.has(k));
+    this.keys = nextSet;
+    if (added.length) this.send({ "+": added });
+    if (removed.length) this.send({ "-": removed });
+  }
+
+  setRate(ms: number) {
+    this.rate = ms;
+    this.send({ rate: ms });
+  }
+
+  close() {
+    this.closed = true;
+    if (this.retry) clearTimeout(this.retry);
+    this.ws?.close();
+    this.ws = null;
+  }
+}

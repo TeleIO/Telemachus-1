@@ -2,6 +2,8 @@
   "version": "5",
   "specifiers": {
     "npm:@sveltejs/vite-plugin-svelte@^5.0.3": "5.1.1_svelte@5.56.1__acorn@8.16.0_vite@6.4.3__picomatch@4.0.4",
+    "npm:@types/leaflet@^1.9.12": "1.9.21",
+    "npm:leaflet@^1.9.4": "1.9.4",
     "npm:svelte@^5.19.0": "5.56.1_acorn@8.16.0",
     "npm:vite@*": "6.4.3_picomatch@4.0.4",
     "npm:vite@^6.0.7": "6.4.3_picomatch@4.0.4"
@@ -320,6 +322,15 @@
     "@types/estree@1.0.9": {
       "integrity": "sha512-GhdPgy1el4/ImP05X05Uw4cw2/M93BCUmnEvWZNStlCzEKME4Fkk+YpoA5OiHNQmoS7Cafb8Xa3Pya8m1Qrzeg=="
     },
+    "@types/geojson@7946.0.16": {
+      "integrity": "sha512-6C8nqWur3j98U6+lXDfTUWIfgvZU+EumvpHKcYjujKH7woYyLj2sUmff0tRhrqM7BohUw7Pz3ZB1jj2gW9Fvmg=="
+    },
+    "@types/leaflet@1.9.21": {
+      "integrity": "sha512-TbAd9DaPGSnzp6QvtYngntMZgcRk+igFELwR2N99XZn7RXUdKgsXMR+28bUO0rPsWp8MIu/f47luLIQuSLYv/w==",
+      "dependencies": [
+        "@types/geojson"
+      ]
+    },
     "@types/trusted-types@2.0.7": {
       "integrity": "sha512-ScaPdn1dQczgbl0QFTeTOmVHFULt394XJgOQNoyVhZ6r2vLnMLJfBPd53SB52T/3G36VI1/g2MZaX0cwDuXsfw=="
     },
@@ -412,6 +423,9 @@
     },
     "kleur@4.1.5": {
       "integrity": "sha512-o+NO+8WrRiQEE4/7nwRJhN1HWpVmJm511pBHUxPLtp0BUISzlBplORYSmTclCnJvQq2tKu/sgl3xVpkc7ZWuQQ=="
+    },
+    "leaflet@1.9.4": {
+      "integrity": "sha512-nxS1ynzJOmOlHp+iL3FyWqK89GtNL8U8rvlMOsQdTTssxZwCXh8N2NB3GDQOL+YR3XnWyZAxwQixURb+FA74PA=="
     },
     "locate-character@3.0.0": {
       "integrity": "sha512-SW13ws7BjaeJ6p7Q6CO2nchbYEc3X3J6WrmTTDto7yMPqVSZTUyY5Tjbid+Ab8gLnATtygYtiDIJGQRRn2ZOiA=="
@@ -541,6 +555,8 @@
     "packageJson": {
       "dependencies": [
         "npm:@sveltejs/vite-plugin-svelte@^5.0.3",
+        "npm:@types/leaflet@^1.9.12",
+        "npm:leaflet@^1.9.4",
         "npm:svelte@^5.19.0",
         "npm:vite@^6.0.7"
       ]

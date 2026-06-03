@@ -15,6 +15,7 @@ const PAGES = [
   "smart-ass",
   "speech",
   "d-pad",
+  "map",
 ];
 
 const here = import.meta.dirname;
