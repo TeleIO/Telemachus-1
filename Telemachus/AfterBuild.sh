@@ -31,8 +31,21 @@ cp "$TargetDir/websocket-sharp.dll" "$ProjectDir/../publish/GameData/Telemachus/
 cp "$ProjectDir/../TelemachusReborn.version" "$ProjectDir/../publish/GameData/Telemachus/"
 
 cp -pR "$ProjectDir/../Parts/."                         "$ProjectDir/../publish/GameData/Telemachus/Parts/"
-cp -pR "$ProjectDir/../WebPages/WebPages/src/."         "$ProjectDir/../publish/GameData/Telemachus/Plugins/PluginData/Telemachus/"
 cp -pR "$ProjectDir/../Licences/."                      "$ProjectDir/../publish/GameData/Telemachus/"
+
+# Web UI: build the modern frontend (frontend/, Deno+Svelte) when Deno is
+# available; otherwise fall back to the legacy WebPages/src pages so the build
+# still works on machines without Deno.
+webDest="$ProjectDir/../publish/GameData/Telemachus/Plugins/PluginData/Telemachus/"
+frontendDir="$ProjectDir/../frontend"
+if command -v deno >/dev/null 2>&1 && [ -f "$frontendDir/deno.json" ]; then
+  echo "Building modern web UI with Deno..."
+  ( cd "$frontendDir" && deno install --quiet && deno task build )
+  cp -pR "$frontendDir/dist/." "$webDest"
+else
+  echo "Deno not available — shipping legacy WebPages/src."
+  cp -pR "$ProjectDir/../WebPages/WebPages/src/." "$webDest"
+fi
 cp     "$ProjectDir/../README.md"                       "$ProjectDir/../publish/GameData/Telemachus/"
 
 # Download Houston

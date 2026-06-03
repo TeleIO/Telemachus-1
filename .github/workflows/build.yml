@@ -17,6 +17,10 @@ jobs:
         with:
           fetch-depth: 0
 
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+
       - name: Install Mono BCL
         run: sudo apt-get install -y mono-devel curl unzip
 
