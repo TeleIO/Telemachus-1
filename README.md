@@ -8,9 +8,9 @@
 
 <p align="center">
 
-[![Build](https://github.com/TeleIO/Telemachus-1/actions/workflows/build.yml/badge.svg)](https://github.com/TeleIO/Telemachus-1/actions/workflows/build.yml)
-[![GitHub Downloads](https://img.shields.io/github/downloads/TeleIO/Telemachus-1/total.svg)](https://github.com/TeleIO/Telemachus-1/releases)
-[![Stars](https://img.shields.io/github/stars/TeleIO/Telemachus-1)](https://github.com/TeleIO/Telemachus-1/stargazers)
+[![Build](https://github.com/TeaGuild/Telemachus-1/actions/workflows/build.yml/badge.svg)](https://github.com/TeaGuild/Telemachus-1/actions/workflows/build.yml)
+[![GitHub Downloads](https://img.shields.io/github/downloads/TeaGuild/Telemachus-1/total.svg)](https://github.com/TeaGuild/Telemachus-1/releases)
+[![Stars](https://img.shields.io/github/stars/TeaGuild/Telemachus-1)](https://github.com/TeaGuild/Telemachus-1/stargazers)
 [![Discord](https://img.shields.io/discord/695052938095231016.svg?label=discord)](https://discord.gg/nkbauw7)
 
 </p>
@@ -54,7 +54,7 @@ All mod integrations are soft dependencies via reflection — no mod DLLs are re
 
 ## Installation
 
-1. Download the latest `GameData.zip` from the [Releases](https://github.com/TeleIO/Telemachus-1/releases) page.
+1. Download the latest `GameData.zip` from the [Releases](https://github.com/TeaGuild/Telemachus-1/releases) page.
 2. Extract and merge the `GameData/` folder into your KSP installation directory.
 3. Launch KSP. The Telemachus server starts automatically when a vessel with a Telemachus antenna is active, or when running in partless mode.
 4. Open a browser and navigate to `http://localhost:8085/` to access the built-in UI.
@@ -1077,11 +1077,11 @@ This merges the auto-generated schema with `tools/manual-apis.json` (for constru
 
 Contributions are welcome — see [CONTRIBUTORS.md](CONTRIBUTORS.md) for the full list of people who have helped build this.
 
-- Bug reports and feature requests: [open an issue](https://github.com/TeleIO/Telemachus-1/issues)
+- Bug reports and feature requests: [open an issue](https://github.com/TeaGuild/Telemachus-1/issues)
 - Chat: [Discord server](https://discord.gg/nkbauw7)
 - Pull requests: please follow the [conventional commits](https://www.conventionalcommits.org/) format (`feat:`, `fix:`, `docs:`, etc.). A commit-msg hook is installed automatically when you enter the Nix dev shell.
 
-Please follow the [Code of Conduct](https://github.com/TeleIO/Telemachus-1/wiki/Code-of-Conduct).
+Please follow the [Code of Conduct](https://github.com/TeaGuild/Telemachus-1/wiki/Code-of-Conduct).
 
 ---
 

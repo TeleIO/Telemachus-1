@@ -4,7 +4,7 @@
   "name": "Telemachus Reborn",
   "abstract": "Telemachus is a universal Web Telemetry Mod for Kerbal Space Program. It allows you to access any aspects of game from browser.",
   "author": "DanGSun,Sidrus",
-  "$kref": "#/ckan/github/TeleIO/Telemachus-1",
+  "$kref": "#/ckan/github/TeaGuild/Telemachus-1",
   "$vref": "#/ckan/ksp-avc",
   "license": "MIT",
   "release_status": "stable",
