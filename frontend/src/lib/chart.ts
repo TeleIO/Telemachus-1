@@ -38,9 +38,22 @@ export class Chart {
     return { w, h };
   }
 
+  /** Content-box size of the host (.display), excluding its CSS padding — what
+   *  the legacy jQuery `.width()/.height()` returned, so the svg fits inside. */
+  private contentSize() {
+    const cs = getComputedStyle(this.el);
+    const padX = (parseFloat(cs.paddingLeft) || 0) + (parseFloat(cs.paddingRight) || 0);
+    const padY = (parseFloat(cs.paddingTop) || 0) + (parseFloat(cs.paddingBottom) || 0);
+    return {
+      w: (this.el.clientWidth || 300) - padX,
+      h: (this.el.clientHeight || 150) - padY,
+    };
+  }
+
   private build() {
-    this.width = this.el.clientWidth || 300;
-    this.height = this.el.clientHeight || 150;
+    const size = this.contentSize();
+    this.width = size.w;
+    this.height = size.h;
     const { w, h } = this.dataDims();
 
     this.x = d3.scaleLinear().range([0, w]).domain([0, WINDOW]);
@@ -108,7 +121,8 @@ export class Chart {
     this.data = this.data.filter((row) => row[0] >= cutoff);
     this.x.domain([t - WINDOW, t]);
 
-    if (this.width !== (this.el.clientWidth || this.width) || this.height !== (this.el.clientHeight || this.height)) {
+    const size = this.contentSize();
+    if (this.width !== size.w || this.height !== size.h) {
       this.resize();
     } else {
       this.autoY();

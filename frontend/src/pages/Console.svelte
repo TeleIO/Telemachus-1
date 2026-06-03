@@ -43,6 +43,31 @@
   let stopKeys: (() => void) | undefined;
   let lastValues: Record<string, unknown> = {};
 
+  // console.css sizes the charts with percentage heights that only resolve when
+  // #container / #charts have an explicit pixel height — the legacy console.js
+  // set this from the viewport in a resize handler. Ported here.
+  let containerEl: HTMLDivElement;
+  let chartsEl: HTMLDivElement;
+  function resize() {
+    if (!containerEl || !chartsEl) return;
+    const top = containerEl.getBoundingClientRect().top;
+    const footer = document.querySelector("body > footer") as HTMLElement | null;
+    const footerH = footer ? footer.offsetHeight + 40 : 60;
+    const h = Math.max(globalThis.innerHeight - top - footerH, 240);
+    containerEl.style.height = `${h}px`;
+    chartsEl.style.height = `${h}px`;
+    // Bound the telemetry list so it scrolls above the (absolute) add-form,
+    // rather than overflowing underneath it.
+    const ul = containerEl.querySelector("#telemetry ul") as HTMLElement | null;
+    const form = containerEl.querySelector("#telemetry form") as HTMLElement | null;
+    if (ul && form) ul.style.height = `${Math.max(form.offsetTop - ul.offsetTop, 0)}px`;
+    for (let i = 0; i < 3; i++) {
+      slotCharts[i]?.resize();
+      slotMaps[i]?.map.invalidateSize();
+    }
+  }
+  const scheduleResize = () => requestAnimationFrame(resize);
+
   // ---- api discovery (expand b.* per body, r.* per resource) ----
   async function loadApi() {
     let list: Array<{ apistring: string; name: string; units: string; plotable: boolean }>;
@@ -137,7 +162,7 @@
 
   function setChart(i: number, name: string) {
     slotNames[i] = name;
-    queueMicrotask(() => buildSlot(i));
+    queueMicrotask(() => { buildSlot(i); scheduleResize(); });
   }
 
   // ---- telemetry list ----
@@ -176,7 +201,7 @@
     const l = layouts[name];
     telemetryKeys = l.telemetry.filter((k) => k in api);
     slotNames = [l.charts[0] ?? "", l.charts[1] ?? "", l.charts[2] ?? ""];
-    queueMicrotask(() => { for (let i = 0; i < 3; i++) buildSlot(i); });
+    queueMicrotask(() => { for (let i = 0; i < 3; i++) buildSlot(i); scheduleResize(); });
   }
   function saveLayout() {
     const name = prompt("What name would you like to save this layout under?", layoutName)?.trim();
@@ -211,8 +236,15 @@
       metText = missionTimeString(Number(lastValues["v.missionTime"]) || 0);
       utText = dateString(Number(lastValues["t.universalTime"]) || 0);
     }, 1000);
+    globalThis.addEventListener("resize", resize);
+    scheduleResize();
     loadApi();
-    onDestroy(() => { unsub(); clearInterval(clock); stopKeys?.(); });
+    onDestroy(() => {
+      unsub();
+      clearInterval(clock);
+      stopKeys?.();
+      globalThis.removeEventListener("resize", resize);
+    });
   });
 </script>
 
@@ -227,7 +259,7 @@
   <p id="ut">{utText}</p>
 </header>
 
-<div id="container">
+<div id="container" bind:this={containerEl}>
   <article id="telemetry">
     <header><h2>{S.telemetry}</h2></header>
     <ul>
@@ -263,7 +295,7 @@
     </form>
   </article>
 
-  <div id="charts">
+  <div id="charts" bind:this={chartsEl}>
     {#each [0, 1, 2] as i (i)}
       <article class={i === 0 ? "large chart" : "small chart"}>
         <header>
@@ -285,3 +317,17 @@
   <button id="saveLayout" onclick={saveLayout}>{S.saveLayout}</button>
   <button id="deleteLayout" onclick={deleteLayout} disabled={!(layoutName in customLayouts)}>{S.deleteLayout}</button>
 </footer>
+
+<style>
+  /* The legacy layout/chart menus were svg hamburger buttons that console.css
+     aligned; our native <select> needs explicit vertical-centering against the
+     heading so the title and dropdown share a centre line. */
+  header h1,
+  header h2,
+  header select {
+    vertical-align: middle;
+  }
+  header select {
+    margin-left: 0.5ex;
+  }
+</style>
