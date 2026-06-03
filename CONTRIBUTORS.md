@@ -25,6 +25,7 @@ Thanks to everyone who has contributed to Telemachus Reborn.
 - [HebaruSan (@HebaruSan)](https://github.com/HebaruSan) — CKAN maintainer; version file URL fix (2026)
 - [Jan Sandbrink (@NobodysNightmare)](https://github.com/NobodysNightmare) — added G-force telemetry API and chart (2014)
 - [John M Knight (@johnmknight)](https://github.com/johnmknight) — added mp4, json, and txt MIME types (2016)
+- [Jon Pepler (@jonpepler)](https://github.com/jonpepler) — CORS allowlist for cross-origin clients, main-thread deferral of action handlers, build-script portability (2026)
 - [Mark T. Tomczak (@fixermark)](https://github.com/fixermark) — docking port downcast bug fix (2014)
 - [Martin Schmidt (@maschmi)](https://github.com/maschmi) — Linux build support, OS detection (2019)
 - [monstrim (@monstrim)](https://github.com/monstrim) — float precision APIs, boolean parsing (2016)
