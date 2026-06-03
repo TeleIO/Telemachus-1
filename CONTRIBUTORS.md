@@ -31,5 +31,5 @@ Thanks to everyone who has contributed to Telemachus Reborn.
 - [Nicholas Devenish (@ndevenish)](https://github.com/ndevenish) — websocket-sharp HTTP server rewrite, plugin system, binary subscriptions, RasterPropMonitor API integration (2015)
 - [Row-Bear (@Row-Bear)](https://github.com/Row-Bear) — map layers, zoom limits, popup display, documentation (2020)
 - [scripty (@scriptythekid)](https://github.com/scriptythekid) — build documentation and solution file updates (2020)
-- [StoneBlue (@StoneBlue)](https://github.com/StoneBlue) — RemoteTech integration (2019)
+- [StoneBlue (@StoneBlue)](https://github.com/StoneBlue) — TeleBlade antenna model, part deprecation and DDS texture cleanup (2019)
 - [Whitey04 (@Whitey04)](https://github.com/Whitey04) — career mode part config: unlocked antenna at start (2014)
