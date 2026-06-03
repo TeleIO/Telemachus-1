@@ -1,0 +1,19 @@
+{
+  "nodeModulesDir": "auto",
+  "unstable": ["bare-node-builtins"],
+  "imports": {
+    "shiki": "npm:shiki@3.23.0",
+    "@shikijs/core": "npm:@shikijs/core@3.23.0",
+    "@shikijs/themes": "npm:@shikijs/themes@3.23.0",
+    "@shikijs/langs": "npm:@shikijs/langs@3.23.0",
+    "@shikijs/engine-javascript": "npm:@shikijs/engine-javascript@3.23.0",
+    "@shikijs/engine-oniguruma": "npm:@shikijs/engine-oniguruma@3.23.0",
+    "@shikijs/types": "npm:@shikijs/types@3.23.0",
+    "@shikijs/vscode-textmate": "npm:@shikijs/vscode-textmate@10.0.2"
+  },
+  "tasks": {
+    "dev": "deno run -A npm:astro dev",
+    "build": "deno run -A npm:astro build",
+    "preview": "deno run -A npm:astro preview"
+  }
+}
