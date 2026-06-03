@@ -12,8 +12,8 @@
     "@shikijs/vscode-textmate": "npm:@shikijs/vscode-textmate@10.0.2"
   },
   "tasks": {
-    "dev": "deno run -A npm:astro dev",
-    "build": "deno run -A npm:astro build",
-    "preview": "deno run -A npm:astro preview"
+    "dev": "deno run -A npm:astro dev --config astro.config.deno.mjs",
+    "build": "deno run -A npm:astro build --config astro.config.deno.mjs",
+    "preview": "deno run -A npm:astro preview --config astro.config.deno.mjs"
   }
 }
