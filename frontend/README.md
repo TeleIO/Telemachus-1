@@ -18,6 +18,20 @@ asset URLs, so it drops straight into the plugin's static server (which has no
 SPA fallback and serves `.js` as `application/x-javascript`). Routing stays
 multi-page; no `.mjs`/`.wasm` is emitted.
 
+## Eyeball it locally (no KSP)
+
+```sh
+deno task mock    # builds the UI, then serves it with fake telemetry
+```
+
+Open <http://localhost:8085/telemachus/index.html>. The mock (`mock/server.ts`)
+emulates the plugin: static files under `/telemachus/`, the HTTP
+`datalink?alias=api` endpoint, the `/datalink` WebSocket push channel
+(+/-/run/rate), and `a.api`/`a.version`/`a.ip`. Telemetry is a small coherent
+flight sim, so the map marker moves, charts scroll and tables update; control
+pages send real (no-op) actions. `deno task serve` serves an existing `dist/`
+without rebuilding.
+
 ## Architecture (what got deduplicated)
 
 | Shared module | Replaces |
