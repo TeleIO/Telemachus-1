@@ -300,6 +300,51 @@ paths:
                   a.version:
                     type: string
       x-plotable: true
+  "/api/alarm.add":
+    get:
+      summary: "Create a stock-clock alarm. Args: title, ut, [warpAction], [message]. warpAction = DoNothing | KillWarp | PauseGame (default KillWarp). message = No | Yes | YesIfOtherVessel (default Yes). Returns the new alarm's id (uint), or an error string."
+      operationId: alarm.add
+      tags:
+        - alarm
+      parameters:
+        - name: title
+          in: query
+          required: true
+          description: string parameter (passed via bracket notation)
+          schema:
+            type: string
+        - name: ut
+          in: query
+          required: true
+          description: double parameter (passed via bracket notation)
+          schema:
+            type: number
+        - name: warpAction
+          in: query
+          required: true
+          description: string parameter (passed via bracket notation)
+          schema:
+            type: string
+        - name: message
+          in: query
+          required: true
+          description: string parameter (passed via bracket notation)
+          schema:
+            type: string
+        -           $ref: "#/components/parameters/ScaleParam"
+        -           $ref: "#/components/parameters/PrecisionParam"
+        -           $ref: "#/components/parameters/IntParam"
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  alarm.add:
+                    type: object
+      x-plotable: true
   "/api/alarm.count":
     get:
       summary: Number of Active Alarms
@@ -320,6 +365,33 @@ paths:
                 properties:
                   alarm.count:
                     type: integer
+      x-plotable: true
+  "/api/alarm.delete":
+    get:
+      summary: "Remove a stock-clock alarm by id. Args: id. Returns true if the alarm was found and queued for removal, false if no alarm with that id exists right now."
+      operationId: alarm.delete
+      tags:
+        - alarm
+      parameters:
+        - name: id
+          in: query
+          required: true
+          description: uint parameter (passed via bracket notation)
+          schema:
+            type: string
+        -           $ref: "#/components/parameters/ScaleParam"
+        -           $ref: "#/components/parameters/PrecisionParam"
+        -           $ref: "#/components/parameters/IntParam"
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  alarm.delete:
+                    type: boolean
       x-plotable: true
   "/api/alarm.list":
     get:
