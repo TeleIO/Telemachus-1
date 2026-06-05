@@ -702,6 +702,52 @@ Example: `r.resource[ElectricCharge]`, `r.resource[LiquidFuel]`, `r.resource[Oxi
 | `alarm.nextAlarm` | Next alarm to trigger |
 | `alarm.timeToNext` | Time until next alarm (s) |
 
+### `recovery.*` / `crash.*` / `flight.*` — Mission outcomes
+
+Snapshot keys captured from `GameEvents` — readable from any scene (including Space Center / Tracking Station after the flight) so a dashboard can surface a "last outcome" panel.
+
+| Key | Description |
+|-----|-------------|
+| `recovery.lastSummary` | Last `MissionRecoveryDialog` content (vesselName, recoveryFactor, scienceEarned, fundsEarned, parts[], resources[], crew[]) + FlightLogger stats |
+| `recovery.hasRecent` | Whether a recovery snapshot is available |
+| `crash.lastCrash` | Most recent notable-vessel crash — terrain, water, or non-collision loss (burn-up / structural). Debris/flags excluded. Full object below |
+| `crash.hasRecent` | Whether a crash snapshot is available |
+| `flight.events` | Current flight's `FlightLogger.eventLog` (live) |
+| `flight.achievements` | Highest altitude / speed / G / partsLost / etc. |
+
+> `PRELAUNCH` recovery (the cheap launchpad refund path) doesn't fire `onVesselRecoveryProcessingComplete` so it produces no snapshot. Flight-scene recoveries and the post-landing summary dialog both work.
+
+<details><summary><code>crash.lastCrash</code> — full object</summary>
+
+A single-slot "last notable crash", fed by three KSP signals: `onCrash` (terrain), `onCrashSplashdown` (water), and `onVesselWillDestroy` (a non-collision loss — re-entry burn-up, structural/aero break-up, or an impact so fast `CollisionEnhancer` destroyed the craft before a collision event fired). Persists across scenes; cleared on KSP restart.
+
+**Excluded** (never recorded): vessels of type `Debris`, `Flag`, or `Unknown` — spent boosters and the like won't clobber the slot and hide the real crash (`SpaceObject`/asteroids are kept, being pilotable). The `onVesselWillDestroy` path additionally requires the **active** vessel, a situation other than `PRELAUNCH`, and that no revert / recovery / scene change is in progress.
+
+| Field | Type | Notes |
+|-------|------|-------|
+| `eventKind` | string | `Crash` (terrain) · `CrashSplashdown` (water) · `Destroyed` (non-collision) |
+| `vesselName` | string | |
+| `vesselType` | string | KSP `VesselType` — `Ship`, `Probe`, `Lander`, `SpaceObject`, … (never Debris/Flag/Unknown) |
+| `vesselId` | string | vessel GUID |
+| `body` | string | celestial body, e.g. `Kerbin` |
+| `situation` | string | KSP situation at death — `FLYING`, `LANDED`, `SPLASHED`, … |
+| `latitude` / `longitude` / `altitude` | number | site of the event (4dp) |
+| `ut` | number | universal time |
+| `what` | string | what was struck — collision paths only; empty for `Destroyed` |
+| `msg` | string | collision message; empty for `Destroyed` |
+| `partsLost` | array | `{ partName, partTitle, partId, msg }` |
+| `crewAboard` | string[] | crew aboard at the time |
+| `kerbalsKilled` | string[] | crew killed |
+| `events` | string[] | `FlightLogger` event log (e.g. `"… exploded due to overheating: 2201 / 2200 K"`) |
+| `flightStats` | object | `FlightLogger` mission stats — `highestSpeed`, `highestAltitude`, `highestGee`, `flightEndMode`, … |
+
+Two value-shape notes:
+
+- **Collision** (`Crash` / `CrashSplashdown`): `partsLost` lists the parts that struck, coalesced over a 5 s window; `what` and `msg` are populated.
+- **`Destroyed`**: `what` and `msg` are empty, and `partsLost` is whatever parts remained at destroy time — often `[]` for a burn-up, since parts cook off individually before the vessel-destroy fires. The `events` log is then the record of what happened.
+
+</details>
+
 ### `m.*` — Map view
 
 | Key | Description |
