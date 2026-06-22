@@ -70,6 +70,7 @@ if [ -n "$schemaFile" ]; then
     | grep -v 'SCHEMA_JSON' \
     | sed 's/.*internal const string Json = @"//;s/";//' \
     | sed 's/""/"/g' \
+    | sed "s|${ProjectDir%/}/||g" \
     > "$ProjectDir/../publish/api-schema.json"
   echo "Extracted API schema to publish/api-schema.json"
 else

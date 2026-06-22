@@ -8328,6 +8328,32 @@ paths:
                 properties:
                   r.resourceCurrentMax:
                     type: object
+  "/api/r.resourceFor":
+    get:
+      summary: "Live resources for a single part keyed by flightID. Returns { resourceName: { amount, maxAmount, flow?, nominalFlow? } }. amount / maxAmount cover storage; flow is signed units/sec (positive = producing, negative = consuming) summed across the part's modules; nominalFlow is the 100%-efficiency cap. Both are omitted when the part contributes none, when no module supports a nominal (e.g. engines), or when nominal equals flow. Rows are emitted for resources the part contributes flow to even when storage is zero (RTGs, solar panels). Empty object when the flightID isn't found."
+      operationId: r.resourceFor
+      tags:
+        - resource
+      parameters:
+        - name: flightId
+          in: query
+          required: true
+          description: uint parameter (passed via bracket notation)
+          schema:
+            type: string
+        -           $ref: "#/components/parameters/ScaleParam"
+        -           $ref: "#/components/parameters/PrecisionParam"
+        -           $ref: "#/components/parameters/IntParam"
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  r.resourceFor:
+                    type: object
   "/api/r.resourceMax":
     get:
       summary: Max Resource Information
@@ -9892,6 +9918,32 @@ paths:
                   therm.hottestPartTempRatio:
                     type: number
       x-plotable: true
+  "/api/therm.part":
+    get:
+      summary: "Thermal state for a single part keyed by flightID. Returns { temperature, maxTemperature, temperatureK, maxTemperatureK }; null if the flightID isn't found. Core part temperature only — skin temperature is not exposed here."
+      operationId: therm.part
+      tags:
+        - thermal
+      parameters:
+        - name: flightId
+          in: query
+          required: true
+          description: uint parameter (passed via bracket notation)
+          schema:
+            type: string
+        -           $ref: "#/components/parameters/ScaleParam"
+        -           $ref: "#/components/parameters/PrecisionParam"
+        -           $ref: "#/components/parameters/IntParam"
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  therm.part:
+                    type: object
   "/api/v.abortValue":
     get:
       summary: Query abort value
@@ -11466,6 +11518,32 @@ paths:
                   v.packed:
                     type: boolean
       x-plotable: true
+  "/api/v.partState":
+    get:
+      summary: "Live deployable / behavioural state for a single part keyed by flightID. Returns { seq, modules: [{ type, state, ...extras }] }. Cached server-side and invalidated on staging, action-group events, vessel modifications, part death / undock / couple, and PAW dismiss; plus a 10s backstop covering player right-click interactions that don't fire a global event. Consumers subscribe and dedup on the seq field rather than re-processing the modules array on every push."
+      operationId: v.partState
+      tags:
+        - vessel
+      parameters:
+        - name: flightId
+          in: query
+          required: true
+          description: uint parameter (passed via bracket notation)
+          schema:
+            type: string
+        -           $ref: "#/components/parameters/ScaleParam"
+        -           $ref: "#/components/parameters/PrecisionParam"
+        -           $ref: "#/components/parameters/IntParam"
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  v.partState:
+                    type: object
   "/api/v.perturbation":
     get:
       summary: Orbital Perturbation Magnitude
@@ -12250,6 +12328,47 @@ paths:
                     type: array
                     items:
                       type: number
+  "/api/v.topology":
+    get:
+      summary: "Active vessel topology: rootFlightId + per-part flightId, persistentId, parentFlightId, fuelLineTarget (flightId of the receiving tank for fuel-line parts, null otherwise), name, title, manufacturer, category, inverseStage, crewCapacity, maxTemp, crashTolerance, dryMass, orgPos[x,y,z], up[x,y,z] (part-local up in vessel frame), bounds.size{x,y,z}, bounds.center{x,y,z} (mesh-center offset from orgPos in vessel-local frame — already rotated by orgRot; add it to orgPos to get the mesh centre in assembly space), modules[]. Cached and event-invalidated — subscribe to v.topologySeq to detect changes rather than streaming this key."
+      operationId: v.topology
+      tags:
+        - vessel
+      parameters:
+        -           $ref: "#/components/parameters/ScaleParam"
+        -           $ref: "#/components/parameters/PrecisionParam"
+        -           $ref: "#/components/parameters/IntParam"
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  v.topology:
+                    type: object
+  "/api/v.topologySeq":
+    get:
+      summary: Monotonic counter bumped whenever vessel topology changes. Subscribe to this and refetch v.topology only when it ticks.
+      operationId: v.topologySeq
+      tags:
+        - vessel
+      parameters:
+        -           $ref: "#/components/parameters/ScaleParam"
+        -           $ref: "#/components/parameters/PrecisionParam"
+        -           $ref: "#/components/parameters/IntParam"
+      responses:
+        200:
+          description: Successful response
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  v.topologySeq:
+                    type: integer
+      x-plotable: true
   "/api/v.upAxis":
     get:
       summary: Local Up Axis

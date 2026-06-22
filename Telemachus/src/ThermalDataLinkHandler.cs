@@ -231,6 +231,37 @@ namespace Telemachus
             }
         }
 
+        // --- Per-part thermal lookup ---
+
+        [TelemetryAPI("therm.part",
+            "Thermal state for a single part keyed by flightID. Returns " +
+            "{ temperature, maxTemperature, temperatureK, maxTemperatureK }; " +
+            "null if the flightID isn't found. Core part temperature only — " +
+            "skin temperature is not exposed here.",
+            Plotable = false,
+            Category = "thermal",
+            ReturnType = "object",
+            Params = "uint flightId")]
+        object PartFor(DataSources ds)
+        {
+            if (ds.args == null || ds.args.Count == 0) return null;
+            if (!uint.TryParse(ds.args[0], out var flightId)) return null;
+            if (ds.vessel == null || ds.vessel.parts == null) return null;
+
+            foreach (var part in ds.vessel.parts)
+            {
+                if (part == null || part.flightID != flightId) continue;
+                return new Dictionary<string, object>
+                {
+                    ["temperature"] = part.temperature - 273.15,
+                    ["maxTemperature"] = part.maxTemp - 273.15,
+                    ["temperatureK"] = part.temperature,
+                    ["maxTemperatureK"] = part.maxTemp,
+                };
+            }
+            return null;
+        }
+
         protected override int pausedHandler() => PausedDataLinkHandler.partPaused();
     }
 }
