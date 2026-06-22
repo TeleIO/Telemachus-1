@@ -519,6 +519,7 @@ SAS modes: `StabilityAssist`, `Prograde`, `Retrograde`, `Normal`, `Antinormal`, 
 | `f.abort` | **Action:** trigger abort |
 | `f.ag1` … `f.ag10` | **Action:** custom action groups |
 | `f.stage` | **Action:** activate next stage |
+| `f.ag.bindings` | Flat per-action listing of which parts are bound to each action group on the active vessel. One row per (action, group) pair; unbound actions are omitted. |
 
 </details>
 
@@ -749,6 +750,71 @@ Example: `r.resource[ElectricCharge]`, `r.resource[LiquidFuel]`, `r.resource[Oxi
 | `a.mods` | Detected mod integrations (object) |
 | `a.physicsMode` | `"patched_conics"` or `"n_body"` (Principia) |
 | `a.schema` | Full API schema as JSON |
+
+### `tech.*` — Tech tree
+
+Callable from any game scene.
+
+| Key | Description |
+|-----|-------------|
+| `tech.nodes` | Full tech tree — every node with its title, description, science cost, prerequisites, state (Available / Researchable / Unavailable), and the parts it unlocks. Costs include both nominal and strategy-modified effective values. See the OpenAPI schema for field detail. |
+| `tech.unlockedIds` | All currently unlocked node IDs |
+| `tech.unlockedPartCount` | Count of unlocked parts |
+| `tech.affordable` | Unpurchased nodes affordable right now (with cost / scienceRequired) |
+| `tech.unlock[nodeId]` | **Action:** purchase a node by ID; returns `0` on success or an error string |
+
+### `kc.*` — KSC / Space Center
+
+| Key | Description |
+|-----|-------------|
+| `kc.scene` | Current scene name (`SPACECENTER`, `FLIGHT`, `EDITOR`, or `TRACKSTATION`) |
+| `kc.facilityLevels` | All Space Center facilities — current level, max level, upgrade cost (nominal and strategy-modified), and the multi-line descriptions KSP shows in its upgrade dialog |
+| `kc.launchSite` | Active launch site (`LaunchPad` / `Runway`) |
+| `kc.padOccupied` / `kc.padVesselTitle` | Pad state |
+| `kc.partsAvailable` | All purchasable parts with their availability + cost |
+| `kc.savedShips` | Saved craft per facility — name, part count, mass, rollout cost (nominal and strategy-modified), and any missing-part references |
+| `kc.crewRoster` | Full kerbal roster — name, stats, experience, and current assignment |
+| `kc.upgradeFacility[facilityName]` | **Action:** start a facility upgrade; deducts funds |
+
+### `sci.*` — Science
+
+| Key | Description |
+|-----|-------------|
+| `sci.count` / `sci.dataAmount` | Science container summary |
+| `sci.canRecoverTotal` / `sci.canTransmitTotal` | Aggregate recoverable / transmittable |
+| `sci.instruments` | All ModuleScienceExperiment instances on the active vessel |
+| `sci.experiments` | Stored experiment data |
+| `sci.experimentBreakdown` | Per-experiment breakdown (subject / amount / dataScale) |
+| `sci.deploy[partFlightId, experimentId]` | **Action:** deploy an experiment |
+| `sci.dump[partFlightId]` | **Action:** dump stored science from a container |
+| `sci.reset[partFlightId]` | **Action:** reset an experiment |
+| `sci.transmit[partFlightId]` | **Action:** transmit stored science |
+
+### `contracts.*` — Contracts
+
+Contract IDs are emitted as **strings** (KSP-generated long values frequently exceed JS `Number.MAX_SAFE_INTEGER`). Action handlers accept both string and number forms.
+
+| Key | Description |
+|-----|-------------|
+| `contracts.active` | Active contracts; rows include id, title, agent, parameters (with `parameterType` + typed fields per parameter) |
+| `contracts.offered` | Offered (un-accepted) contracts |
+| `contracts.completedRecent` | Recently-completed contracts |
+| `contracts.accept[id]` | **Action:** accept an offered contract |
+| `contracts.decline[id]` | **Action:** decline an offered contract |
+| `contracts.cancel[id]` | **Action:** cancel an active contract |
+
+### `ksp.*` — Scene & vessel verbs
+
+All `AlwaysEvaluable` action keys for launch / recovery / revert / scene transitions. Each refuses internally when the underlying state isn't ready.
+
+| Key | Description |
+|-----|-------------|
+| `ksp.launch[shipName, facility, site, crewSemicolons]` | **Action:** load a saved craft to the chosen pad. Refuses outside SC/Editor or if an active vessel exists. Crew names delimited by `;` (since `,` is already an arg separator). |
+| `ksp.recover` | **Action:** recover active vessel (PRELAUNCH / LANDED / SPLASHED only) |
+| `ksp.revertToLaunch` | **Action:** revert to the post-init launch snapshot (Flight only) |
+| `ksp.revertToEditor[vab\|sph]` | **Action:** revert to the editor scene (Flight only) |
+| `ksp.toSpaceCenter` / `ksp.toTrackingStation` | **Action:** switch scenes |
+| `ksp.canRevert` / `ksp.canRevertToLaunch` / `ksp.canRevertToEditor` | Whether the corresponding revert path is available (mirrors `FlightDriver.CanRevert*`) |
 
 ### Camera API
 
@@ -1021,22 +1087,34 @@ Each burn object contains `{ tangent, normal, binormal, initial_time, duration }
 | `therm.heatShieldTempCelsius` | Heat shield temperature | C |
 | `therm.heatShieldFlux` | Heat shield thermal flux | kW |
 
-### `sci.*` / `career.*` / `comm.*` — Science, career & comms *(WIP — in testing)*
+### `career.*` — Career mode
 
 | Key | Description |
 |-----|-------------|
-| `sci.count` | Number of science experiments aboard |
-| `sci.dataAmount` | Total science data aboard |
-| `sci.experiments` | Experiments with data (object) |
 | `career.funds` | Available funds |
 | `career.reputation` | Current reputation |
 | `career.science` | Available science points |
 | `career.mode` | Game mode (CAREER / SCIENCE / SANDBOX) |
+
+### `comm.*` — CommNet
+
+| Key | Description |
+|-----|-------------|
 | `comm.connected` | CommNet is connected |
 | `comm.signalStrength` | CommNet signal strength (0–1) |
 | `comm.controlState` | CommNet control state (0=none, 1=partial, 2=full) |
 | `comm.controlStateName` | CommNet control state name |
 | `comm.signalDelay` | CommNet signal delay (s) |
+
+### `strategies.*` — Administration Building strategies
+
+Callable from any game scene — the activate / deactivate path replicates KSP's eligibility checks against live state, so the Admin Building dialog does not need to be open.
+
+| Key | Description |
+|-----|-------------|
+| `strategies.all` | All career strategies (active and inactive) with title, description, department, current activation state, costs (nominal and strategy-modified), reputation requirements, factor-slider info, and pre-computed `canActivate` / `canDeactivate` flags with human-readable blocked reasons |
+| `strategies.activate[id, factor]` | **Action:** activate a strategy at the given commitment factor (0–1). Returns `0` on success, error string otherwise. |
+| `strategies.deactivate[id]` | **Action:** deactivate an active strategy. Returns `0` on success, error string otherwise. |
 
 ---
 

@@ -26,6 +26,13 @@ namespace Telemachus
             APIHandlers.Add(new ScienceCareerDataLinkHandler(formatters));
             APIHandlers.Add(new TimeWarpDataLinkHandler(formatters));
             APIHandlers.Add(new TargetDataLinkHandler(formatters));
+            APIHandlers.Add(new TechTreeDataLinkHandler(formatters));
+            APIHandlers.Add(new KscDataLinkHandler(formatters));
+            APIHandlers.Add(new ScienceInstrumentsDataLinkHandler(formatters));
+            APIHandlers.Add(new ContractsDataLinkHandler(formatters));
+            APIHandlers.Add(new LaunchDataLinkHandler(formatters));
+            APIHandlers.Add(new ActionGroupBindingsDataLinkHandler(formatters));
+            APIHandlers.Add(new StrategiesDataLinkHandler(formatters));
 
             APIHandlers.Add(new CompoundDataLinkHandler(
                 new List<DataLinkHandler> {
