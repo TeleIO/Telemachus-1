@@ -268,6 +268,60 @@ namespace Telemachus
             return orbitPatch.getRelativePositionAtUT(ut);
         }
 
+        // --- Available Targets ---
+
+        // List the vessels currently eligible for `tar.setTargetVessel`,
+        // along with the integer index the action expects. Returned in
+        // `FlightGlobals.Vessels` order so the indexes match the action's
+        // contract one-for-one. Filters out Flag / EVA / Debris / Unknown
+        // by default (the bulk of `FlightGlobals.Vessels` for any sane
+        // career save), and the active vessel itself (no point targeting
+        // yourself).
+        //
+        // Position is reported in the active vessel's *local* frame via
+        // `transform.InverseTransformPoint` — Unity-local x/y/z. The client
+        // derives distance / bearing / elevation from the vector; we don't
+        // ship those server-side.
+        [TelemetryAPI("tar.availableVessels", "Available target vessels with their setTargetVessel indices",
+            Plotable = false, Category = "target", ReturnType = "object")]
+        object AvailableVessels(DataSources ds)
+        {
+            var list = new List<Dictionary<string, object>>();
+            var vessels = FlightGlobals.Vessels;
+            if (vessels == null) return list;
+            var active = ds.vessel;
+            Transform activeT = active != null ? active.transform : null;
+            for (int i = 0; i < vessels.Count; i++)
+            {
+                var v = vessels[i];
+                if (v == null) continue;
+                if (active != null && v == active) continue;
+                switch (v.vesselType)
+                {
+                    case VesselType.Flag:
+                    case VesselType.EVA:
+                    case VesselType.Debris:
+                    case VesselType.Unknown:
+                        continue;
+                }
+                var entry = new Dictionary<string, object>
+                {
+                    ["index"] = i,
+                    ["name"] = v.GetName(),
+                    ["type"] = v.vesselType.ToString(),
+                    ["situation"] = v.situation.ToString(),
+                    ["body"] = v.mainBody != null ? v.mainBody.bodyName : "",
+                };
+                if (activeT != null)
+                {
+                    var localPos = activeT.InverseTransformPoint(v.transform.position);
+                    entry["position"] = new[] { localPos.x, localPos.y, localPos.z };
+                }
+                list.Add(entry);
+            }
+            return list;
+        }
+
         // --- Target Actions ---
 
         [TelemetryAPI("tar.setTargetBody", "Set Target to Celestial Body", IsAction = true, Category = "target", ReturnType = "int", Params = "int bodyId")]
@@ -292,6 +346,37 @@ namespace Telemachus
         object ClearTarget(DataSources ds)
         {
             FlightGlobals.fetch.SetVesselTarget(null);
+            return true;
+        }
+
+        [TelemetryAPI("tar.switchVessel",
+            "Fly to vessel by index — same as Tracking Station 'Fly'. " +
+            "Saves the current vessel's state first, then loads the target. " +
+            "Args: int vesselIndex (from tar.availableVessels.index). " +
+            "Returns true on dispatch; scene change is asynchronous.",
+            IsAction = true,
+            Category = "target",
+            ReturnType = "bool",
+            Params = "int vesselIndex")]
+        object SwitchVessel(DataSources ds)
+        {
+            if (ds.args == null || ds.args.Count == 0) return false;
+            if (!int.TryParse(ds.args[0], out int vesselIdx)) return false;
+            if (vesselIdx < 0 || vesselIdx >= FlightGlobals.Vessels.Count) return false;
+
+            if (HighLogic.CurrentGame == null) return false;
+
+            // Persist the current state before switching so the active
+            // vessel's mid-flight pose / fuel / heat / etc. is preserved
+            // and re-loaded when the operator switches back. Mirrors what
+            // the Tracking Station's "Fly" button does internally.
+            Game game = HighLogic.CurrentGame.Updated();
+            GamePersistence.SaveGame(
+                game,
+                "persistent",
+                HighLogic.SaveFolder,
+                SaveMode.OVERWRITE);
+            FlightDriver.StartAndFocusVessel(game, vesselIdx);
             return true;
         }
 
