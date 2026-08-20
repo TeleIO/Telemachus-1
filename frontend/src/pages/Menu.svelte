@@ -8,4 +8,6 @@
   <p role="link" tabindex="0" onclick={() => open("information.html")}>Telemachus UI</p>
   <hr />
   <p role="link" tabindex="0" onclick={() => open("houston/index.html")}>Houston &amp; MKON UI</p>
+  <hr />
+  <p role="link" tabindex="0" onclick={() => open("openmct/index.html")}>OpenMCT</p>
 </div>

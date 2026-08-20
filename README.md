@@ -1059,7 +1059,7 @@ Install the [.NET SDK 8+](https://dotnet.microsoft.com/download) (or Mono), then
 dotnet build Telemachus/Telemachus.csproj
 ```
 
-The post-build script stages the output to `publish/GameData/` and downloads the [Houston](https://github.com/TeleIO/houston) and [mkon](https://github.com/TeleIO/mkon) companion apps automatically.
+The post-build script stages the output to `publish/GameData/` and downloads the [Houston](https://github.com/TeleIO/houston), [mkon](https://github.com/TeleIO/mkon) and [openmct](https://codeberg.org/Overloader/KerbalOpenMCT) companion apps automatically.
 
 ### OpenAPI spec
 

@@ -59,4 +59,10 @@ export const PAGES: PageInfo[] = [
     href: "houston/index.html",
     description: "This page opens Houston and MKON UI.",
   },
+  {
+    id: "openmct",
+    title: "OpenMCT",
+    href: "openmct/index.html",
+    description: "This page opens OpenMCT",
+  },
 ];
