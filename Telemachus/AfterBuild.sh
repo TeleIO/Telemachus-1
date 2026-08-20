@@ -13,6 +13,7 @@ fi
 # Portable expansion of a possibly-empty array under `set -u` (works on older bash too).
 houstonUrl="$(curl --silent ${authHeader[@]+"${authHeader[@]}"} "https://api.github.com/repos/TeleIO/houston/releases/latest" | grep '"browser_download_url":' | cut -d : -f2,3 | cut -d \" -f2)"
 mkonUrl="https://github.com/TeleIO/mkon/archive/master.zip"
+openMctUrl="$(curl -s https://codeberg.org/api/v1/repos/Overloader/KerbalOpenMCT/releases/latest |grep -o '"browser_download_url":"[^"]*"'  | cut -d'"' -f4)"
 
 echo "$ProjectDir"
 echo "$TargetDir"
@@ -59,7 +60,13 @@ mkdir -p "$ProjectDir/../publish/GameData/Telemachus/Plugins/PluginData/Telemach
 unzip mkon.zip
 cp -pR mkon-master/. "$ProjectDir/../publish/GameData/Telemachus/Plugins/PluginData/Telemachus/mkon"
 
-rm Houston.zip mkon.zip
+# Download OpenMCT
+curl -LO "$openMctUrl"
+unzip dist.zip
+chmod -R u+w dist
+mv dist "$ProjectDir/../publish/GameData/Telemachus/Plugins/PluginData/Telemachus/openmct"
+
+rm Houston.zip mkon.zip dist.zip
 rm -rf mkon-master
 
 # Extract API schema from source-generated file
