@@ -18,3 +18,6 @@ WebPages/WebPages.v12.suo
 docs/node_modules/
 docs/dist/
 docs/.astro/
+
+# Nix
+.direnv/
